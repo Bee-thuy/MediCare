@@ -86,7 +86,7 @@
                 app:layout_constraintTop_toBottomOf="@id/languageVietnameseName" />
 
             <ImageView
-                android:id="@+id/languageSelectedIndicator"
+                android:id="@+id/languageVietnameseSelectedIndicator"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:contentDescription="@string/language_selected"
@@ -141,7 +141,7 @@
                 app:layout_constraintTop_toBottomOf="@id/languageEnglishName" />
 
             <ImageView
-                android:id="@+id/languageSelectedIndicator"
+                android:id="@+id/languageEnglishSelectedIndicator"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:contentDescription="@string/language_selected"

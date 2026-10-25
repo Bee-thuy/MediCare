@@ -6,7 +6,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.viewpager2.widget.ViewPager2
 import com.example.medicare.R
 import com.example.medicare.ui.base.FullscreenActivity
-import com.example.medicare.ui.main.MainActivity
+import com.example.medicare.ui.splash.SplashActivity
+import com.example.medicare.util.AppPreferences
 
 class OnboardingActivity : FullscreenActivity() {
 
@@ -32,11 +33,8 @@ class OnboardingActivity : FullscreenActivity() {
 
     private fun onPageAction(position: Int) {
         if (position == LAST_PAGE_INDEX) {
-            getSharedPreferences(MainActivity.PREFERENCES_NAME, MODE_PRIVATE)
-                .edit()
-                .putBoolean(MainActivity.PREF_ONBOARDING_COMPLETE, true)
-                .apply()
-            startActivity(Intent(this, MainActivity::class.java))
+            AppPreferences.setOnboardingComplete(this)
+            startActivity(Intent(this, SplashActivity::class.java))
             finish()
         } else {
             pager.currentItem = position + 1

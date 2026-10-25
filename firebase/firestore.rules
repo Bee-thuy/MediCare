@@ -1,0 +1,41 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.type == 'ADMIN';
+    }
+
+    match /users/{userId} {
+      // A self-registering account may only create a USER profile.
+      allow create: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.type == 'USER'
+        && request.resource.data.accountStatus == 'ACTIVE'
+        && request.resource.data.keys().hasOnly([
+          'fullName', 'email', 'phone', 'type', 'accountStatus', 'createdAt', 'updatedAt'
+        ]);
+
+      allow get: if signedIn() && (request.auth.uid == userId || isAdmin());
+      allow list: if isAdmin();
+
+      // Users may update only safe profile fields. Role and account status are immutable here.
+      allow update: if isAdmin() || (
+        signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.type == resource.data.type
+        && request.resource.data.accountStatus == resource.data.accountStatus
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['fullName', 'phone', 'updatedAt'])
+      );
+
+      allow delete: if false;
+    }
+  }
+}

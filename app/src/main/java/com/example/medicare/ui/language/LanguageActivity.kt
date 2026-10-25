@@ -7,13 +7,15 @@ import com.example.medicare.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.example.medicare.ui.base.FullscreenActivity
-import com.example.medicare.ui.main.MainActivity
 import com.example.medicare.ui.onboarding.OnboardingActivity
+import com.example.medicare.util.AppPreferences
 
 class LanguageActivity : FullscreenActivity() {
 
     private lateinit var vietnameseCard: MaterialCardView
     private lateinit var englishCard: MaterialCardView
+    private lateinit var vietnameseIndicator: View
+    private lateinit var englishIndicator: View
     private lateinit var continueButton: MaterialButton
     private var selectedLanguage: String? = null
 
@@ -23,6 +25,8 @@ class LanguageActivity : FullscreenActivity() {
 
         vietnameseCard = findViewById(R.id.languageVietnameseCard)
         englishCard = findViewById(R.id.languageEnglishCard)
+        vietnameseIndicator = findViewById(R.id.languageVietnameseSelectedIndicator)
+        englishIndicator = findViewById(R.id.languageEnglishSelectedIndicator)
         continueButton = findViewById(R.id.languageContinueButton)
 
         vietnameseCard.setOnClickListener { selectLanguage(LANGUAGE_VIETNAMESE) }
@@ -32,13 +36,13 @@ class LanguageActivity : FullscreenActivity() {
 
     private fun selectLanguage(language: String) {
         selectedLanguage = language
-        updateSelection(vietnameseCard, language == LANGUAGE_VIETNAMESE)
-        updateSelection(englishCard, language == LANGUAGE_ENGLISH)
+        updateSelection(vietnameseCard, vietnameseIndicator, language == LANGUAGE_VIETNAMESE)
+        updateSelection(englishCard, englishIndicator, language == LANGUAGE_ENGLISH)
         continueButton.isEnabled = true
         continueButton.alpha = 1f
     }
 
-    private fun updateSelection(card: MaterialCardView, isSelected: Boolean) {
+    private fun updateSelection(card: MaterialCardView, indicator: View, isSelected: Boolean) {
         card.strokeColor = getColor(
             if (isSelected) R.color.language_selected_stroke else R.color.language_card_stroke,
         )
@@ -49,16 +53,12 @@ class LanguageActivity : FullscreenActivity() {
         card.setCardBackgroundColor(
             getColor(if (isSelected) R.color.language_selected_background else R.color.white),
         )
-        card.findViewById<View>(R.id.languageSelectedIndicator).visibility =
-            if (isSelected) View.VISIBLE else View.INVISIBLE
+        indicator.visibility = if (isSelected) View.VISIBLE else View.INVISIBLE
     }
 
     private fun continueToIntro() {
         val language = selectedLanguage ?: return
-        getSharedPreferences(MainActivity.PREFERENCES_NAME, MODE_PRIVATE)
-            .edit()
-            .putString(MainActivity.PREF_LANGUAGE, language)
-            .apply()
+        AppPreferences.setLanguage(this, language)
         startActivity(Intent(this, OnboardingActivity::class.java))
         finish()
     }

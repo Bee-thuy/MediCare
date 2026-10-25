@@ -1,0 +1,10 @@
+{
+  "username": "admin2003@",
+  "password": "06102003",
+  "fullName": "MediCare Administrator",
+  "email": "admin2003@",
+  "phone": "",
+  "type": "ADMIN",
+  "accountStatus": "ACTIVE",
+  "note": "Debug-only mock account. This file is bundled only in debug builds and is not a Firebase account."
+}
