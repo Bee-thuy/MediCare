@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">MediCare</string>
+    <string name="onboarding_brand">MediCare</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_get_started">Get started</string>
+    <string name="onboarding_page_1_title">Care made simple</string>
+    <string name="onboarding_page_1_description">Keep your health information and daily care in one place.</string>
+    <string name="onboarding_page_2_title">Your wellbeing, on track</string>
+    <string name="onboarding_page_2_description">Build healthy routines with clear, personal guidance.</string>
+    <string name="onboarding_page_3_title">Ready when you are</string>
+    <string name="onboarding_page_3_description">Start your journey to better everyday care with MediCare.</string>
+    <string name="main_welcome_title">Welcome to MediCare</string>
+    <string name="main_welcome_message">Your personal health companion is ready.</string>
+    <string name="splash_welcome">Welcome to\nMedica! 👋</string>
+    <string name="splash_description">The best online doctor appointment &amp;consultation app of the century for your health and medical needs!</string>
+    <string name="language_title">Choose your language</string>
+    <string name="language_subtitle">You can change this anytime in Settings.</string>
+    <string name="language_vietnamese">Tiếng Việt</string>
+    <string name="language_vietnamese_detail">Vietnamese</string>
+    <string name="language_english">English</string>
+    <string name="language_english_detail">English</string>
+    <string name="language_continue">Continue</string>
+    <string name="language_selected">Selected</string>
 </resources>
