@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="manager_doctor_count">
+        <item quantity="one">%d bác sĩ</item>
+        <item quantity="other">%d bác sĩ</item>
+    </plurals>
+</resources>

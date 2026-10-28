@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_marginStart="5dp"
+    android:layout_weight="1"
+    android:background="@drawable/manager_quick_action_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="6dp">
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:contentDescription="@string/manager_approve_appointments"
+        android:src="@drawable/ic_manager_notifications"
+        android:tint="#F18519" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/manager_approve_appointments"
+        android:textColor="#C06B1B"
+        android:textSize="11sp" />
+</LinearLayout>

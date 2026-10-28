@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/manageSpecialtiesBack"
+                android:layout_width="34dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="‹"
+                android:textColor="@color/manager_ink"
+                android:textSize="38sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/plus_jakarta_sans_bold"
+                android:text="@string/manager_specialties"
+                android:textColor="@color/manager_ink"
+                android:textSize="20sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/manageSpecialtiesAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:background="@drawable/manager_button_background"
+                android:insetBottom="0dp"
+                android:insetTop="0dp"
+                android:text="@string/manager_add_specialty"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:hint="@string/manager_search_specialty">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/manageSpecialtiesSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/manageSpecialtiesEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:gravity="center"
+            android:text="@string/manager_no_specialties"
+            android:textColor="@color/manager_muted"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:id="@+id/manageSpecialtiesList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:orientation="vertical" />
+    </LinearLayout>
+</ScrollView>

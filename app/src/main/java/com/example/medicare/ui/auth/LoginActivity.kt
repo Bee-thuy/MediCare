@@ -4,13 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.core.view.WindowCompat
 import com.example.medicare.R
 import com.example.medicare.data.auth.AuthRepository
 import com.example.medicare.data.auth.SessionState
-import com.example.medicare.model.UserRole
 import com.example.medicare.ui.base.FullscreenActivity
 import com.example.medicare.util.AuthNavigator
-import com.example.medicare.util.DebugMockAdminAccount
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -28,6 +27,7 @@ class LoginActivity : FullscreenActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, true)
         setContentView(R.layout.activity_login)
 
         emailLayout = findViewById(R.id.loginEmailLayout)
@@ -37,23 +37,12 @@ class LoginActivity : FullscreenActivity() {
         loginButton = findViewById(R.id.loginButton)
         loading = findViewById(R.id.loginLoading)
 
+        findViewById<View>(R.id.loginBackButton).setOnClickListener { finish() }
         findViewById<TextView>(R.id.loginRegisterLink).setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
         findViewById<TextView>(R.id.loginForgotPasswordLink).setOnClickListener {
             startActivity(Intent(this, ForgotPasswordActivity::class.java))
-        }
-        findViewById<MaterialButton>(R.id.loginDebugAdminButton).apply {
-            visibility = if (resources.getBoolean(R.bool.debug_demo_accounts_enabled)) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
-            setOnClickListener {
-                emailInput.setText("admin2003@")
-                passwordInput.setText("06102003")
-                signIn()
-            }
         }
         loginButton.setOnClickListener { signIn() }
 
@@ -81,11 +70,6 @@ class LoginActivity : FullscreenActivity() {
     private fun signIn() {
         val email = emailInput.text?.toString().orEmpty().trim()
         val password = passwordInput.text?.toString().orEmpty()
-        if (DebugMockAdminAccount.matches(this, email, password)) {
-            AuthNavigator.openHome(this, UserRole.ADMIN)
-            return
-        }
-
         emailLayout.error = if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) null else getString(R.string.auth_invalid_email)
         passwordLayout.error = if (password.isNotBlank()) null else getString(R.string.auth_required_password)
         if (emailLayout.error != null || passwordLayout.error != null) return

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/manager_background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp">
+
+        <TextView
+            android:id="@+id/patientNotificationBack"
+            android:layout_width="36dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:text="‹"
+            android:textColor="@color/manager_ink"
+            android:textSize="40sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/plus_jakarta_sans_bold"
+            android:text="@string/manager_send_notification_title"
+            android:textColor="@color/manager_ink"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/manager_quick_action_background"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="14dp">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_manager_notifications"
+                    android:tint="@color/manager_blue" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:lineSpacingExtra="2dp"
+                    android:text="@string/manager_notification_info"
+                    android:textColor="@color/manager_muted"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/plus_jakarta_sans_bold"
+                android:text="@string/manager_notification_type"
+                android:textColor="@color/manager_ink"
+                android:textSize="18sp" />
+
+            <RadioGroup
+                android:id="@+id/patientNotificationTypes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/patientNotificationConfirmed"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:buttonTint="@color/manager_blue"
+                    android:checked="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/manager_notification_confirmed"
+                    android:textColor="@color/manager_ink"
+                    android:textSize="16sp" />
+
+                <RadioButton
+                    android:id="@+id/patientNotificationRejected"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:buttonTint="@color/manager_blue"
+                    android:gravity="center_vertical"
+                    android:text="@string/manager_notification_rejected"
+                    android:textColor="@color/manager_ink"
+                    android:textSize="16sp" />
+
+                <RadioButton
+                    android:id="@+id/patientNotificationRescheduled"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:buttonTint="@color/manager_blue"
+                    android:gravity="center_vertical"
+                    android:text="@string/manager_notification_rescheduled"
+                    android:textColor="@color/manager_ink"
+                    android:textSize="16sp" />
+
+                <RadioButton
+                    android:id="@+id/patientNotificationCancelled"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:buttonTint="@color/manager_blue"
+                    android:gravity="center_vertical"
+                    android:text="@string/manager_notification_cancelled"
+                    android:textColor="@color/manager_ink"
+                    android:textSize="16sp" />
+
+                <RadioButton
+                    android:id="@+id/patientNotificationGeneral"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:buttonTint="@color/manager_blue"
+                    android:gravity="center_vertical"
+                    android:text="@string/manager_notification_general"
+                    android:textColor="@color/manager_ink"
+                    android:textSize="16sp" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/plus_jakarta_sans_bold"
+                android:text="@string/manager_notification_content"
+                android:textColor="@color/manager_ink"
+                android:textSize="18sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="500">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/patientNotificationContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:background="@drawable/manager_card_background"
+                    android:gravity="top|start"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:maxLength="500"
+                    android:padding="14dp"
+                    android:textColor="@color/manager_ink"
+                    android:textColorHint="@color/manager_muted"
+                    android:textSize="15sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/patientNotificationSend"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="26dp"
+                android:background="@drawable/manager_button_background"
+                android:insetBottom="0dp"
+                android:insetTop="0dp"
+                android:text="@string/manager_send_notification"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

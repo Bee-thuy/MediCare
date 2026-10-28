@@ -20,14 +20,14 @@ class AuthRepository(
         user.reload()
             .addOnSuccessListener { loadProfile(user.uid, user.isEmailVerified, callback) }
             .addOnFailureListener {
-                callback(SessionState.Error("Không thể xác thực phiên đăng nhập. Vui lòng thử lại."))
+                callback(SessionState.Error("Unable to verify your sign-in session. Please try again."))
             }
     }
 
     fun signIn(email: String, password: String, callback: (SessionState) -> Unit) {
         auth.signInWithEmailAndPassword(email.trim(), password)
             .addOnSuccessListener { resolveSession(callback) }
-            .addOnFailureListener { callback(SessionState.Error("Email hoặc mật khẩu không đúng.")) }
+            .addOnFailureListener { callback(SessionState.Error("Incorrect email or password.")) }
     }
 
     /** Public registration can create USER only; Firestore Rules lock the type afterwards. */
@@ -41,10 +41,11 @@ class AuthRepository(
         auth.createUserWithEmailAndPassword(email.trim(), password)
             .addOnSuccessListener { result ->
                 val user = result.user ?: run {
-                    callback(Result.failure(IllegalStateException("Không thể tạo tài khoản.")))
+                    callback(Result.failure(IllegalStateException("Unable to create your account.")))
                     return@addOnSuccessListener
                 }
                 val profile = hashMapOf(
+                    "id" to user.uid,
                     "fullName" to fullName.trim(),
                     "email" to email.trim(),
                     "phone" to phone.trim(),
@@ -58,20 +59,20 @@ class AuthRepository(
                         user.sendEmailVerification()
                             .addOnSuccessListener { callback(Result.success(Unit)) }
                             .addOnFailureListener {
-                                callback(Result.failure(IllegalStateException("Tài khoản đã tạo nhưng chưa gửi được email xác minh.")))
+                                callback(Result.failure(IllegalStateException("Your account was created, but the verification email could not be sent.")))
                             }
                     }
                     .addOnFailureListener {
                         user.delete()
                         signOut()
-                        callback(Result.failure(IllegalStateException("Không thể tạo hồ sơ. Hãy kiểm tra Firestore Rules.")))
+                        callback(Result.failure(IllegalStateException("Unable to create your profile. Please check your Firestore Rules.")))
                     }
             }
             .addOnFailureListener { error ->
                 val message = if (error is FirebaseAuthUserCollisionException) {
-                    "Email này đã được đăng ký."
+                    "This email address is already registered."
                 } else {
-                    "Không thể tạo tài khoản. Vui lòng thử lại sau."
+                    "Unable to create your account. Please try again later."
                 }
                 callback(Result.failure(IllegalStateException(message)))
             }
@@ -81,7 +82,7 @@ class AuthRepository(
         auth.sendPasswordResetEmail(email.trim())
             .addOnSuccessListener { callback(Result.success(Unit)) }
             .addOnFailureListener {
-                callback(Result.failure(IllegalStateException("Không thể gửi email đặt lại mật khẩu.")))
+                callback(Result.failure(IllegalStateException("Unable to send the password reset email.")))
             }
     }
 
@@ -92,13 +93,13 @@ class AuthRepository(
             .addOnSuccessListener { snapshot ->
                 if (!snapshot.exists()) {
                     signOut()
-                    callback(SessionState.Error("Không tìm thấy hồ sơ tài khoản."))
+                    callback(SessionState.Error("Account profile not found."))
                     return@addOnSuccessListener
                 }
                 val role = UserRole.fromClaim(snapshot.getString("type"))
                 if (role == null) {
                     signOut()
-                    callback(SessionState.Error("Tài khoản chưa được cấp loại hợp lệ."))
+                    callback(SessionState.Error("Your account has not been assigned a valid role."))
                     return@addOnSuccessListener
                 }
                 if (role == UserRole.USER && !isEmailVerified) {
@@ -110,19 +111,19 @@ class AuthRepository(
                     AccountStatus.ACTIVE -> callback(SessionState.Authenticated(role, profile))
                     AccountStatus.DISABLED -> {
                         signOut()
-                        callback(SessionState.Error("Tài khoản đã bị vô hiệu hóa."))
+                        callback(SessionState.Error("This account has been disabled."))
                     }
-                    AccountStatus.PENDING -> callback(SessionState.Error("Tài khoản đang chờ được kích hoạt."))
+                    AccountStatus.PENDING -> callback(SessionState.Error("This account is awaiting activation."))
                 }
             }
             .addOnFailureListener {
-                callback(SessionState.Error("Không thể tải hồ sơ tài khoản. Hãy kiểm tra mạng hoặc Firestore Rules."))
+                callback(SessionState.Error("Unable to load your account profile. Please check your network or Firestore Rules."))
             }
     }
 
     private companion object {
         const val USERS_COLLECTION = "users"
-        const val EMAIL_VERIFICATION_REQUIRED = "Vui lòng xác minh email trước khi đăng nhập."
+        const val EMAIL_VERIFICATION_REQUIRED = "Please verify your email before signing in."
     }
 }
 

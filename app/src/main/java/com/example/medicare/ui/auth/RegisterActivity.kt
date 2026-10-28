@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.TextView
+import androidx.core.view.WindowCompat
 import com.example.medicare.R
 import com.example.medicare.data.auth.AuthRepository
 import com.example.medicare.data.auth.SessionState
@@ -40,6 +41,7 @@ class RegisterActivity : FullscreenActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, true)
         setContentView(R.layout.activity_register)
 
         nameLayout = findViewById(R.id.registerNameLayout)
@@ -50,6 +52,7 @@ class RegisterActivity : FullscreenActivity() {
         registerButton = findViewById(R.id.registerButton)
         loading = findViewById(R.id.registerLoading)
 
+        findViewById<View>(R.id.registerBackButton).setOnClickListener { finish() }
         findViewById<TextView>(R.id.registerLoginLink).setOnClickListener { finish() }
         registerButton.setOnClickListener { register() }
     }

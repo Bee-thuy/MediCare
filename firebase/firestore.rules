@@ -14,13 +14,14 @@ service cloud.firestore {
 
     match /users/{userId} {
       // A self-registering account may only create a USER profile.
-      allow create: if signedIn()
-        && request.auth.uid == userId
-        && request.resource.data.type == 'USER'
-        && request.resource.data.accountStatus == 'ACTIVE'
-        && request.resource.data.keys().hasOnly([
-          'fullName', 'email', 'phone', 'type', 'accountStatus', 'createdAt', 'updatedAt'
-        ]);
+      allow create: if isAdmin()
+        || (signedIn()
+          && request.auth.uid == userId
+          && request.resource.data.type == 'USER'
+          && request.resource.data.accountStatus == 'ACTIVE'
+          && request.resource.data.keys().hasOnly([
+            'id', 'fullName', 'email', 'phone', 'type', 'accountStatus', 'createdAt', 'updatedAt'
+          ]));
 
       allow get: if signedIn() && (request.auth.uid == userId || isAdmin());
       allow list: if isAdmin();
@@ -36,6 +37,18 @@ service cloud.firestore {
       );
 
       allow delete: if false;
+    }
+
+    match /doctors/{doctorId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /specialties/{specialtyId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /workShifts/{shiftId} {
+      allow read, write: if isAdmin();
     }
   }
 }

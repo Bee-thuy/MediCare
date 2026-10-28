@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/manager_dialog_background"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="30dp">
+
+    <TextView
+        android:layout_width="78dp"
+        android:layout_height="78dp"
+        android:background="@drawable/manager_confirmation_icon_background"
+        android:gravity="center"
+        android:text="✓"
+        android:textColor="@color/white"
+        android:textSize="51sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:fontFamily="@font/plus_jakarta_sans_bold"
+        android:gravity="center"
+        android:text="@string/manager_confirm_appointment_title"
+        android:textColor="@color/manager_ink"
+        android:textSize="21sp" />
+
+    <TextView
+        android:id="@+id/confirmAppointmentMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:gravity="center"
+        android:lineSpacingExtra="3dp"
+        android:textColor="@color/manager_muted"
+        android:textSize="15sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="26dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/confirmAppointmentCancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/manager_card_background"
+            android:insetBottom="0dp"
+            android:insetTop="0dp"
+            android:text="@string/manager_cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/manager_ink" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/confirmAppointmentAccept"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/manager_button_background"
+            android:insetBottom="0dp"
+            android:insetTop="0dp"
+            android:text="@string/manager_accept"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</LinearLayout>

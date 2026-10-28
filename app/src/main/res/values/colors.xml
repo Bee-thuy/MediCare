@@ -14,4 +14,20 @@
     <color name="language_card_stroke">#DCE3F4</color>
     <color name="language_selected_stroke">#5265FF</color>
     <color name="language_selected_background">#EAF0FF</color>
+    <color name="auth_blue">#3567D4</color>
+    <color name="auth_input_background">#F8F8FA</color>
+    <color name="auth_input_icon">#A6A8AD</color>
+    <color name="auth_divider">#E9E9EC</color>
+    <color name="auth_hint">#A4A5AA</color>
+    <color name="auth_text">#202124</color>
+    <color name="manager_blue">#2364E8</color>
+    <color name="manager_blue_dark">#123D91</color>
+    <color name="manager_ink">#15213D</color>
+    <color name="manager_muted">#72809B</color>
+    <color name="manager_border">#E4EAF4</color>
+    <color name="manager_background">#FBFCFF</color>
+    <color name="manager_green">#18A869</color>
+    <color name="manager_red">#F0444A</color>
+    <color name="manager_cyan">#20B6D5</color>
+    <color name="manager_orange">#FFAE2D</color>
 </resources>

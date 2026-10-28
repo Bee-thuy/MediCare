@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/manager_background"
+    android:fillViewport="true"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="106dp"
+            android:background="@drawable/manager_overview_background"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:contentDescription="@string/manager_overview_today"
+                android:src="@drawable/ic_manager_shield"
+                android:tint="@color/white" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/plus_jakarta_sans_bold"
+                    android:text="@string/manager_overview_today"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/manager_today_date"
+                    android:textColor="#CBE2FF"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="›"
+                android:textColor="@color/white"
+                android:textSize="36sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal">
+
+            <include
+                android:id="@+id/dashboardDoctorsCard"
+                layout="@layout/item_dashboard_stat_doctors" />
+            <include
+                android:id="@+id/dashboardPatientsCard"
+                layout="@layout/item_dashboard_stat_patients" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <include
+                android:id="@+id/dashboardSchedulesCard"
+                layout="@layout/item_dashboard_stat_schedules" />
+            <include
+                android:id="@+id/dashboardPendingCard"
+                layout="@layout/item_dashboard_stat_pending" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <include
+                android:id="@+id/dashboardCompletedCard"
+                layout="@layout/item_dashboard_stat_completed" />
+            <include
+                android:id="@+id/dashboardChartCard"
+                layout="@layout/item_dashboard_stat_chart" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:fontFamily="@font/plus_jakarta_sans_bold"
+            android:text="@string/manager_quick_actions"
+            android:textColor="@color/manager_ink"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="132dp"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal">
+
+            <include
+                android:id="@+id/dashboardQuickAddDoctor"
+                layout="@layout/item_dashboard_quick_doctor" />
+            <include
+                android:id="@+id/dashboardQuickAddSpecialty"
+                layout="@layout/item_dashboard_quick_specialty" />
+            <include
+                android:id="@+id/dashboardQuickAddWorkShift"
+                layout="@layout/item_dashboard_quick_work_shift" />
+            <include
+                android:id="@+id/dashboardQuickApproveAppointments"
+                layout="@layout/item_dashboard_quick_appointments" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

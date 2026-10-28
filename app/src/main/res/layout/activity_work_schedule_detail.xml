@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/manager_background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp">
+
+        <TextView
+            android:id="@+id/detailScheduleBack"
+            android:layout_width="36dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:text="‹"
+            android:textColor="@color/manager_ink"
+            android:textSize="40sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/plus_jakarta_sans_bold"
+            android:text="@string/work_schedule_detail"
+            android:textColor="@color/manager_ink"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/manager_card_background"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="14dp">
+
+                <TextView
+                    android:id="@+id/detailScheduleInitials"
+                    android:layout_width="62dp"
+                    android:layout_height="62dp"
+                    android:background="@drawable/manager_appointment_avatar_background"
+                    android:gravity="center"
+                    android:textColor="@color/manager_blue"
+                    android:textSize="19sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/detailScheduleDoctorName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/plus_jakarta_sans_bold"
+                        android:textColor="@color/manager_ink"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/detailScheduleDoctorInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:textColor="@color/manager_muted"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/detailScheduleSpecialty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/manager_muted"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/manager_status_active_background"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="6dp"
+                    android:text="@string/work_schedule_status_active"
+                    android:textColor="@color/manager_green"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:fontFamily="@font/plus_jakarta_sans_bold"
+                android:text="Thông tin lịch làm việc"
+                android:textColor="@color/manager_ink"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/manager_card_background"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:text="▣    Ngày làm việc                 26/05/2025 (Thứ 2)"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/manager_ink"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="◷    Ca làm việc                    Ca sáng"
+                    android:textColor="@color/manager_ink"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="◷    Giờ làm việc                  08:00 - 12:00"
+                    android:textColor="@color/manager_ink"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="⌂    Phòng khám                    Phòng 201"
+                    android:textColor="@color/manager_ink"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="♙    Thời gian khám              30 phút / lượt"
+                    android:textColor="@color/manager_ink"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="▣    Số lượng lịch hẹn            8 lượt"
+                    android:textColor="@color/manager_ink"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="✓    Trạng thái                    Đang làm việc"
+                    android:textColor="@color/manager_green"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="▤    Ghi chú                         Khám bệnh theo lịch hẹn"
+                    android:textColor="@color/manager_ink"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/plus_jakarta_sans_bold"
+                android:text="Danh sách khung giờ khám"
+                android:textColor="@color/manager_ink"
+                android:textSize="17sp" />
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:columnCount="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="3dp"
+                    android:background="@drawable/manager_card_background"
+                    android:gravity="center"
+                    android:text="08:00"
+                    android:textColor="@color/manager_blue"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="3dp"
+                    android:background="@drawable/manager_card_background"
+                    android:gravity="center"
+                    android:text="08:30"
+                    android:textColor="@color/manager_blue"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="3dp"
+                    android:background="@drawable/manager_card_background"
+                    android:gravity="center"
+                    android:text="09:00"
+                    android:textColor="@color/manager_blue"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="3dp"
+                    android:background="@drawable/manager_card_background"
+                    android:gravity="center"
+                    android:text="09:30"
+                    android:textColor="@color/manager_blue"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="3dp"
+                    android:background="@drawable/manager_card_background"
+                    android:gravity="center"
+                    android:text="10:00"
+                    android:textColor="@color/manager_blue"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="3dp"
+                    android:background="@drawable/manager_card_background"
+                    android:gravity="center"
+                    android:text="10:30"
+                    android:textColor="@color/manager_blue"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="3dp"
+                    android:background="@drawable/manager_card_background"
+                    android:gravity="center"
+                    android:text="11:00"
+                    android:textColor="@color/manager_blue"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="3dp"
+                    android:background="@drawable/manager_card_background"
+                    android:gravity="center"
+                    android:text="11:30"
+                    android:textColor="@color/manager_blue"
+                    android:textStyle="bold" />
+            </GridLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/detailScheduleEdit"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/manager_card_background"
+            android:insetBottom="0dp"
+            android:insetTop="0dp"
+            android:text="Sửa lịch"
+            android:textAllCaps="false"
+            android:textColor="@color/manager_blue" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/detailScheduleLock"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/manager_reject_button_background"
+            android:insetBottom="0dp"
+            android:insetTop="0dp"
+            android:text="Khóa lịch"
+            android:textAllCaps="false"
+            android:textColor="@color/manager_red" />
+    </LinearLayout>
+</LinearLayout>
