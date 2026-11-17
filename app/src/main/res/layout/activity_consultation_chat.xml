@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/manager_background"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/consultationChatBack"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="←"
+            android:textColor="@color/patient_purple"
+            android:textSize="28sp" />
+
+        <TextView
+            android:id="@+id/consultationChatTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/plus_jakarta_sans_bold"
+            android:textColor="@color/manager_ink"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/consultationChatEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="@string/chat_empty"
+        android:textColor="@color/manager_muted"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/consultationChatScroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/consultationChatMessages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/consultationChatTyping"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/manager_card_background"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="14dp"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/consultationChatTypingDotOne"
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:background="@drawable/chat_typing_dot" />
+
+        <View
+            android:id="@+id/consultationChatTypingDotTwo"
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/chat_typing_dot" />
+
+        <View
+            android:id="@+id/consultationChatTypingDotThree"
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/chat_typing_dot" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/consultationChatInput"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:background="@drawable/manager_card_background"
+            android:hint="@string/chat_hint"
+            android:inputType="textCapSentences|textMultiLine"
+            android:paddingHorizontal="14dp"
+            android:textColor="@color/manager_ink"
+            android:textColorHint="@color/manager_muted" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/consultationChatSend"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/chat_send"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/patient_purple"
+            app:cornerRadius="14dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto" />
+    </LinearLayout>
+</LinearLayout>

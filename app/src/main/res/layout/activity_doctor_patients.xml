@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/manager_background" android:orientation="vertical" android:padding="16dp">
+    <TextView android:id="@+id/doctorPatientsBack" android:layout_width="wrap_content"
+        android:layout_height="40dp" android:gravity="center_vertical" android:text="‹  Quay lại"
+        android:textColor="@color/doctor_teal" android:visibility="gone" />
+    <TextView android:id="@+id/doctorPatientsTitle" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:fontFamily="@font/inter_bold"
+        android:text="Bệnh nhân được phân công" android:textColor="@color/manager_ink" android:textSize="13sp" />
+    <EditText android:id="@+id/doctorPatientsSearch" android:layout_width="match_parent"
+        android:layout_height="44dp" android:layout_marginTop="12dp"
+        android:background="@drawable/manager_card_background"
+        android:hint="🔍 Tìm theo tên bệnh nhân..." android:inputType="text"
+        android:paddingHorizontal="14dp" android:textColor="@color/manager_ink"
+        android:textColorHint="@color/manager_muted" android:textSize="11sp" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:layout_marginTop="12dp" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout android:id="@+id/doctorPatientsList" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:orientation="vertical" />
+            <TextView android:id="@+id/doctorPatientsEmpty" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:gravity="center" android:padding="20dp"
+                android:text="Chưa có bệnh nhân được phân công." android:textColor="@color/manager_muted"
+                android:textSize="11sp" android:visibility="gone" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" android:background="@drawable/manager_info_background"
+                android:padding="14dp" android:text="ℹ️ Danh sách giới hạn theo bác sĩ đang đăng nhập. Chỉ xem hồ sơ có quyền truy cập."
+                android:textColor="@color/doctor_teal_dark" android:textSize="11sp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

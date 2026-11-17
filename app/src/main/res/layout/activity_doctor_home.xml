@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/doctorHomeScroll" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="@color/manager_background"
+    android:fillViewport="true" android:scrollbars="none">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="16dp">
+
+        <LinearLayout android:id="@+id/doctorHero" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:background="@drawable/doctor_overview_background"
+            android:gravity="center_vertical" android:orientation="horizontal" android:padding="20dp">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="KHU VỰC BÁC SĨ" android:textColor="#D7F4E9" android:textSize="10sp" android:textStyle="bold" />
+                <TextView android:id="@+id/doctorGreeting" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_marginTop="6dp"
+                    android:fontFamily="@font/plus_jakarta_sans_bold" android:text="Chào bác sĩ 👋"
+                    android:textColor="@color/white" android:textSize="21sp" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp" android:text="Chúc một ngày làm việc hiệu quả!"
+                    android:textColor="#D7F4E9" android:textSize="11sp" />
+            </LinearLayout>
+            <TextView android:layout_width="58dp" android:layout_height="58dp"
+                android:gravity="center" android:text="🩺" android:textSize="42sp" />
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/doctorStatsTop" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
+            <LinearLayout style="@style/DoctorHomeStat" android:layout_marginEnd="5dp"
+                android:background="@drawable/manager_stat_doctors_background">
+                <TextView style="@style/DoctorHomeKpiIcon" android:text="🗓️" />
+                <TextView android:id="@+id/doctorConfirmedCount" style="@style/DoctorHomeKpiValue" android:text="0" />
+                <TextView style="@style/DoctorHomeKpiName" android:text="Lịch được duyệt" />
+            </LinearLayout>
+            <LinearLayout style="@style/DoctorHomeStat" android:layout_marginStart="5dp"
+                android:background="@drawable/manager_stat_pending_background">
+                <TextView style="@style/DoctorHomeKpiIcon" android:text="⏳" />
+                <TextView android:id="@+id/doctorPendingCount" style="@style/DoctorHomeKpiValue" android:text="0" />
+                <TextView style="@style/DoctorHomeKpiName" android:text="Chờ Admin duyệt" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/doctorStatsBottom" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="10dp" android:orientation="horizontal">
+            <LinearLayout style="@style/DoctorHomeStat" android:layout_marginEnd="5dp"
+                android:background="@drawable/manager_stat_patients_background">
+                <TextView style="@style/DoctorHomeKpiIcon" android:text="👥" />
+                <TextView android:id="@+id/doctorPatientCount" style="@style/DoctorHomeKpiValue" android:text="0" />
+                <TextView style="@style/DoctorHomeKpiName" android:text="Bệnh nhân hôm nay" />
+            </LinearLayout>
+            <LinearLayout style="@style/DoctorHomeStat" android:layout_marginStart="5dp"
+                android:background="@drawable/manager_stat_schedules_background">
+                <TextView style="@style/DoctorHomeKpiIcon" android:text="✅" />
+                <TextView android:id="@+id/doctorCompletedCount" style="@style/DoctorHomeKpiValue" android:text="0" />
+                <TextView style="@style/DoctorHomeKpiName" android:text="Đã hoàn thành" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/doctorAppointmentsSection" android:layout_width="match_parent"
+            android:layout_height="48dp" android:layout_marginTop="16dp" android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:fontFamily="@font/inter_bold"
+                android:text="Lịch khám gần nhất" android:textColor="@color/manager_ink" android:textSize="13sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Xem tất cả ›" android:textColor="@color/doctor_teal" android:textSize="11sp" />
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/doctorAppointmentsHeader" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:background="@drawable/manager_card_background"
+            android:orientation="vertical" android:padding="14dp" android:visibility="gone">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:gravity="center_vertical" android:orientation="horizontal">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:fontFamily="@font/inter_bold"
+                    android:text="Lịch khám cá nhân" android:textColor="@color/manager_ink" android:textSize="13sp" />
+                <TextView android:id="@+id/doctorScheduleDate" android:layout_width="wrap_content"
+                    android:layout_height="36dp" android:background="@drawable/manager_info_background"
+                    android:gravity="center" android:paddingHorizontal="10dp" android:textColor="@color/doctor_teal"
+                    android:textSize="10sp" />
+            </LinearLayout>
+            <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="12dp" android:scrollbars="none">
+                <LinearLayout android:id="@+id/doctorFilterRow" android:layout_width="wrap_content"
+                    android:layout_height="40dp" android:orientation="horizontal">
+                    <TextView android:id="@+id/doctorAllTab" style="@style/DoctorAppointmentChip" android:text="Tất cả" />
+                    <TextView android:id="@+id/doctorConfirmedTab" style="@style/DoctorAppointmentChip" android:text="Đã duyệt" />
+                    <TextView android:id="@+id/doctorInProgressTab" style="@style/DoctorAppointmentChip" android:text="Đang khám" />
+                    <TextView android:id="@+id/doctorCompletedTab" style="@style/DoctorAppointmentChip" android:text="Đã khám" />
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+
+        <TextView android:id="@+id/doctorExamHeading" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginBottom="12dp"
+            android:fontFamily="@font/inter_bold" android:text="Ghi nhận kết quả khám"
+            android:textColor="@color/manager_ink" android:textSize="13sp" android:visibility="gone" />
+        <TextView android:id="@+id/doctorDailySummary" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:visibility="gone" />
+        <EditText android:id="@+id/doctorSearchPatients" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:visibility="gone" />
+        <LinearLayout android:id="@+id/doctorAppointmentsList" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="14dp" android:orientation="vertical" />
+        <TextView android:id="@+id/doctorAppointmentsEmpty" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="22dp" android:gravity="center"
+            android:padding="20dp" android:textColor="@color/manager_muted" android:textSize="11sp"
+            android:visibility="gone" />
+        <TextView android:id="@+id/doctorInfoBox" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="14dp"
+            android:background="@drawable/manager_info_background" android:padding="14dp"
+            android:textColor="@color/doctor_teal_dark" android:textSize="11sp" android:visibility="gone" />
+
+        <LinearLayout android:id="@+id/doctorUtilities" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="20dp" android:orientation="vertical">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_bold" android:text="Tiện ích bác sĩ"
+                android:textColor="@color/manager_ink" android:textSize="13sp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" android:orientation="horizontal">
+                <TextView android:id="@+id/doctorExamShortcut" style="@style/DoctorActionTile"
+                    android:layout_marginEnd="5dp" android:text="🩺\nNhập kết quả" />
+                <TextView android:id="@+id/doctorPrescriptionShortcut" style="@style/DoctorActionTile"
+                    android:layout_marginStart="5dp" android:text="💊\nKê đơn" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" android:orientation="horizontal">
+                <TextView android:id="@+id/doctorChatShortcut" style="@style/DoctorActionTile"
+                    android:layout_marginEnd="5dp" android:text="💬\nChat bệnh nhân" />
+                <TextView android:id="@+id/doctorScheduleShortcut" style="@style/DoctorActionTile"
+                    android:layout_marginStart="5dp" android:text="📅\nLịch làm việc" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

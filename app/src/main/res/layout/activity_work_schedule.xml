@@ -1,250 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/manager_background"
+    android:id="@+id/main" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="@color/manager_background"
     android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp">
-
-        <TextView
-            android:id="@+id/workScheduleBack"
-            android:layout_width="36dp"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:text="‹"
-            android:textColor="@color/manager_ink"
-            android:textSize="40sp" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/plus_jakarta_sans_bold"
-            android:text="@string/work_schedule_title"
-            android:textColor="@color/manager_ink"
-            android:textSize="21sp" />
-
-        <TextView
-            android:id="@+id/workScheduleWeekly"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:background="@drawable/manager_quick_action_background"
-            android:gravity="center"
-            android:text="▦"
-            android:textColor="@color/manager_blue"
-            android:textSize="22sp" />
+    <LinearLayout android:id="@+id/workScheduleHeader" android:layout_width="match_parent"
+        android:layout_height="74dp" android:background="@drawable/manager_header_background"
+        android:gravity="center_vertical" android:orientation="horizontal" android:paddingHorizontal="16dp">
+        <TextView android:id="@+id/workScheduleBack" android:layout_width="40dp"
+            android:layout_height="40dp" android:background="@drawable/role_header_action_background"
+            android:gravity="center" android:text="‹" android:textColor="@color/white"
+            android:textSize="28sp" />
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:layout_weight="1" android:orientation="vertical">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Smart Healthcare · Quản trị viên" android:textColor="#DDEBFF"
+                android:textSize="10sp" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:fontFamily="@font/plus_jakarta_sans_bold" android:text="Lịch làm việc"
+                android:textColor="@color/white" android:textSize="18sp" />
+        </LinearLayout>
+        <TextView android:id="@+id/workScheduleWeekly" android:layout_width="40dp"
+            android:layout_height="40dp" android:background="@drawable/role_header_action_background"
+            android:gravity="center" android:text="▦" android:textColor="@color/white"
+            android:textSize="20sp" />
+        <TextView android:id="@+id/workScheduleAdd" android:layout_width="40dp"
+            android:layout_height="40dp" android:layout_marginStart="6dp"
+            android:background="@drawable/role_header_action_background"
+            android:gravity="center" android:text="+" android:textColor="@color/white"
+            android:textSize="24sp" />
     </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true"
-        android:scrollbars="none">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="4dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/manager_button_background"
-                    android:gravity="center"
-                    android:text="Tất cả (12)"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/manager_card_background"
-                    android:gravity="center"
-                    android:text="Đang làm việc (8)"
-                    android:textColor="@color/manager_ink"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="4dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/manager_card_background"
-                    android:gravity="center"
-                    android:text="Nghỉ / Khóa (4)"
-                    android:textColor="@color/manager_ink"
-                    android:textSize="11sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="46dp"
-                android:layout_marginTop="14dp"
-                android:background="@drawable/manager_card_background"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingHorizontal="14dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="▣  26/05/2025"
-                    android:textColor="@color/manager_muted"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:id="@+id/workScheduleAssign"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:background="@drawable/manager_button_background"
-                    android:gravity="center"
-                    android:paddingHorizontal="10dp"
-                    android:text="+ Phân lịch"
-                    android:textColor="@color/white"
-                    android:textSize="11sp" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:fontFamily="@font/plus_jakarta_sans_bold"
-                android:text="Lịch bác sĩ hôm nay"
-                android:textColor="@color/manager_ink"
-                android:textSize="18sp" />
-
-            <LinearLayout
-                android:id="@+id/workScheduleDoctorA"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/manager_card_background"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="14dp">
-
-                <TextView
-                    android:layout_width="46dp"
-                    android:layout_height="46dp"
-                    android:background="@drawable/manager_appointment_avatar_background"
-                    android:gravity="center"
-                    android:text="NA"
-                    android:textColor="@color/manager_blue"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/plus_jakarta_sans_bold"
-                        android:text="BS. Nguyễn Văn A"
-                        android:textColor="@color/manager_ink"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Tim mạch  •  08:00 - 12:00  •  Phòng 201"
-                        android:textColor="@color/manager_muted"
-                        android:textSize="12sp" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:fillViewport="true" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:background="@drawable/manager_card_background" android:orientation="vertical"
+                android:padding="15dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:gravity="center_vertical" android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:fontFamily="@font/plus_jakarta_sans_bold"
+                        android:text="Lịch làm việc bác sĩ" android:textColor="@color/manager_ink"
+                        android:textSize="15sp" />
+                    <TextView android:id="@+id/workScheduleWeeklyInline"
+                        android:layout_width="wrap_content" android:layout_height="40dp"
+                        android:gravity="center_vertical" android:text="Xem tuần  ›"
+                        android:textColor="@color/manager_blue" android:textSize="11sp" />
                 </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/manager_status_active_background"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="5dp"
-                    android:text="@string/work_schedule_status_active"
-                    android:textColor="@color/manager_green"
-                    android:textSize="10sp" />
+                <AutoCompleteTextView android:id="@+id/workScheduleDoctorFilter"
+                    android:layout_width="match_parent" android:layout_height="42dp"
+                    android:layout_marginTop="8dp" android:background="@drawable/manager_card_background"
+                    android:hint="Chọn bác sĩ  ▾" android:inputType="none"
+                    android:paddingHorizontal="12dp" android:textColor="@color/manager_ink"
+                    android:textSize="11sp" />
+                <EditText android:id="@+id/workScheduleDate" android:layout_width="match_parent"
+                    android:layout_height="42dp" android:layout_marginTop="8dp"
+                    android:background="@drawable/manager_card_background"
+                    android:focusable="false" android:gravity="center_vertical"
+                    android:hint="Chọn ngày làm việc" android:inputType="none"
+                    android:paddingHorizontal="12dp" android:textColor="@color/manager_ink"
+                    android:textSize="11sp" />
+                <LinearLayout android:id="@+id/workScheduleWeekStrip"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="11dp" android:orientation="horizontal" />
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/workScheduleDoctorB"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/manager_card_background"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="14dp">
-
-                <TextView
-                    android:layout_width="46dp"
-                    android:layout_height="46dp"
-                    android:background="@drawable/manager_appointment_avatar_background"
-                    android:gravity="center"
-                    android:text="TB"
-                    android:textColor="@color/manager_blue"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/plus_jakarta_sans_bold"
-                        android:text="BS. Trần Thị B"
-                        android:textColor="@color/manager_ink"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Nội khoa  •  08:00 - 12:00  •  Phòng 202"
-                        android:textColor="@color/manager_muted"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/manager_status_active_background"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="5dp"
-                    android:text="@string/work_schedule_status_active"
-                    android:textColor="@color/manager_green"
-                    android:textSize="10sp" />
-            </LinearLayout>
+            <TextView android:id="@+id/workScheduleSection" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="20dp"
+                android:fontFamily="@font/plus_jakarta_sans_bold" android:text="Các ca trong ngày"
+                android:textColor="@color/manager_ink" android:textSize="13sp" />
+            <TextView android:id="@+id/workScheduleEmpty" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="12dp"
+                android:gravity="center" android:padding="20dp"
+                android:text="Chưa có ca làm việc cho ngày này."
+                android:textColor="@color/manager_muted" android:textSize="11sp" />
+            <LinearLayout android:id="@+id/workScheduleList" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="10dp"
+                android:orientation="vertical" />
+            <TextView android:id="@+id/workScheduleAddInline" android:layout_width="match_parent"
+                android:layout_height="44dp" android:layout_marginTop="12dp"
+                android:background="@drawable/manager_button_background" android:gravity="center"
+                android:text="+ Tạo ca / Xin nghỉ" android:textColor="@color/white"
+                android:textSize="12sp" android:textStyle="bold" />
+            <TextView android:id="@+id/workScheduleLeaveRequests"
+                android:layout_width="match_parent" android:layout_height="40dp"
+                android:layout_marginTop="8dp" android:gravity="center"
+                android:text="Yêu cầu nghỉ / đổi ca từ bác sĩ  ›"
+                android:textColor="@color/manager_blue" android:textSize="11sp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

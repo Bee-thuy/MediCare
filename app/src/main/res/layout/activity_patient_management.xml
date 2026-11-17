@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/manager_background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/patientManagementBack"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:gravity="center_vertical"
+            android:text="@string/auth_back"
+            android:textColor="@color/manager_blue"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/plus_jakarta_sans_bold"
+            android:text="@string/manager_patients"
+            android:textColor="@color/manager_ink"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/manager_patient_management_subtitle"
+            android:textColor="@color/manager_muted"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/patientManagementSearch"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/manager_card_background"
+            android:hint="@string/manager_patient_search"
+            android:inputType="text"
+            android:paddingHorizontal="14dp"
+            android:textColor="@color/manager_ink"
+            android:textColorHint="@color/manager_muted" />
+
+        <TextView
+            android:id="@+id/patientManagementEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:gravity="center"
+            android:text="@string/manager_no_patients"
+            android:textColor="@color/manager_muted"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/patientManagementList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical" />
+    </LinearLayout>
+</ScrollView>

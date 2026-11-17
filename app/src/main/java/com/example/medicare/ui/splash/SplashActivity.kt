@@ -4,9 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import com.example.medicare.R
 import com.example.medicare.data.auth.AuthRepository
-import com.example.medicare.data.auth.SessionState
+import com.example.medicare.databinding.ActivitySplashBinding
+import com.example.medicare.model.SessionState
 import com.example.medicare.ui.base.FullscreenActivity
 import com.example.medicare.ui.auth.LoginActivity
 import com.example.medicare.ui.language.LanguageActivity
@@ -18,6 +18,7 @@ class SplashActivity : FullscreenActivity() {
 
     private val handler = Handler(Looper.getMainLooper())
     private val authRepository = AuthRepository()
+    private lateinit var binding: ActivitySplashBinding
     private var initialDelayFinished = false
     private var sessionState: SessionState? = null
     private var didNavigate = false
@@ -29,7 +30,8 @@ class SplashActivity : FullscreenActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        binding = ActivitySplashBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         handler.postDelayed(completeInitialDelay, SPLASH_DELAY_MS)
         authRepository.resolveSession {
             sessionState = it

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/manager_background" android:fillViewport="true"
+    android:scrollbars="none">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="16dp">
+        <TextView android:id="@+id/doctorWorkBack" android:layout_width="wrap_content"
+            android:layout_height="38dp" android:gravity="center_vertical" android:text="‹  Quay lại"
+            android:textColor="@color/doctor_teal" />
+        <TextView android:id="@+id/doctorWorkTitle" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:fontFamily="@font/inter_bold"
+            android:text="Thời gian làm việc" android:textColor="@color/manager_ink" android:textSize="18sp" />
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" android:background="@drawable/manager_card_background"
+            android:orientation="vertical" android:padding="14dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:gravity="center_vertical" android:orientation="horizontal">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:fontFamily="@font/inter_bold"
+                    android:text="Lịch làm việc cá nhân" android:textColor="@color/manager_ink"
+                    android:textSize="13sp" />
+                <TextView android:id="@+id/doctorWorkDate" android:layout_width="wrap_content"
+                    android:layout_height="32dp" android:background="@drawable/manager_info_background"
+                    android:gravity="center" android:paddingHorizontal="10dp" android:textColor="@color/doctor_teal"
+                    android:textSize="10sp" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/doctorWorkWeekStrip" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="14dp"
+                android:orientation="horizontal" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:visibility="gone">
+            <TextView android:id="@+id/doctorWorkDay" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:text="Ngày" />
+            <TextView android:id="@+id/doctorWorkWeek" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:text="Tuần" />
+            <TextView android:id="@+id/doctorWorkMonth" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:text="Tháng" />
+        </LinearLayout>
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="19dp" android:fontFamily="@font/inter_bold"
+            android:text="Ca được phân công" android:textColor="@color/manager_ink" android:textSize="13sp" />
+        <LinearLayout android:id="@+id/doctorWorkList" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="11dp" android:orientation="vertical" />
+        <TextView android:id="@+id/doctorWorkEmpty" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:gravity="center" android:padding="20dp"
+            android:text="Chưa có ca làm việc ngày này." android:textColor="@color/manager_muted"
+            android:textSize="11sp" android:visibility="gone" />
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="19dp" android:fontFamily="@font/inter_bold"
+            android:text="Đơn xin nghỉ / đổi ca" android:textColor="@color/manager_ink" android:textSize="13sp" />
+        <TextView android:id="@+id/doctorWorkRequests" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="11dp"
+            android:background="@drawable/manager_card_background" android:padding="14dp"
+            android:textColor="@color/manager_muted" android:textSize="11sp" />
+        <TextView android:id="@+id/doctorWorkRequestLeave" android:layout_width="match_parent"
+            android:layout_height="44dp" android:layout_marginTop="12dp"
+            android:background="@drawable/doctor_primary_button_background" android:gravity="center"
+            android:text="+ Gửi yêu cầu nghỉ / đổi lịch" android:textColor="@color/white"
+            android:textSize="12sp" android:textStyle="bold" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="13dp" android:background="@drawable/manager_info_background"
+            android:padding="14dp" android:text="ℹ️ Yêu cầu được chuyển tới Admin để duyệt; lịch cũ vẫn giữ nguyên tới khi có quyết định."
+            android:textColor="@color/doctor_teal_dark" android:textSize="11sp" />
+    </LinearLayout>
+</ScrollView>

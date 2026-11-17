@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp" android:background="@drawable/manager_card_background"
+    android:orientation="vertical" android:padding="15dp">
+    <TextView android:id="@+id/doctorPrescriptionPatient" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:fontFamily="@font/inter_bold"
+        android:textColor="@color/manager_ink" android:textSize="12sp" />
+    <TextView android:id="@+id/doctorPrescriptionSummary" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginTop="2dp"
+        android:textColor="@color/manager_muted" android:textSize="10sp" />
+    <LinearLayout android:id="@+id/doctorPrescriptionMedications" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginTop="8dp"
+        android:orientation="vertical" />
+    <TextView android:id="@+id/doctorPrescriptionOpen" android:layout_width="match_parent"
+        android:layout_height="38dp" android:layout_marginTop="9dp"
+        android:background="@drawable/manager_secondary_action_background"
+        android:fontFamily="@font/inter_bold" android:gravity="center"
+        android:text="Xem / chỉnh đơn" android:textColor="@color/doctor_teal_dark"
+        android:textSize="11sp" />
+</LinearLayout>

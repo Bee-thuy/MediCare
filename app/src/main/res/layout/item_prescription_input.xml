@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/manager_card_background"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/prescriptionRemove"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_gravity="end"
+        android:gravity="center"
+        android:text="@string/doctor_remove_medication"
+        android:textColor="@color/manager_red"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/prescriptionName"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@android:color/transparent"
+        android:hint="@string/doctor_medication_name"
+        android:inputType="textCapSentences"
+        android:textColor="@color/manager_ink"
+        android:textColorHint="@color/manager_muted" />
+
+    <EditText
+        android:id="@+id/prescriptionDosage"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@android:color/transparent"
+        android:hint="@string/doctor_medication_dosage"
+        android:inputType="textCapSentences"
+        android:textColor="@color/manager_ink"
+        android:textColorHint="@color/manager_muted" />
+
+    <EditText
+        android:id="@+id/prescriptionInstructions"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@android:color/transparent"
+        android:hint="@string/doctor_medication_instructions"
+        android:inputType="textCapSentences"
+        android:textColor="@color/manager_ink"
+        android:textColorHint="@color/manager_muted" />
+
+    <EditText
+        android:id="@+id/prescriptionDurationDays"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@android:color/transparent"
+        android:hint="@string/doctor_medication_duration"
+        android:inputType="text"
+        android:textColor="@color/manager_ink"
+        android:textColorHint="@color/manager_muted" />
+</LinearLayout>

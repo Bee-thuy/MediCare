@@ -9,19 +9,20 @@
     android:focusable="true"
     android:gravity="center"
     android:orientation="vertical">
-  <ImageView
+  <TextView
     android:id="@+id/managerNavNotificationsIcon"
-    android:layout_width="24dp"
-    android:layout_height="24dp"
+    android:layout_width="39dp"
+    android:layout_height="32dp"
+    android:background="@drawable/manager_nav_icon_background"
     android:contentDescription="@null"
-    android:src="@drawable/ic_manager_work_shift"/>
+    android:gravity="center" android:text="👥" android:textSize="21sp"/>
   <TextView
     android:id="@+id/managerNavNotificationsLabel"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="2dp"
     android:fontFamily="@font/plus_jakarta_sans_medium"
-    android:text="@string/manager_work_schedule_nav"
+    android:text="@string/manager_patients"
     android:textColor="@color/manager_muted"
     android:textSize="10sp"/>
 </LinearLayout>

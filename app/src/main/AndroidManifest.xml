@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
+        android:name=".MediCareApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,80 +15,142 @@
         android:roundIcon="@drawable/medicare_logo_oval"
         android:supportsRtl="true"
         android:theme="@style/Theme.MediCare">
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="medicare_updates" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/medicare_logo_rounded_24dp" />
+        <activity android:name=".manager.dashboard.ManagerReportActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".manager.review.ManagerReviewsActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".user.review.MyReviewsActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".user.chat.PatientChatsActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".user.settings.PatientSettingsActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".user.review.ReviewDoctorActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".user.medical.MedicalHistoryActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".manager.schedule.LeaveRequestsActivity" android:exported="false" android:screenOrientation="portrait" />
+        <service
+            android:name=".notification.MediCareMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <activity android:name=".notification.NotificationsActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".doctor.schedule.DoctorScheduleActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".doctor.medical.DoctorPrescriptionsActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".doctor.profile.DoctorProfileActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".doctor.patient.DoctorPatientsActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".ui.profile.ProfileActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".manager.work_schedule.ScheduleUpdateResultActivity"
+            android:name=".user.reminder.AddMedicationReminderActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".user.reminder.MedicationReminderActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".manager.work_schedule.LeaveLockScheduleActivity"
+            android:name=".manager.patient.PatientManagementActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".manager.work_schedule.WorkShiftListActivity"
+            android:name=".ui.chat.ConsultationChatActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".user.medical.MedicalRecordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".manager.work_schedule.AssignDoctorScheduleActivity"
+            android:name=".user.appointment.MyAppointmentsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".manager.work_schedule.WorkScheduleDetailActivity"
+            android:name=".doctor.medical.CompleteAppointmentActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".user.appointment.BookAppointmentActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".manager.work_schedule.WeeklyScheduleActivity"
+            android:name=".user.doctor.DoctorDirectoryActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".manager.work_schedule.WorkScheduleActivity"
+            android:name=".manager.schedule.AssignDoctorScheduleActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".manager.user.ProposeScheduleActivity"
+            android:name=".manager.schedule.ScheduleUpdateResultActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".manager.schedule.LeaveLockScheduleActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".manager.schedule.WorkShiftListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".manager.schedule.WorkScheduleDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".manager.schedule.WeeklyScheduleActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".manager.schedule.WorkScheduleActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".manager.appointment.ProposeScheduleActivity"
             android:exported="false" />
         <activity
-            android:name=".manager.user.DetailDoctorActivity"
+            android:name=".manager.appointment.DetailDoctorActivity"
             android:exported="false" />
         <activity
-            android:name=".manager.user.PatientNotificationActivity"
+            android:name=".manager.appointment.PatientNotificationActivity"
             android:exported="false" />
         <activity
-            android:name=".manager.user.DetailPatientActivity"
+            android:name=".manager.appointment.DetailPatientActivity"
             android:exported="false" />
         <activity
-            android:name=".manager.docter.WorkShiftActivity"
+            android:name=".manager.doctor.WorkShiftActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".manager.docter.SpecialtyActivity"
+            android:name=".manager.doctor.SpecialtyActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".manager.docter.AddSpecialtyActivity"
+            android:name=".manager.doctor.AddSpecialtyActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".manager.docter.AddWorkShiftActivity"
+            android:name=".manager.doctor.AddWorkShiftActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".manager.docter.AddDoctorActivity"
+            android:name=".manager.doctor.AddDoctorActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".manager.ui.ManagerActivity"
+            android:name=".manager.ManagerActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.admin.AdminHomeActivity"
+            android:name=".doctor.DoctorHomeActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.doctor.DoctorHomeActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.patient.PatientHomeActivity"
+            android:name=".user.PatientHomeActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -121,10 +185,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.main.MainActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

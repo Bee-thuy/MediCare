@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/manager_background" android:orientation="vertical">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="74dp"
+        android:background="@color/patient_purple_dark" android:gravity="center_vertical"
+        android:orientation="horizontal" android:paddingHorizontal="16dp">
+        <TextView android:id="@+id/patientMenuButton" android:layout_width="40dp" android:layout_height="40dp"
+            android:background="@drawable/role_header_action_background" android:contentDescription="Mở danh mục bệnh nhân"
+            android:gravity="center" android:text="☰" android:textColor="@color/white" android:textSize="20sp" />
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:layout_weight="1" android:orientation="vertical">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Smart Healthcare · Bệnh nhân" android:textColor="#E5DFFF" android:textSize="10sp" />
+            <TextView android:id="@+id/patientHeaderTitle" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" android:fontFamily="@font/inter_bold"
+                android:text="Trang chủ bệnh nhân" android:textColor="@color/white" android:textSize="18sp" />
+        </LinearLayout>
+        <TextView android:id="@+id/patientHeaderNotifications" android:layout_width="40dp"
+            android:layout_height="40dp" android:background="@drawable/role_header_action_background"
+            android:contentDescription="Thông báo" android:gravity="center" android:text="🔔" android:textSize="19sp" />
+    </LinearLayout>
+    <FrameLayout android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1">
+    <ScrollView android:id="@+id/patientHomeScroll" android:layout_width="match_parent"
+        android:layout_height="match_parent" android:fillViewport="true" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="132dp"
+                android:background="@drawable/patient_hero_background" android:gravity="center_vertical"
+                android:orientation="horizontal" android:padding="20dp">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:text="SMART HEALTHCARE 💜" android:textColor="#E5DFFF" android:textSize="10sp" />
+                    <TextView android:id="@+id/patientHomeGreeting" android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:layout_marginTop="6dp"
+                        android:fontFamily="@font/inter_bold" android:text="Xin chào!"
+                        android:textColor="@color/white" android:textSize="20sp" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp" android:text="Chủ động chăm sóc sức khỏe của bạn"
+                        android:textColor="#E5DFFF" android:textSize="11sp" />
+                </LinearLayout>
+                <TextView android:layout_width="56dp" android:layout_height="64dp"
+                    android:gravity="center" android:text="👨‍⚕️" android:textSize="43sp" />
+            </LinearLayout>
+            <TextView android:id="@+id/patientSearchShortcut" android:layout_width="match_parent"
+                android:layout_height="43dp" android:layout_marginTop="16dp"
+                android:background="@drawable/manager_card_background" android:gravity="center_vertical"
+                android:paddingHorizontal="13dp" android:text="🔍  Tìm bác sĩ, chuyên khoa, bệnh viện..."
+                android:textColor="@color/manager_muted" android:textSize="12sp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" android:orientation="horizontal">
+                <LinearLayout android:id="@+id/patientBrowseDoctors" style="@style/PatientHomeTile"
+                    android:layout_marginEnd="5dp">
+                    <TextView style="@style/PatientTileIcon" android:text="🩺" />
+                    <TextView style="@style/PatientTileLabel" android:text="Tìm bác sĩ" />
+                    <TextView style="@style/PatientTileDescription" android:text="Chọn chuyên khoa" />
+                </LinearLayout>
+                <LinearLayout android:id="@+id/patientBookingShortcut" style="@style/PatientHomeTile"
+                    android:layout_marginStart="5dp">
+                    <TextView style="@style/PatientTileIcon" android:text="📅" />
+                    <TextView style="@style/PatientTileLabel" android:text="Đặt lịch khám" />
+                    <TextView style="@style/PatientTileDescription" android:text="Chọn giờ linh hoạt" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" android:orientation="horizontal">
+                <LinearLayout android:id="@+id/patientMedicalHistory" style="@style/PatientHomeTile"
+                    android:layout_marginEnd="5dp">
+                    <TextView style="@style/PatientTileIcon" android:text="📂" />
+                    <TextView style="@style/PatientTileLabel" android:text="Hồ sơ sức khỏe" />
+                    <TextView style="@style/PatientTileDescription" android:text="Lịch sử và đơn thuốc" />
+                </LinearLayout>
+                <LinearLayout android:id="@+id/patientMedicationReminders" style="@style/PatientHomeTile"
+                    android:layout_marginStart="5dp">
+                    <TextView style="@style/PatientTileIcon" android:text="💊" />
+                    <TextView style="@style/PatientTileLabel" android:text="Nhắc uống thuốc" />
+                    <TextView style="@style/PatientTileDescription" android:text="Không quên liều" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" android:orientation="horizontal">
+                <LinearLayout android:id="@+id/patientChatShortcut" style="@style/PatientHomeTile"
+                    android:layout_marginEnd="5dp">
+                    <TextView style="@style/PatientTileIcon" android:text="💬" />
+                    <TextView style="@style/PatientTileLabel" android:text="Chat bác sĩ" />
+                    <TextView style="@style/PatientTileDescription" android:text="Tư vấn từ xa" />
+                </LinearLayout>
+                <LinearLayout android:id="@+id/patientMyReviews" style="@style/PatientHomeTile"
+                    android:layout_marginStart="5dp">
+                    <TextView style="@style/PatientTileIcon" android:text="⭐" />
+                    <TextView style="@style/PatientTileLabel" android:text="Đánh giá" />
+                    <TextView style="@style/PatientTileDescription" android:text="Chia sẻ trải nghiệm" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="14dp" android:gravity="center_vertical" android:orientation="horizontal">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:fontFamily="@font/inter_bold"
+                    android:text="Lịch khám sắp tới" android:textColor="@color/manager_ink" android:textSize="13sp" />
+                <TextView android:id="@+id/patientMyAppointments" android:layout_width="wrap_content"
+                    android:layout_height="40dp" android:gravity="center_vertical"
+                    android:text="Xem tất cả ›" android:textColor="@color/patient_purple" android:textSize="11sp" />
+            </LinearLayout>
+            <TextView android:id="@+id/patientUpcomingAppointment" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:background="@drawable/manager_card_background"
+                android:padding="15dp" android:text="@string/patient_no_upcoming"
+                android:textColor="@color/manager_muted" android:textSize="12sp" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="18dp" android:fontFamily="@font/inter_bold"
+                android:text="Bác sĩ nổi bật" android:textColor="@color/manager_ink" android:textSize="13sp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" android:background="@drawable/manager_card_background"
+                android:orientation="vertical" android:padding="15dp">
+                <TextView android:id="@+id/patientFeaturedDoctors" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:textColor="@color/manager_ink" android:textSize="12sp" />
+                <TextView android:id="@+id/patientPopularSpecialties" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_marginTop="5dp"
+                    android:textColor="@color/manager_muted" android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <androidx.fragment.app.FragmentContainerView android:id="@+id/patientFragmentContainer"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:visibility="gone" />
+    </FrameLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="68dp"
+        android:background="@color/white" android:elevation="8dp" android:orientation="horizontal"
+        android:paddingHorizontal="5dp" android:paddingVertical="5dp">
+        <TextView android:id="@+id/patientNavAccount" style="@style/RoleBottomItem" android:text="🔐\nTài khoản" />
+        <TextView android:id="@+id/patientNavHome" style="@style/RoleBottomItem"
+            android:text="🏠\nTrang chủ" android:textColor="@color/patient_purple" />
+        <TextView android:id="@+id/patientNavSearch" style="@style/RoleBottomItem" android:text="🔍\nTìm bác sĩ" />
+        <TextView android:id="@+id/patientNavBooking" style="@style/RoleBottomItem" android:text="📅\nĐặt lịch" />
+        <TextView android:id="@+id/patientNavCatalog" style="@style/RoleBottomItem" android:text="☷\nDanh mục" />
+    </LinearLayout>
+</LinearLayout>

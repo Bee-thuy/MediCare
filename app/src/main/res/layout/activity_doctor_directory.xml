@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/manager_background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/doctorDirectoryHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/patient_overview_background"
+        android:elevation="2dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="14dp">
+
+        <TextView
+            android:id="@+id/doctorDirectoryBack"
+            android:layout_width="38dp"
+            android:layout_height="42dp"
+            android:gravity="center"
+            android:text="‹"
+            android:textColor="@color/white"
+            android:textSize="38sp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/plus_jakarta_sans_bold"
+                android:text="Chọn bác sĩ"
+                android:textColor="@color/white"
+                android:textSize="21sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Tìm người đồng hành phù hợp với bạn"
+                android:textColor="#E8E1FF"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="18dp">
+
+        <EditText
+            android:id="@+id/doctorDirectorySearch"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@drawable/manager_card_background"
+            android:hint="Tìm theo tên hoặc chuyên khoa"
+            android:paddingHorizontal="17dp"
+            android:textColor="@color/manager_ink"
+            android:textColorHint="@color/manager_muted" />
+
+        <AutoCompleteTextView
+            android:id="@+id/doctorDirectorySpecialtyFilter"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/manager_card_background"
+            android:hint="@string/patient_filter_specialty"
+            android:inputType="none"
+            android:paddingHorizontal="17dp"
+            android:textColor="@color/manager_ink"
+            android:textColorHint="@color/manager_muted" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/doctorDirectoryEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:gravity="center"
+        android:text="Chưa có bác sĩ đang hoạt động."
+        android:textColor="@color/manager_muted"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/doctorDirectoryList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="24dp" />
+</LinearLayout>

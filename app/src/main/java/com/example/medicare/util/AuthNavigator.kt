@@ -3,9 +3,9 @@ package com.example.medicare.util
 import android.app.Activity
 import android.content.Intent
 import com.example.medicare.model.UserRole
-import com.example.medicare.ui.doctor.DoctorHomeActivity
-import com.example.medicare.manager.ui.ManagerActivity
-import com.example.medicare.ui.patient.PatientHomeActivity
+import com.example.medicare.doctor.DoctorHomeActivity
+import com.example.medicare.manager.ManagerActivity
+import com.example.medicare.user.PatientHomeActivity
 
 object AuthNavigator {
     fun openHome(activity: Activity, role: UserRole) {

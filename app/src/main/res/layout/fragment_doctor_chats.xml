@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/manager_background" android:orientation="vertical"
+    android:focusableInTouchMode="true" android:padding="16dp">
+    <LinearLayout android:id="@+id/doctorChatPatientCard" android:layout_width="match_parent"
+        android:layout_height="64dp" android:background="@drawable/manager_card_background"
+        android:clickable="true" android:focusable="true" android:gravity="center_vertical"
+        android:orientation="horizontal" android:paddingHorizontal="13dp">
+        <TextView android:layout_width="44dp" android:layout_height="44dp"
+            android:background="@drawable/doctor_avatar_background" android:gravity="center"
+            android:text="👤" android:textSize="21sp" />
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_marginStart="10dp" android:layout_weight="1" android:orientation="vertical">
+            <TextView android:id="@+id/doctorChatPatientName" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:fontFamily="@font/inter_bold"
+                android:text="Chọn bệnh nhân để tư vấn" android:textColor="@color/manager_ink"
+                android:textSize="12sp" />
+            <TextView android:id="@+id/doctorChatPatientStatus" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="3dp"
+                android:text="Cuộc trò chuyện theo lịch khám" android:textColor="@color/manager_muted"
+                android:textSize="10sp" />
+        </LinearLayout>
+        <TextView android:layout_width="28dp" android:layout_height="wrap_content"
+            android:gravity="center" android:text="⋮" android:textColor="@color/manager_muted"
+            android:textSize="21sp" />
+    </LinearLayout>
+    <ScrollView android:id="@+id/doctorChatScroll" android:layout_width="match_parent"
+        android:layout_height="0dp" android:layout_weight="1.4" android:fillViewport="true"
+        android:scrollbars="none">
+        <LinearLayout android:id="@+id/doctorChatMessages" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="vertical"
+            android:paddingTop="8dp" />
+    </ScrollView>
+    <TextView android:id="@+id/doctorChatTyping" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_marginBottom="5dp"
+        android:background="@drawable/manager_card_background" android:padding="9dp"
+        android:text="Bệnh nhân đang nhập…" android:textColor="@color/manager_muted"
+        android:textSize="10sp" android:visibility="gone" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="48dp"
+        android:gravity="center_vertical" android:orientation="horizontal">
+        <EditText android:id="@+id/doctorChatInput" android:layout_width="0dp"
+            android:layout_height="44dp" android:layout_weight="1"
+            android:background="@drawable/manager_card_background" android:hint="Nhập tin nhắn..."
+            android:inputType="textCapSentences|textMultiLine" android:paddingHorizontal="12dp"
+            android:textColor="@color/manager_ink" android:textColorHint="@color/manager_muted"
+            android:textSize="11sp" />
+        <TextView android:id="@+id/doctorChatSend" android:layout_width="44dp"
+            android:layout_height="44dp" android:layout_marginStart="7dp"
+            android:background="@drawable/doctor_chat_send_background" android:gravity="center"
+            android:text="➤" android:textColor="@color/white" android:textSize="17sp" />
+    </LinearLayout>
+    <View android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>

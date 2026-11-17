@@ -8,29 +8,40 @@
     android:id="@+id/managerBottomNavigation"
     android:layout_width="match_parent"
     android:layout_height="68dp"
-    android:background="@color/white"
+    android:background="@drawable/manager_header_background"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingHorizontal="20dp">
-    <ImageView
-    android:layout_width="34dp"
-    android:layout_height="34dp"
-    android:contentDescription="@string/app_name"
-    android:src="@drawable/ic_manager_shield"/>
+    android:paddingHorizontal="16dp">
     <TextView
+    android:id="@+id/managerMenuButton"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:contentDescription="Mở danh mục"
+    android:gravity="center"
+    android:background="@drawable/manager_header_action_background"
+    android:text="☰"
+    android:textColor="@color/white"
+    android:textSize="20sp"/>
+    <LinearLayout
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
+    android:layout_marginStart="12dp"
     android:layout_weight="1"
-    android:fontFamily="@font/plus_jakarta_sans_bold"
-    android:text="@string/manager_title"
-    android:textColor="@color/manager_blue_dark"
-    android:textSize="20sp"/>
+    android:orientation="vertical">
+      <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Smart Healthcare · Quản trị viên" android:textColor="#DDEBFF"
+        android:textSize="10sp"/>
+      <TextView
+        android:id="@+id/managerHeaderTitle"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="2dp" android:fontFamily="@font/plus_jakarta_sans_bold"
+        android:text="Tổng quan" android:textColor="@color/white" android:textSize="18sp"/>
+    </LinearLayout>
     <FrameLayout
     android:id="@+id/managerNotificationButton"
     android:layout_width="44dp"
     android:layout_height="44dp"
-    android:background="?attr/selectableItemBackgroundBorderless"
+    android:background="@drawable/role_header_action_background"
     android:clickable="true"
     android:contentDescription="@string/manager_notifications"
     android:focusable="true">
@@ -39,14 +50,7 @@
     android:layout_height="26dp"
     android:layout_gravity="center"
     android:src="@drawable/ic_manager_notifications"
-    android:tint="@color/manager_ink"/>
-      <View
-    android:layout_width="10dp"
-    android:layout_height="10dp"
-    android:layout_gravity="top|end"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="7dp"
-    android:background="@drawable/manager_pending_badge"/>
+    android:tint="@color/white"/>
     </FrameLayout>
   </LinearLayout>
   <androidx.fragment.app.FragmentContainerView

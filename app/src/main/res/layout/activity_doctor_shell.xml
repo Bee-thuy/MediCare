@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/manager_background">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="74dp"
+        android:background="@color/doctor_teal_dark" android:gravity="center_vertical"
+        android:orientation="horizontal" android:paddingHorizontal="16dp">
+        <TextView android:id="@+id/doctorMenuButton" android:layout_width="40dp" android:layout_height="40dp"
+            android:background="@drawable/role_header_action_background" android:gravity="center"
+            android:text="☰" android:textSize="20sp" android:textColor="@color/white"
+            android:contentDescription="Mở danh mục bác sĩ" />
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:layout_weight="1" android:orientation="vertical">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Smart Healthcare · Bác sĩ" android:textColor="#D7F4E9" android:textSize="10sp" />
+            <TextView android:id="@+id/doctorHeaderTitle" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="2dp"
+                android:fontFamily="@font/plus_jakarta_sans_bold" android:text="Tổng quan bác sĩ"
+                android:textColor="@color/white" android:textSize="18sp" />
+        </LinearLayout>
+        <TextView android:id="@+id/doctorHeaderNotifications" android:layout_width="40dp"
+            android:layout_height="40dp" android:background="@drawable/role_header_action_background"
+            android:gravity="center" android:text="🔔" android:textSize="19sp"
+            android:contentDescription="Thông báo" />
+    </LinearLayout>
+    <androidx.fragment.app.FragmentContainerView android:id="@+id/doctorFragmentContainer"
+        android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="68dp"
+        android:background="@color/white" android:elevation="8dp" android:orientation="horizontal"
+        android:paddingHorizontal="5dp" android:paddingVertical="5dp">
+        <TextView android:id="@+id/doctorNavHome" style="@style/RoleBottomItem" android:text="🏠\nTrang chủ" />
+        <TextView android:id="@+id/doctorNavAppointments" style="@style/RoleBottomItem" android:text="📋\nLịch khám" />
+        <TextView android:id="@+id/doctorNavPatients" style="@style/RoleBottomItem" android:text="👥\nBệnh nhân" />
+        <TextView android:id="@+id/doctorNavExam" style="@style/RoleBottomItem" android:text="🩺\nKết quả" />
+        <TextView android:id="@+id/doctorNavCatalog" style="@style/RoleBottomItem" android:text="☷\nDanh mục" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,118 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:fillViewport="true"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/manager_background" android:fillViewport="true"
     android:scrollbars="none">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/managerDoctorsBack"
-                android:layout_width="34dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="‹"
-                android:textColor="@color/manager_ink"
-                android:textSize="38sp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/plus_jakarta_sans_bold"
-                android:text="@string/manager_doctors"
-                android:textColor="@color/manager_ink"
-                android:textSize="20sp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/managerDoctorsAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="44dp"
-                android:background="@drawable/manager_button_background"
-                android:insetBottom="0dp"
-                android:insetTop="0dp"
-                android:text="@string/manager_add_doctor"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="16dp">
+        <TextView android:id="@+id/managerDoctorsBack" android:layout_width="0dp"
+            android:layout_height="0dp" android:visibility="gone" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:gravity="center_vertical" android:orientation="horizontal">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:fontFamily="@font/plus_jakarta_sans_bold"
+                android:text="Danh sách bác sĩ" android:textColor="@color/manager_ink"
                 android:textSize="13sp" />
+            <TextView android:id="@+id/managerDoctorsAdd" android:layout_width="wrap_content"
+                android:layout_height="40dp" android:gravity="center_vertical"
+                android:text="+ Thêm mới  ›" android:textColor="@color/manager_blue"
+                android:textSize="11sp" android:textStyle="bold" />
         </LinearLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:hint="@string/manager_search_doctor">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/managerDoctorsSearch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:orientation="horizontal">
-
+        <EditText android:id="@+id/managerDoctorsSearch" android:layout_width="match_parent"
+            android:layout_height="43dp" android:layout_marginTop="10dp"
+            android:background="@drawable/manager_card_background"
+            android:hint="🔍 Tìm bác sĩ hoặc chuyên khoa..." android:inputType="text"
+            android:paddingHorizontal="13dp" android:singleLine="true"
+            android:textColor="@color/manager_ink" android:textColorHint="@color/manager_muted"
+            android:textSize="12sp" />
+        <TextView android:id="@+id/managerDoctorsFiltersToggle"
+            android:layout_width="match_parent" android:layout_height="35dp"
+            android:gravity="center_vertical|end" android:text="Lọc chuyên khoa, trạng thái  ▾"
+            android:textColor="@color/manager_blue" android:textSize="11sp" />
+        <LinearLayout android:id="@+id/managerDoctorsFiltersPanel"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:visibility="gone">
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_width="0dp" android:layout_height="wrap_content"
                 android:layout_weight="1">
-
-                <AutoCompleteTextView
-                    android:id="@+id/managerDoctorsSpecialtyFilter"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/manager_all_specialties"
-                    android:inputType="none" />
+                <AutoCompleteTextView android:id="@+id/managerDoctorsSpecialtyFilter"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:hint="Chuyên khoa" android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
-
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.65">
-
-                <AutoCompleteTextView
-                    android:id="@+id/managerDoctorsStatusFilter"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/manager_all_statuses"
-                    android:inputType="none" />
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_marginStart="8dp" android:layout_weight="1">
+                <AutoCompleteTextView android:id="@+id/managerDoctorsStatusFilter"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:hint="Trạng thái" android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/managerDoctorsEmpty"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
-            android:gravity="center"
-            android:text="@string/manager_no_doctors"
-            android:textColor="@color/manager_muted"
-            android:textSize="16sp" />
-
-        <LinearLayout
-            android:id="@+id/managerDoctorsList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
+        <TextView android:id="@+id/managerDoctorsEmpty" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="30dp"
+            android:gravity="center" android:padding="20dp" android:text="Chưa có bác sĩ phù hợp"
+            android:textColor="@color/manager_muted" android:textSize="12sp"
+            android:visibility="gone" />
+        <LinearLayout android:id="@+id/managerDoctorsList" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="8dp"
             android:orientation="vertical" />
+        <TextView android:id="@+id/managerDoctorsBottomAdd" android:layout_width="match_parent"
+            android:layout_height="44dp" android:layout_marginTop="12dp"
+            android:background="@drawable/manager_button_background" android:gravity="center"
+            android:text="+  Thêm bác sĩ" android:textColor="@color/white"
+            android:textSize="12sp" android:textStyle="bold" />
     </LinearLayout>
 </ScrollView>

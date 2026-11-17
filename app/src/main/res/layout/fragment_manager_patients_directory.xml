@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/manager_background" android:fillViewport="true"
+    android:scrollbars="none">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="16dp">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:fontFamily="@font/plus_jakarta_sans_bold" android:text="Hồ sơ bệnh nhân"
+            android:textColor="@color/manager_ink" android:textSize="13sp" />
+        <EditText android:id="@+id/managerPatientsSearch"
+            android:layout_width="match_parent" android:layout_height="43dp"
+            android:layout_marginTop="12dp" android:background="@drawable/manager_card_background"
+            android:hint="🔍 Tên, số điện thoại, email..." android:inputType="text"
+            android:paddingHorizontal="13dp" android:singleLine="true"
+            android:textColor="@color/manager_ink" android:textColorHint="@color/manager_muted"
+            android:textSize="12sp" />
+        <TextView android:id="@+id/managerPatientsEmpty" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="30dp"
+            android:gravity="center" android:padding="20dp"
+            android:text="Chưa có hồ sơ bệnh nhân phù hợp"
+            android:textColor="@color/manager_muted" android:textSize="12sp"
+            android:visibility="gone" />
+        <LinearLayout android:id="@+id/managerPatientsList" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="12dp"
+            android:orientation="vertical" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" android:background="@drawable/manager_info_background"
+            android:padding="13dp"
+            android:text="ℹ️  Quản trị viên chỉ được hỗ trợ tài khoản và lịch hẹn; không sửa chẩn đoán hay đơn thuốc."
+            android:textColor="@color/manager_blue_dark" android:textSize="11sp" />
+    </LinearLayout>
+</ScrollView>

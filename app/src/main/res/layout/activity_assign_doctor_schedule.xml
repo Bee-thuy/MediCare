@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/manager_background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/assignScheduleBack"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:gravity="center_vertical"
+            android:text="‹"
+            android:textColor="@color/manager_ink"
+            android:textSize="40sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/plus_jakarta_sans_bold"
+            android:text="Phân lịch làm việc"
+            android:textColor="@color/manager_ink"
+            android:textSize="24sp" />
+
+        <AutoCompleteTextView
+            android:id="@+id/assignScheduleDoctor"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/manager_card_background"
+            android:hint="Chọn bác sĩ"
+            android:inputType="none"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/manager_ink"
+            android:textColorHint="@color/manager_muted" />
+
+        <EditText
+            android:id="@+id/assignScheduleDate"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/manager_card_background"
+            android:focusable="false"
+            android:hint="Ngày làm việc"
+            android:inputType="none"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/manager_ink"
+            android:textColorHint="@color/manager_muted" />
+
+        <AutoCompleteTextView
+            android:id="@+id/assignScheduleShift"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/manager_card_background"
+            android:hint="Chọn ca làm việc"
+            android:inputType="none"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/manager_ink"
+            android:textColorHint="@color/manager_muted" />
+
+        <EditText
+            android:id="@+id/assignScheduleRoom"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/manager_card_background"
+            android:hint="Phòng khám, ví dụ: Phòng 201"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/manager_ink"
+            android:textColorHint="@color/manager_muted" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/assignScheduleDuration"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/manager_card_background"
+                android:hint="Phút/lượt"
+                android:inputType="number"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/manager_ink"
+                android:textColorHint="@color/manager_muted" />
+
+            <EditText
+                android:id="@+id/assignScheduleCapacity"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/manager_card_background"
+                android:hint="Số lượt tối đa"
+                android:inputType="number"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/manager_ink"
+                android:textColorHint="@color/manager_muted" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/assignScheduleNote"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/manager_card_background"
+            android:gravity="top"
+            android:hint="Ghi chú (không bắt buộc)"
+            android:inputType="textMultiLine"
+            android:padding="16dp"
+            android:textColor="@color/manager_ink"
+            android:textColorHint="@color/manager_muted" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/assignScheduleSave"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/manager_button_background"
+            android:text="Lưu lịch làm việc"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:backgroundTint="@null" />
+    </LinearLayout>
+</ScrollView>

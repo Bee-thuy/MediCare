@@ -7,5 +7,5 @@
     android:width="1dp"
     android:color="@color/manager_border" />
     <corners
-    android:radius="14dp" />
+    android:radius="18dp" />
 </shape>

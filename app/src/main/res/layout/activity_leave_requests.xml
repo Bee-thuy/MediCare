@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/manager_background" android:orientation="vertical" android:padding="20dp">
+    <TextView android:id="@+id/leaveRequestsBack" android:layout_width="wrap_content" android:layout_height="42dp" android:gravity="center_vertical" android:text="‹" android:textColor="@color/manager_ink" android:textSize="38sp" />
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:fontFamily="@font/plus_jakarta_sans_bold" android:text="@string/manager_leave_requests" android:textColor="@color/manager_ink" android:textSize="23sp" />
+    <TextView android:id="@+id/leaveRequestsEmpty" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="48dp" android:gravity="center" android:text="@string/manager_no_leave_requests" android:textColor="@color/manager_muted" android:visibility="gone" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_marginTop="16dp" android:layout_weight="1"><LinearLayout android:id="@+id/leaveRequestsList" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" /></ScrollView>
+</LinearLayout>

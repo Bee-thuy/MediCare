@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_marginBottom="9dp" android:background="@drawable/manager_card_background"
+    android:gravity="center_vertical" android:orientation="horizontal" android:padding="13dp">
+    <TextView android:id="@+id/doctorAppointmentInitials" android:layout_width="44dp"
+        android:layout_height="44dp" android:background="@drawable/doctor_avatar_background"
+        android:gravity="center" android:text="👤" android:textSize="19sp" />
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+        android:layout_marginStart="10dp" android:layout_weight="1" android:orientation="vertical">
+        <TextView android:id="@+id/doctorAppointmentPatientName" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:fontFamily="@font/plus_jakarta_sans_bold"
+            android:textColor="@color/manager_ink" android:textSize="12sp" />
+        <TextView android:id="@+id/doctorAppointmentTime" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="3dp"
+            android:textColor="@color/manager_muted" android:textSize="10sp" />
+        <TextView android:id="@+id/doctorAppointmentStatus" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_marginTop="5dp"
+            android:background="@drawable/manager_info_background" android:paddingHorizontal="7dp"
+            android:paddingVertical="3dp" android:textSize="10sp" />
+    </LinearLayout>
+    <TextView android:layout_width="20dp" android:layout_height="wrap_content"
+        android:gravity="end" android:text="›" android:textColor="@color/manager_muted"
+        android:textSize="24sp" />
+</LinearLayout>

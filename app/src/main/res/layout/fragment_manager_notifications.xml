@@ -1,24 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="28dp">
-  <TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="36dp"
-    android:fontFamily="@font/plus_jakarta_sans_bold"
-    android:text="@string/manager_notifications"
-    android:textColor="@color/manager_ink"
-    android:textSize="26sp"/>
-  <TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:fontFamily="@font/plu_jakarta_sans_regular"
-    android:text="@string/manager_notifications_description"
-    android:textColor="@color/manager_muted"
-    android:textSize="16sp"/>
-</LinearLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/manager_background" android:fillViewport="true"
+    android:scrollbars="none">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="16dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:gravity="center_vertical" android:orientation="horizontal">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:fontFamily="@font/plus_jakarta_sans_bold"
+                android:text="Trung tâm thông báo" android:textColor="@color/manager_ink"
+                android:textSize="13sp" />
+            <TextView android:id="@+id/managerNotificationsBroadcast"
+                android:layout_width="wrap_content" android:layout_height="40dp"
+                android:gravity="center_vertical" android:text="+ Soạn tin  ›"
+                android:textColor="@color/manager_blue" android:textSize="11sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" android:background="@drawable/manager_card_background"
+            android:orientation="vertical" android:padding="15dp">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Mẫu thông báo tự động" android:textColor="@color/manager_ink"
+                android:textSize="12sp" android:textStyle="bold" />
+            <LinearLayout style="@style/ManagerNotificationTemplateRow" android:orientation="horizontal" android:gravity="center_vertical">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:text="✅ Lịch đã xác nhận" android:textColor="@color/manager_ink" android:textSize="11sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Đang bật" android:textColor="@color/manager_blue" android:textSize="10sp" />
+            </LinearLayout>
+            <LinearLayout style="@style/ManagerNotificationTemplateRow" android:orientation="horizontal" android:gravity="center_vertical">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:text="🔄 Đề xuất đổi giờ khám" android:textColor="@color/manager_ink" android:textSize="11sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Đang bật" android:textColor="@color/manager_blue" android:textSize="10sp" />
+            </LinearLayout>
+            <LinearLayout style="@style/ManagerNotificationTemplateRow" android:orientation="horizontal" android:gravity="center_vertical">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:text="❌ Lịch bị từ chối" android:textColor="@color/manager_ink" android:textSize="11sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Đang bật" android:textColor="@color/manager_blue" android:textSize="10sp" />
+            </LinearLayout>
+            <LinearLayout style="@style/ManagerNotificationTemplateRow" android:orientation="horizontal" android:gravity="center_vertical">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:text="💊 Nhắc uống thuốc" android:textColor="@color/manager_ink" android:textSize="11sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Đang bật" android:textColor="@color/manager_blue" android:textSize="10sp" />
+            </LinearLayout>
+        </LinearLayout>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" android:fontFamily="@font/plus_jakarta_sans_bold"
+            android:text="Lịch sử đã gửi" android:textColor="@color/manager_ink"
+            android:textSize="13sp" />
+        <TextView android:id="@+id/managerNotificationsHistoryEmpty"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:gravity="center" android:padding="18dp"
+            android:text="Chưa có thông báo chung đã gửi."
+            android:textColor="@color/manager_muted" android:textSize="11sp" />
+        <LinearLayout android:id="@+id/managerNotificationsHistoryList"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" android:orientation="vertical" />
+        <TextView android:id="@+id/managerNotificationsCompose"
+            android:layout_width="match_parent" android:layout_height="44dp"
+            android:layout_marginTop="12dp" android:background="@drawable/manager_button_background"
+            android:gravity="center" android:text="📨 Soạn thông báo"
+            android:textColor="@color/white" android:textSize="12sp" android:textStyle="bold" />
+    </LinearLayout>
+</ScrollView>

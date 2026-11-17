@@ -2,6 +2,7 @@ package com.example.medicare.data.auth
 
 import com.example.medicare.model.AccountProfile
 import com.example.medicare.model.AccountStatus
+import com.example.medicare.model.SessionState
 import com.example.medicare.model.UserRole
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -125,10 +126,4 @@ class AuthRepository(
         const val USERS_COLLECTION = "users"
         const val EMAIL_VERIFICATION_REQUIRED = "Please verify your email before signing in."
     }
-}
-
-sealed class SessionState {
-    data object SignedOut : SessionState()
-    data class Authenticated(val role: UserRole, val profile: AccountProfile) : SessionState()
-    data class Error(val message: String) : SessionState()
 }

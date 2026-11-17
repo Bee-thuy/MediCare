@@ -12,6 +12,20 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.type == 'ADMIN';
     }
 
+    function isDoctor() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.type == 'DOCTOR';
+    }
+
+    function canAccessChat(appointmentId) {
+      return signedIn()
+        && exists(/databases/$(database)/documents/appointments/$(appointmentId))
+        && (get(/databases/$(database)/documents/appointments/$(appointmentId)).data.patientId == request.auth.uid
+          || get(/databases/$(database)/documents/appointments/$(appointmentId)).data.doctorId == request.auth.uid)
+        && get(/databases/$(database)/documents/appointments/$(appointmentId)).data.status in ['CONFIRMED', 'ARRIVED', 'IN_PROGRESS', 'COMPLETED'];
+    }
+
     match /users/{userId} {
       // A self-registering account may only create a USER profile.
       allow create: if isAdmin()
@@ -33,22 +47,167 @@ service cloud.firestore {
         && request.resource.data.type == resource.data.type
         && request.resource.data.accountStatus == resource.data.accountStatus
         && request.resource.data.diff(resource.data).affectedKeys()
-          .hasOnly(['fullName', 'phone', 'updatedAt'])
+          .hasOnly(['fullName', 'phone', 'avatarUrl', 'fcmToken', 'updatedAt'])
       );
 
       allow delete: if false;
     }
 
     match /doctors/{doctorId} {
-      allow read, write: if isAdmin();
+      allow get, list: if isAdmin() || (signedIn() && resource.data.isActive == true);
+      allow create, delete: if isAdmin();
+      allow update: if isAdmin() || (isDoctor()
+        && request.auth.uid == doctorId
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['biography', 'workplace', 'avatarUrl', 'updatedAt']));
     }
 
     match /specialties/{specialtyId} {
-      allow read, write: if isAdmin();
+      allow read: if signedIn();
+      allow write: if isAdmin();
     }
 
     match /workShifts/{shiftId} {
       allow read, write: if isAdmin();
+    }
+
+    match /doctorSchedules/{scheduleId} {
+      allow get, list: if isAdmin()
+        || (signedIn() && (resource.data.isLocked == false || resource.data.doctorId == request.auth.uid));
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /appointments/{appointmentId} {
+      allow create: if isAdmin() || (signedIn()
+        && request.resource.data.patientId == request.auth.uid
+        && request.resource.data.status == 'PENDING');
+      allow get, list: if isAdmin()
+        || (signedIn() && (resource.data.patientId == request.auth.uid || resource.data.doctorId == request.auth.uid));
+      allow update: if isAdmin()
+        || (isDoctor()
+          && resource.data.doctorId == request.auth.uid
+          && ((resource.data.status == 'CONFIRMED' && request.resource.data.status == 'ARRIVED')
+            || (resource.data.status == 'ARRIVED' && request.resource.data.status == 'IN_PROGRESS')
+            || (resource.data.status == 'IN_PROGRESS' && request.resource.data.status == 'COMPLETED'))
+          && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['status', 'updatedAt']))
+        || (signedIn()
+          && resource.data.patientId == request.auth.uid
+          && resource.data.status in ['PENDING', 'CONFIRMED']
+          && request.resource.data.status == 'CANCELLED'
+          && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['status', 'cancellationReason', 'updatedAt']));
+      allow delete: if isAdmin();
+    }
+
+    match /appointmentAuditLogs/{logId} {
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.type == 'EXPIRED_SCHEDULE_ATTEMPT';
+      allow get, list: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    match /doctorLeaveRequests/{requestId} {
+      allow create: if isDoctor()
+        && request.resource.data.doctorId == request.auth.uid
+        && request.resource.data.status == 'PENDING'
+        && request.resource.data.keys().hasOnly(['id', 'doctorId', 'date', 'reason', 'status', 'createdAt', 'updatedAt']);
+      allow get, list: if isAdmin() || (isDoctor() && resource.data.doctorId == request.auth.uid);
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+
+    match /notifications/{notificationId} {
+      allow get, list: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow create: if isAdmin();
+      allow update: if signedIn()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead', 'readAt']);
+      allow delete: if false;
+    }
+
+    match /medicalRecords/{recordId} {
+      allow create: if isDoctor()
+        && request.resource.data.doctorId == request.auth.uid;
+
+      allow get, list: if isAdmin()
+        || (signedIn()
+          && (resource.data.patientId == request.auth.uid
+            || resource.data.doctorId == request.auth.uid));
+
+      allow update, delete: if false;
+    }
+
+    match /doctorReviews/{reviewId} {
+      allow get, list: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.patientId == request.auth.uid
+        && exists(/databases/$(database)/documents/appointments/$(request.resource.data.appointmentId))
+        && get(/databases/$(database)/documents/appointments/$(request.resource.data.appointmentId)).data.patientId == request.auth.uid
+        && get(/databases/$(database)/documents/appointments/$(request.resource.data.appointmentId)).data.status == 'COMPLETED';
+      allow update: if signedIn() && resource.data.patientId == request.auth.uid && request.resource.data.patientId == resource.data.patientId;
+      allow delete: if false;
+    }
+
+    match /consultations/{appointmentId} {
+      allow get: if canAccessChat(appointmentId);
+
+      allow create: if canAccessChat(appointmentId)
+        && request.resource.data.keys().hasOnly(['typingUserIds', 'updatedAt'])
+        && request.resource.data.typingUserIds.size() == 1
+        && request.resource.data.typingUserIds.hasAll([request.auth.uid]);
+
+      allow update: if canAccessChat(appointmentId)
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['typingUserIds', 'updatedAt'])
+        && (
+          (request.resource.data.typingUserIds.hasAll([request.auth.uid])
+            && !resource.data.typingUserIds.hasAll([request.auth.uid])
+            && request.resource.data.typingUserIds.size() == resource.data.typingUserIds.size() + 1
+            && request.resource.data.typingUserIds.hasAll(resource.data.typingUserIds))
+          ||
+          (resource.data.typingUserIds.hasAll([request.auth.uid])
+            && !request.resource.data.typingUserIds.hasAll([request.auth.uid])
+            && request.resource.data.typingUserIds.size() + 1 == resource.data.typingUserIds.size()
+            && resource.data.typingUserIds.hasAll(request.resource.data.typingUserIds))
+        );
+
+      allow delete: if false;
+    }
+
+    match /consultations/{appointmentId}/messages/{messageId} {
+      allow get, list: if canAccessChat(appointmentId);
+
+      allow create: if canAccessChat(appointmentId)
+        && request.resource.data.senderId == request.auth.uid
+        && request.resource.data.keys().hasOnly(['id', 'senderId', 'content', 'readBy', 'createdAt'])
+        && request.resource.data.readBy.size() == 0;
+
+      allow update: if canAccessChat(appointmentId)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['readBy'])
+        && request.resource.data.readBy.hasAll([request.auth.uid])
+        && (
+          (!resource.data.keys().hasAll(['readBy'])
+            && request.resource.data.readBy.size() == 1)
+          ||
+          (resource.data.keys().hasAll(['readBy'])
+            && request.resource.data.readBy.size() == resource.data.readBy.size() + 1
+            && request.resource.data.readBy.hasAll(resource.data.readBy))
+        );
+      allow delete: if false;
+    }
+
+    match /medicationReminders/{reminderId} {
+      allow create: if signedIn()
+        && request.resource.data.patientId == request.auth.uid;
+
+      allow get, list: if signedIn()
+        && resource.data.patientId == request.auth.uid;
+
+      allow update, delete: if signedIn()
+        && resource.data.patientId == request.auth.uid
+        && request.resource.data.patientId == resource.data.patientId;
     }
   }
 }

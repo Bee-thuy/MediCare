@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/manager_background" android:orientation="vertical">
+    <ScrollView android:id="@+id/patientBookingScroll" android:layout_width="match_parent"
+        android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true"
+        android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:background="@drawable/manager_card_background" android:orientation="vertical"
+                android:padding="15dp">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:gravity="center" android:text="① ━ ② ━ ③ ━ ④"
+                    android:textColor="@color/patient_purple" android:textSize="23sp" />
+                <TextView android:id="@+id/patientBookingStepLabel" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_marginTop="3dp"
+                    android:gravity="center" android:text="Bước 1/4 · Bác sĩ"
+                    android:textColor="@color/manager_muted" android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/patientBookingDoctorStep" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="17dp"
+                android:orientation="vertical">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold" android:text="Chọn bác sĩ"
+                    android:textColor="@color/manager_ink" android:textSize="13sp" />
+                <TextView android:id="@+id/patientBookingDoctorsEmpty" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_marginTop="16dp"
+                    android:gravity="center" android:text="Đang tải danh sách bác sĩ…"
+                    android:textColor="@color/manager_muted" android:textSize="11sp" />
+                <LinearLayout android:id="@+id/patientBookingDoctors" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:orientation="vertical" />
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/patientBookingDateStep" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="17dp"
+                android:orientation="vertical" android:visibility="gone">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:background="@drawable/manager_card_background" android:orientation="vertical"
+                    android:padding="15dp">
+                    <TextView android:id="@+id/patientBookingDoctorName" android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:fontFamily="@font/inter_bold"
+                        android:textColor="@color/manager_ink" android:textSize="12sp" />
+                    <TextView android:id="@+id/patientBookingDoctorSpecialty" android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:layout_marginTop="3dp"
+                        android:textColor="@color/manager_muted" android:textSize="11sp" />
+                </LinearLayout>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp" android:fontFamily="@font/inter_bold"
+                    android:text="Chọn ngày khám" android:textColor="@color/manager_ink"
+                    android:textSize="13sp" />
+                <AutoCompleteTextView android:id="@+id/patientBookingSchedule" android:layout_width="match_parent"
+                    android:layout_height="48dp" android:layout_marginTop="8dp"
+                    android:background="@drawable/manager_card_background"
+                    android:hint="Chọn ngày và ca làm việc" android:inputType="none"
+                    android:paddingHorizontal="15dp" android:textColor="@color/manager_ink"
+                    android:textColorHint="@color/manager_muted" android:textSize="11sp" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp" android:fontFamily="@font/inter_bold"
+                    android:text="Chọn khung giờ" android:textColor="@color/manager_ink"
+                    android:textSize="13sp" />
+                <TextView android:id="@+id/patientBookingSlotsEmpty" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_marginTop="8dp"
+                    android:text="Hãy chọn lịch làm việc để xem giờ trống."
+                    android:textColor="@color/manager_muted" android:textSize="11sp" />
+                <LinearLayout android:id="@+id/patientBookingSlots" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_marginTop="8dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/patientBookingReasonStep" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="17dp"
+                android:orientation="vertical" android:visibility="gone">
+                <TextView android:id="@+id/patientBookingReasonSummary" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:background="@drawable/manager_card_background"
+                    android:padding="15dp" android:textColor="@color/manager_ink" android:textSize="11sp" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp" android:fontFamily="@font/inter_bold"
+                    android:text="Lý do khám" android:textColor="@color/manager_ink" android:textSize="13sp" />
+                <EditText android:id="@+id/patientBookingReason" android:layout_width="match_parent"
+                    android:layout_height="96dp" android:layout_marginTop="8dp"
+                    android:background="@drawable/manager_card_background" android:gravity="top"
+                    android:hint="Ví dụ: Đau đầu, tái khám, khám sức khỏe…"
+                    android:inputType="textMultiLine" android:padding="14dp"
+                    android:textColor="@color/manager_ink" android:textColorHint="@color/manager_muted"
+                    android:textSize="11sp" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp" android:background="@drawable/manager_info_background"
+                    android:padding="12dp" android:text="ℹ️ Bác sĩ sẽ trao đổi chi tiết trong buổi khám."
+                    android:textColor="@color/patient_purple" android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/patientBookingConfirmStep" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="17dp"
+                android:orientation="vertical" android:visibility="gone">
+                <TextView android:id="@+id/patientBookingConfirmation" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:background="@drawable/manager_card_background"
+                    android:padding="17dp" android:textColor="@color/manager_ink" android:textSize="12sp" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp" android:background="@drawable/manager_info_background"
+                    android:padding="12dp"
+                    android:text="ℹ️ Yêu cầu chỉ được xác nhận sau khi Admin kiểm tra và duyệt."
+                    android:textColor="@color/patient_purple" android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="64dp"
+        android:background="@color/white" android:gravity="center_vertical"
+        android:orientation="horizontal" android:paddingHorizontal="16dp">
+        <TextView android:id="@+id/patientBookingBack" android:layout_width="wrap_content"
+            android:layout_height="44dp" android:layout_marginEnd="8dp"
+            android:background="@drawable/manager_card_background" android:gravity="center"
+            android:paddingHorizontal="16dp" android:text="← Quay lại"
+            android:textColor="@color/manager_ink" android:textSize="11sp"
+            android:visibility="gone" />
+        <TextView android:id="@+id/patientBookingNext" android:layout_width="0dp"
+            android:layout_height="44dp" android:layout_weight="1"
+            android:background="@drawable/patient_booking_button_background"
+            android:gravity="center" android:text="Tiếp tục →"
+            android:textColor="@color/white" android:textSize="12sp" android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>
