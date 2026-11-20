@@ -2,6 +2,8 @@ package com.example.medicare.manager.appointment
 
 import android.os.Bundle
 import android.widget.Toast
+import android.widget.ArrayAdapter
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -11,11 +13,11 @@ import com.example.medicare.databinding.ActivityPatientNotificationBinding
 import com.example.medicare.databinding.ActivityNotificationSentBinding
 import com.example.medicare.data.notification.NotificationRepository
 
-/** Composes a mock in-app/email notification for the selected patient appointment. */
+/** Composes a persisted in-app notification for an appointment or selected audience. */
 class PatientNotificationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPatientNotificationBinding
-    private var appointmentTime: String = "08:00 - 08:30"
-    private var appointmentDate: String = "26/05/2025"
+    private var appointmentTime: String = ""
+    private var appointmentDate: String = ""
     private var patientId: String = ""
     private var appointmentId: String = ""
     private val notifications = NotificationRepository()
@@ -44,8 +46,20 @@ class PatientNotificationActivity : AppCompatActivity() {
             binding.patientNotificationContent.setText(contentFor(checkedId))
         }
         binding.patientNotificationSend.setOnClickListener { sendNotification() }
-        binding.patientNotificationConfirmed.isChecked = true
-        binding.patientNotificationContent.setText(contentFor(R.id.patientNotificationConfirmed))
+        if (intent.getBooleanExtra(EXTRA_SEND_TO_ALL, false)) {
+            binding.patientNotificationTypeLabel.visibility = View.GONE
+            binding.patientNotificationTypes.visibility = View.GONE
+            binding.patientNotificationAudienceLabel.visibility = View.VISIBLE
+            binding.patientNotificationAudience.visibility = View.VISIBLE
+            binding.patientNotificationAudience.adapter = ArrayAdapter(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                listOf("Tất cả tài khoản", "Bác sĩ", "Bệnh nhân"))
+            binding.patientNotificationContent.setText("")
+            binding.patientNotificationContent.hint = "Ví dụ: Hệ thống bảo trì lúc..."
+        } else {
+            binding.patientNotificationConfirmed.isChecked = true
+            binding.patientNotificationContent.setText(contentFor(R.id.patientNotificationConfirmed))
+        }
     }
 
     private fun contentFor(typeId: Int): String = when (typeId) {
@@ -73,7 +87,8 @@ class PatientNotificationActivity : AppCompatActivity() {
                 .onFailure { Toast.makeText(this, it.message ?: "Không thể lưu thông báo.", Toast.LENGTH_LONG).show() }
         }
         if (intent.getBooleanExtra(EXTRA_SEND_TO_ALL, false)) {
-            notifications.createForAllPatients("Thông báo từ MediCare", content) { done(it) }
+            val audience = listOf("ALL", "DOCTOR", "USER")[binding.patientNotificationAudience.selectedItemPosition.coerceIn(0, 2)]
+            notifications.createForAudience("Thông báo từ MediCare", content, audience) { done(it) }
         } else {
             notifications.create(
                 userId = patientId,

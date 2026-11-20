@@ -9,9 +9,11 @@
     app:cardElevation="0dp" app:strokeColor="@color/manager_border" app:strokeWidth="1dp">
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
         android:gravity="center_vertical" android:orientation="horizontal" android:padding="13dp">
-        <TextView android:layout_width="43dp" android:layout_height="43dp"
+        <ImageView android:id="@+id/managedSpecialtyIcon"
+            android:layout_width="43dp" android:layout_height="43dp"
             android:background="@drawable/manager_appointment_avatar_background"
-            android:gravity="center" android:text="🧬" android:textSize="23sp" />
+            android:contentDescription="Ảnh minh họa chuyên khoa"
+            android:padding="8dp" android:src="@drawable/ic_manager_specialty" />
         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
             android:layout_marginStart="11dp" android:layout_weight="1" android:orientation="vertical">
             <TextView android:id="@+id/managedSpecialtyName" android:layout_width="match_parent"

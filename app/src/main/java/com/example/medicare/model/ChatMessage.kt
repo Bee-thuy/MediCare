@@ -5,4 +5,6 @@ data class ChatMessage(
     val senderId: String,
     val content: String,
     val readBy: List<String> = emptyList(),
+    val appointmentId: String = "",
+    val createdAtMillis: Long = 0L,
 )

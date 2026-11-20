@@ -1,4 +1,20 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="PatientAppointmentChip">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">33dp</item>
+        <item name="android:layout_marginEnd">6dp</item>
+        <item name="android:background">@drawable/patient_appointment_tab_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingHorizontal">12dp</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="PatientBookingCircle">
+        <item name="android:layout_width">23dp</item>
+        <item name="android:layout_height">23dp</item>
+        <item name="android:background">@drawable/patient_booking_step_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">10sp</item>
+    </style>
     <!-- Base application theme. -->
     <style name="Base.Theme.MediCare" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowFullscreen">true</item>
@@ -14,6 +30,12 @@
     </style>
 
     <style name="Theme.MediCare" parent="Base.Theme.MediCare" />
+    <style name="Theme.MediCare.BottomSheet" parent="Theme.Material3.DayNight.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
 
     <style name="QuickTestAccountButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:layout_width">match_parent</item>
@@ -178,7 +200,7 @@
     </style>
     <style name="PatientSettingsRow">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">62dp</item>
+        <item name="android:layout_height">68dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingHorizontal">15dp</item>
         <item name="android:background">@drawable/manager_card_background</item>
@@ -186,6 +208,97 @@
         <item name="android:textSize">13sp</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
+    </style>
+    <style name="PatientSettingsRowIcon">
+        <item name="android:layout_width">42dp</item>
+        <item name="android:layout_height">42dp</item>
+        <item name="android:background">@drawable/patient_avatar_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="PatientSettingsRowLabel">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:textColor">@color/manager_ink</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+    </style>
+    <style name="PatientSettingsRowArrow">
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/manager_muted</item>
+        <item name="android:textSize">21sp</item>
+    </style>
+    <style name="PatientAccountFieldLabel">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/manager_ink</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+    </style>
+    <style name="PatientAccountField">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">43dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:background">@drawable/patient_feedback_field_background</item>
+        <item name="android:paddingHorizontal">12dp</item>
+        <item name="android:textColor">@color/manager_ink</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    <style name="PatientAccountSheetTitle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+        <item name="android:textColor">@color/manager_ink</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+    <style name="PatientAccountSheetClose">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:background">@drawable/patient_avatar_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">×</item>
+        <item name="android:textColor">@color/manager_muted</item>
+        <item name="android:textSize">21sp</item>
+    </style>
+    <style name="PatientAccountSheetButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">46dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/patient_purple</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:elevation">3dp</item>
+    </style>
+    <style name="PatientProfileFieldLabel">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/manager_ink</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+    </style>
+    <style name="PatientProfileField">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:background">@drawable/patient_profile_field_background</item>
+        <item name="android:paddingHorizontal">14dp</item>
+        <item name="android:textColor">@color/manager_ink</item>
+        <item name="android:textColorHint">@color/manager_muted</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    <style name="DoctorProfileEditField" parent="PatientProfileField">
+        <item name="android:background">@drawable/doctor_profile_edit_field_background</item>
     </style>
     <style name="DoctorActionTile">
         <item name="android:layout_width">0dp</item>
@@ -199,5 +312,14 @@
         <item name="android:lineSpacingExtra">4dp</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
+    </style>
+    <style name="PatientAuthInput">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:background">@drawable/patient_profile_field_background</item>
+        <item name="android:paddingHorizontal">14dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/manager_ink</item>
+        <item name="android:textSize">14sp</item>
     </style>
 </resources>

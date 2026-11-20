@@ -42,8 +42,8 @@ class ManagerNotificationsFragment : Fragment() {
     }
 
     private fun loadHistory() {
-        NotificationRepository().getBroadcastHistory { result ->
-            if (_binding == null) return@getBroadcastHistory
+        NotificationRepository().getAdminSentHistory { result ->
+            if (_binding == null) return@getAdminSentHistory
             binding.managerNotificationsHistoryList.removeAllViews()
             result.onSuccess { messages ->
                 binding.managerNotificationsHistoryEmpty.visibility = if (messages.isEmpty()) View.VISIBLE else View.GONE
@@ -51,7 +51,13 @@ class ManagerNotificationsFragment : Fragment() {
                     val date = if (item.createdAt <= 0L) "" else Instant.ofEpochMilli(item.createdAt)
                         .atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                     val row = TextView(requireContext()).apply {
-                        text = "🔔  ${item.body}\nGửi tới: Tất cả bệnh nhân${if (date.isBlank()) "" else " · $date"}"
+                        val audience = when (item.audience) {
+                            "ALL" -> "Tất cả tài khoản"
+                            "DOCTOR" -> "Bác sĩ"
+                            "USER" -> "Bệnh nhân"
+                            else -> if (item.type == "GENERAL") "Tất cả bệnh nhân" else "Bệnh nhân"
+                        }
+                        text = "🔔  ${item.body}\nGửi tới: $audience${if (date.isBlank()) "" else " · $date"}"
                         textSize = 12f
                         setTextColor(requireContext().getColor(R.color.manager_ink))
                         setPadding(dp(14), dp(12), dp(14), dp(12))

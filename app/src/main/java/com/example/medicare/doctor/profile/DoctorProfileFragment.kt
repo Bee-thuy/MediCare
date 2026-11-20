@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import com.example.medicare.R
 import com.example.medicare.data.auth.AuthRepository
 import com.example.medicare.data.review.DoctorReviewRepository
@@ -24,7 +25,12 @@ class DoctorProfileFragment : Fragment() {
         val binding = ActivityDoctorProfileBinding.inflate(inflater, container, false)
         _binding = binding
         binding.doctorProfileHeader.visibility = View.GONE
-        binding.doctorProfileEdit.setOnClickListener { startActivity(Intent(requireContext(), ProfileActivity::class.java)) }
+        binding.doctorProfileEdit.setOnClickListener {
+            DoctorProfileEditor.show(requireActivity() as AppCompatActivity) { name, phone ->
+                _binding?.doctorProfileName?.text = "BS. $name"
+                _binding?.doctorProfilePhone?.text = phone.ifBlank { "Chưa cập nhật" }
+            }
+        }
         binding.doctorProfilePassword.setOnClickListener {
             startActivity(Intent(requireContext(), ProfileActivity::class.java)
                 .putExtra(ProfileActivity.EXTRA_OPEN_PASSWORD, true))

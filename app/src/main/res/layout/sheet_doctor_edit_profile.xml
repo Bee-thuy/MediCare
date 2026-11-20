@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:background="@drawable/patient_record_sheet_background"
+    android:focusableInTouchMode="true" android:orientation="vertical"
+    android:paddingStart="20dp" android:paddingTop="10dp"
+    android:paddingEnd="20dp" android:paddingBottom="20dp">
+    <View android:layout_width="36dp" android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/patient_profile_sheet_handle" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="48dp"
+        android:layout_marginTop="16dp" android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView android:layout_width="44dp" android:layout_height="44dp"
+            android:background="@drawable/doctor_profile_edit_icon_background"
+            android:gravity="center" android:text="👨‍⚕️" android:textSize="22sp" />
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_marginStart="11dp" android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_bold" android:text="Chỉnh sửa hồ sơ"
+                android:textColor="@color/manager_ink" android:textSize="17sp" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" android:text="Thông tin liên hệ của bác sĩ"
+                android:textColor="@color/manager_muted" android:textSize="11sp" />
+        </LinearLayout>
+        <TextView android:id="@+id/doctorEditClose"
+            style="@style/PatientAccountSheetClose"
+            android:contentDescription="Đóng" />
+    </LinearLayout>
+    <View android:layout_width="match_parent" android:layout_height="1dp"
+        android:layout_marginTop="17dp" android:background="@color/manager_border" />
+    <TextView style="@style/PatientProfileFieldLabel"
+        android:layout_marginTop="16dp" android:text="Họ và tên" />
+    <EditText android:id="@+id/doctorEditName" style="@style/DoctorProfileEditField"
+        android:hint="Nhập họ và tên" android:inputType="textPersonName|textCapWords" />
+    <TextView style="@style/PatientProfileFieldLabel"
+        android:layout_marginTop="12dp" android:text="Số điện thoại" />
+    <EditText android:id="@+id/doctorEditPhone" style="@style/DoctorProfileEditField"
+        android:hint="Nhập số điện thoại" android:inputType="phone" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/doctorEditSave"
+        style="@style/PatientAccountSheetButton"
+        android:layout_height="48dp" android:layout_marginTop="18dp"
+        android:text="Lưu thay đổi" android:textSize="14sp"
+        app:backgroundTint="@color/doctor_teal" />
+</LinearLayout>

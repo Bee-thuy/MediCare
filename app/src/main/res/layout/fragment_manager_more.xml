@@ -32,6 +32,7 @@
             <TextView android:id="@+id/managerMoreWorkShifts" style="@style/ManagerCatalogRow" android:text="◷   Quản lý ca làm" />
             <TextView android:id="@+id/managerMoreLeaveRequests" style="@style/ManagerCatalogRow" android:text="✉   Yêu cầu nghỉ / đổi ca" />
             <TextView android:id="@+id/managerMoreReviews" style="@style/ManagerCatalogRow" android:text="★   Đánh giá bác sĩ" />
+            <TextView android:id="@+id/managerMoreDoctorChat" style="@style/ManagerCatalogRow" android:text="💬   Chat với bác sĩ" />
             <TextView android:id="@+id/managerMoreBroadcast" style="@style/ManagerCatalogRow" android:text="✉   Gửi thông báo toàn bệnh viện" />
         </LinearLayout>
         <com.google.android.material.button.MaterialButton android:id="@+id/managerMoreSignOut"

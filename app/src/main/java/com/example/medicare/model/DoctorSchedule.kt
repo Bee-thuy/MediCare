@@ -15,4 +15,5 @@ data class DoctorSchedule(
     val maximumAppointments: Int,
     val isLocked: Boolean,
     val note: String,
+    val lockedSlots: List<String> = emptyList(),
 )

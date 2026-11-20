@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="74dp"
+    android:background="@drawable/patient_header_background" android:gravity="center_vertical"
+    android:orientation="horizontal" android:paddingHorizontal="16dp">
+    <TextView android:id="@+id/patientChromeMenu" android:layout_width="40dp"
+        android:layout_height="40dp" android:background="@drawable/role_header_action_background"
+        android:gravity="center" android:text="☰" android:textColor="@color/white"
+        android:textSize="20sp" />
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+        android:layout_marginStart="12dp" android:layout_weight="1" android:orientation="vertical">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Smart Healthcare · Bệnh nhân" android:textColor="#E5DFFF"
+            android:textSize="10sp" />
+        <TextView android:id="@+id/patientChromeTitle" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="2dp"
+            android:fontFamily="@font/inter_bold" android:textColor="@color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
+    <TextView android:id="@+id/patientChromeNotifications" android:layout_width="40dp"
+        android:layout_height="40dp" android:background="@drawable/role_header_action_background"
+        android:gravity="center" android:text="🔔" android:textSize="19sp" />
+</LinearLayout>

@@ -12,11 +12,26 @@ import java.time.LocalTime
 import java.util.concurrent.TimeUnit
 
 object ReminderScheduler {
+    fun cancelMedication(context: Context, id: String) {
+        WorkManager.getInstance(context).cancelUniqueWork("medication_$id")
+        (0 until 12).forEach { WorkManager.getInstance(context).cancelUniqueWork("medication_${id}_$it") }
+    }
     fun medication(context: Context, id: String, name: String, time: String) {
+        val hours = time.split(',').map(String::trim).filter(String::isNotBlank).take(12)
+        WorkManager.getInstance(context).cancelUniqueWork("medication_$id")
+        (hours.size until 12).forEach { WorkManager.getInstance(context).cancelUniqueWork("medication_${id}_$it") }
+        hours.forEachIndexed { index, hour ->
+            rescheduleMedication(context, "medication_${id}_$index", name, hour)
+        }
+    }
+
+    fun rescheduleMedication(context: Context, workName: String, name: String, time: String) {
         val localTime = runCatching { LocalTime.parse(time) }.getOrNull() ?: return
         var trigger = LocalDateTime.of(LocalDate.now(), localTime)
         if (!trigger.isAfter(LocalDateTime.now())) trigger = trigger.plusDays(1)
-        enqueue(context, "medication_$id", trigger, "Đến giờ uống thuốc", "$name · $time", workDataOf("repeatDaily" to true, "id" to id, "title" to "Đến giờ uống thuốc", "body" to "$name · $time"))
+        enqueue(context, workName, trigger, "Đến giờ uống thuốc", "$name · $time", workDataOf(
+            "repeatDaily" to true, "workName" to workName, "medicineName" to name,
+            "reminderTime" to time, "title" to "Đến giờ uống thuốc", "body" to "$name · $time"))
     }
 
     fun appointment(context: Context, id: String, date: String, time: String) {

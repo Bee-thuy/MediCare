@@ -24,7 +24,8 @@
         <activity android:name=".manager.dashboard.ManagerReportActivity" android:exported="false" android:screenOrientation="portrait" />
         <activity android:name=".manager.review.ManagerReviewsActivity" android:exported="false" android:screenOrientation="portrait" />
         <activity android:name=".user.review.MyReviewsActivity" android:exported="false" android:screenOrientation="portrait" />
-        <activity android:name=".user.chat.PatientChatsActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".user.chat.PatientChatsActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".doctor.chat.DoctorConversationActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".user.settings.PatientSettingsActivity" android:exported="false" android:screenOrientation="portrait" />
         <activity android:name=".user.review.ReviewDoctorActivity" android:exported="false" android:screenOrientation="portrait" />
         <activity android:name=".user.medical.MedicalHistoryActivity" android:exported="false" android:screenOrientation="portrait" />
@@ -55,6 +56,7 @@
             android:name=".manager.patient.PatientManagementActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.chat.StaffChatActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.chat.ConsultationChatActivity"
             android:exported="false"
@@ -70,6 +72,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".doctor.medical.CompleteAppointmentActivity"
+            android:theme="@style/Theme.MediCare.BottomSheet"
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
@@ -131,6 +134,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".manager.doctor.AddSpecialtyActivity"
+            android:theme="@style/Theme.MediCare.BottomSheet"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -147,6 +151,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".doctor.DoctorHomeActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

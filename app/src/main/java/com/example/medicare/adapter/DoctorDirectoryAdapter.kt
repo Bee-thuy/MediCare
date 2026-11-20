@@ -8,11 +8,18 @@ import com.example.medicare.model.Doctor
 
 class DoctorDirectoryAdapter(
     private val onDoctorSelected: (Doctor) -> Unit,
+    private val onDetails: (Doctor) -> Unit = onDoctorSelected,
 ) : RecyclerView.Adapter<DoctorDirectoryAdapter.DoctorViewHolder>() {
     private var doctors: List<Doctor> = emptyList()
+    private var ratings: Map<String, Pair<Double, Int>> = emptyMap()
 
     fun submitList(value: List<Doctor>) {
         doctors = value
+        notifyDataSetChanged()
+    }
+
+    fun updateRatings(value: Map<String, Pair<Double, Int>>) {
+        ratings = value
         notifyDataSetChanged()
     }
 
@@ -26,18 +33,17 @@ class DoctorDirectoryAdapter(
 
     inner class DoctorViewHolder(private val binding: ItemUserDoctorBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(doctor: Doctor) {
-            binding.userDoctorInitials.text = doctor.fullName
-                .split(" ")
-                .filter(String::isNotBlank)
-                .takeLast(2)
-                .joinToString("") { it.first().toString() }
-            binding.userDoctorName.text = doctor.fullName
-            binding.userDoctorSpecialty.text = doctor.specialty
-            binding.userDoctorExperience.text = doctor.experienceYears
-                .takeIf(String::isNotBlank)
-                ?.let { "$it năm kinh nghiệm" }
-                .orEmpty()
-            binding.root.setOnClickListener { onDoctorSelected(doctor) }
+            binding.userDoctorInitials.text = "👨‍⚕️"
+            binding.userDoctorName.text = "BS. ${doctor.fullName}"
+            binding.userDoctorSpecialty.text = listOfNotNull(doctor.specialty.takeIf(String::isNotBlank),
+                doctor.experienceYears.takeIf(String::isNotBlank)?.let { "$it năm kinh nghiệm" })
+                .joinToString(" · ")
+            val rating = ratings[doctor.id]
+            binding.userDoctorRating.text = if (rating == null) "⭐ Chưa có đánh giá" else
+                "⭐ ${"%.1f".format(rating.first)} · ${rating.second} đánh giá"
+            binding.root.setOnClickListener { onDetails(doctor) }
+            binding.userDoctorDetails.setOnClickListener { onDetails(doctor) }
+            binding.userDoctorBook.setOnClickListener { onDoctorSelected(doctor) }
         }
     }
 }

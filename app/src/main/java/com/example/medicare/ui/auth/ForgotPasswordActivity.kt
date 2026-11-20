@@ -1,6 +1,7 @@
 package com.example.medicare.ui.auth
 
 import android.os.Bundle
+import android.content.Intent
 import android.view.View
 import com.example.medicare.R
 import com.example.medicare.data.auth.AuthRepository
@@ -16,6 +17,14 @@ class ForgotPasswordActivity : FullscreenActivity() {
         binding = ActivityForgotPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.forgotBack.setOnClickListener { finish() }
+        binding.forgotLoginLink.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            finish()
+        }
+        binding.forgotRegisterLink.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+            finish()
+        }
         binding.forgotButton.setOnClickListener { sendResetEmail() }
     }
 

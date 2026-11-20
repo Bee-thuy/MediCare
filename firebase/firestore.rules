@@ -26,6 +26,47 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/appointments/$(appointmentId)).data.status in ['CONFIRMED', 'ARRIVED', 'IN_PROGRESS', 'COMPLETED'];
     }
 
+    function bookingSlotId(scheduleId, startTime) {
+      return scheduleId + '_' + startTime.replace(':', '');
+    }
+
+    function hasReservedSlot(appointmentId) {
+      let slotId = bookingSlotId(request.resource.data.scheduleId, request.resource.data.startTime);
+      return getAfter(/databases/$(database)/documents/bookingSlots/$(slotId)).data.appointmentId == appointmentId
+        && getAfter(/databases/$(database)/documents/bookingSlots/$(slotId)).data.state == 'RESERVED';
+    }
+
+    function slotReleasedOrLegacy(appointmentId) {
+      let slotId = bookingSlotId(resource.data.scheduleId, resource.data.startTime);
+      return !exists(/databases/$(database)/documents/bookingSlots/$(slotId))
+        || get(/databases/$(database)/documents/bookingSlots/$(slotId)).data.appointmentId != appointmentId
+        || getAfter(/databases/$(database)/documents/bookingSlots/$(slotId)).data.state == 'FREE';
+    }
+
+    function validSlotReservation(slotId) {
+      let slot = request.resource.data;
+      let legacyId = bookingSlotId(slot.scheduleId, slot.startTime);
+      let appointment = getAfter(/databases/$(database)/documents/appointments/$(slot.appointmentId));
+      let schedule = get(/databases/$(database)/documents/doctorSchedules/$(slot.scheduleId));
+      return signedIn()
+        && slot.keys().hasAll(['id', 'doctorId', 'scheduleId', 'startTime', 'appointmentId', 'state', 'updatedAt'])
+        && slot.keys().hasOnly(['id', 'doctorId', 'scheduleId', 'startTime', 'appointmentId', 'state', 'updatedAt'])
+        && slot.id == slotId && slotId == legacyId
+        && slot.startTime.matches('^[0-9][0-9]:[0-9][0-9]$')
+        && slot.state == 'RESERVED'
+        && (!exists(/databases/$(database)/documents/appointments/$(legacyId))
+          || get(/databases/$(database)/documents/appointments/$(legacyId)).data.status in ['CANCELLED', 'REJECTED'])
+        && schedule.data.isLocked == false
+        && schedule.data.doctorId == slot.doctorId
+        && !(slot.startTime in schedule.data.get('lockedSlots', []))
+        && appointment.data.patientId == request.auth.uid
+        && appointment.data.doctorId == slot.doctorId
+        && appointment.data.scheduleId == slot.scheduleId
+        && appointment.data.appointmentDate == schedule.data.workDate
+        && appointment.data.startTime == slot.startTime
+        && appointment.data.status == 'PENDING';
+    }
+
     match /users/{userId} {
       // A self-registering account may only create a USER profile.
       allow create: if isAdmin()
@@ -77,10 +118,27 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
 
+    // Availability contains no patient details and is reserved with its appointment atomically.
+    match /bookingSlots/{slotId} {
+      allow get, list: if signedIn();
+      allow create: if isAdmin() || validSlotReservation(slotId);
+      allow update: if isAdmin()
+        || (resource.data.state == 'FREE' && validSlotReservation(slotId))
+        || (signedIn() && resource.data.state == 'RESERVED'
+          && request.resource.data.state == 'FREE'
+          && request.resource.data.appointmentId == resource.data.appointmentId
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['state', 'updatedAt'])
+          && getAfter(/databases/$(database)/documents/appointments/$(resource.data.appointmentId)).data.patientId == request.auth.uid
+          && getAfter(/databases/$(database)/documents/appointments/$(resource.data.appointmentId)).data.status == 'CANCELLED');
+      allow delete: if isAdmin();
+    }
+
     match /appointments/{appointmentId} {
       allow create: if isAdmin() || (signedIn()
         && request.resource.data.patientId == request.auth.uid
-        && request.resource.data.status == 'PENDING');
+        && request.resource.data.id == appointmentId
+        && request.resource.data.status == 'PENDING'
+        && hasReservedSlot(appointmentId));
       allow get, list: if isAdmin()
         || (signedIn() && (resource.data.patientId == request.auth.uid || resource.data.doctorId == request.auth.uid));
       allow update: if isAdmin()
@@ -95,6 +153,7 @@ service cloud.firestore {
           && resource.data.patientId == request.auth.uid
           && resource.data.status in ['PENDING', 'CONFIRMED']
           && request.resource.data.status == 'CANCELLED'
+          && slotReleasedOrLegacy(appointmentId)
           && request.resource.data.diff(resource.data).affectedKeys()
             .hasOnly(['status', 'cancellationReason', 'updatedAt']));
       allow delete: if isAdmin();
@@ -150,6 +209,17 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    match /serviceFeedback/{feedbackId} {
+      allow create: if signedIn()
+        && request.resource.data.patientId == request.auth.uid
+        && request.resource.data.keys().hasOnly(['id', 'patientId', 'message', 'createdAt'])
+        && request.resource.data.message is string
+        && request.resource.data.message.size() > 0
+        && request.resource.data.message.size() <= 2000;
+      allow get, list: if isAdmin() || (signedIn() && resource.data.patientId == request.auth.uid);
+      allow update, delete: if false;
+    }
+
     match /consultations/{appointmentId} {
       allow get: if canAccessChat(appointmentId);
 
@@ -195,6 +265,33 @@ service cloud.firestore {
             && request.resource.data.readBy.size() == resource.data.readBy.size() + 1
             && request.resource.data.readBy.hasAll(resource.data.readBy))
         );
+      allow delete: if false;
+    }
+
+    // One support conversation per doctor, accessible to that doctor and admins.
+    match /staffChats/{doctorId} {
+      allow get: if isAdmin() || (isDoctor() && request.auth.uid == doctorId);
+      allow list, create, update, delete: if false;
+    }
+
+    match /staffChats/{doctorId}/messages/{messageId} {
+      function staffMember() {
+        return isAdmin() || (isDoctor() && request.auth.uid == doctorId);
+      }
+      allow get, list: if staffMember();
+      allow create: if staffMember()
+        && request.resource.data.senderId == request.auth.uid
+        && request.resource.data.keys().hasOnly(['id', 'senderId', 'content', 'readBy', 'createdAt'])
+        && request.resource.data.readBy.size() == 0
+        && request.resource.data.content is string
+        && request.resource.data.content.size() > 0
+        && request.resource.data.content.size() <= 2000;
+      allow update: if staffMember()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['readBy'])
+        && request.resource.data.readBy.hasAll([request.auth.uid])
+        && !resource.data.readBy.hasAll([request.auth.uid])
+        && request.resource.data.readBy.size() == resource.data.readBy.size() + 1
+        && request.resource.data.readBy.hasAll(resource.data.readBy);
       allow delete: if false;
     }
 

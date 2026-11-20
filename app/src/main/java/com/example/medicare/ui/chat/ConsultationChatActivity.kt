@@ -6,6 +6,7 @@ import android.animation.ValueAnimator
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.view.WindowManager
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
@@ -35,8 +36,14 @@ class ConsultationChatActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         binding = ActivityConsultationChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        ChatKeyboardInsets.bind(binding.root) {
+            binding.consultationChatScroll.post {
+                binding.consultationChatScroll.fullScroll(android.view.View.FOCUS_DOWN)
+            }
+        }
 
         appointmentId = intent.getStringExtra(EXTRA_APPOINTMENT_ID).orEmpty()
         binding.consultationChatTitle.text = intent.getStringExtra(EXTRA_TITLE).orEmpty().ifBlank {

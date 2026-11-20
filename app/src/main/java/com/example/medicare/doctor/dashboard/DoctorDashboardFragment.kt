@@ -19,7 +19,6 @@ import com.example.medicare.doctor.DoctorHomeActivity
 import com.example.medicare.doctor.medical.CompleteAppointmentActivity
 import com.example.medicare.model.Appointment
 import com.example.medicare.model.AppointmentStatus
-import com.example.medicare.ui.chat.ConsultationChatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDate
@@ -179,7 +178,10 @@ class DoctorDashboardFragment : Fragment() {
     private fun updateStatus(appointment: Appointment, arrived: Boolean) {
         val action = if (arrived) repository::markPatientArrived else repository::startAppointment
         action(appointment.id) { result ->
-            result.onSuccess { load() }.onFailure {
+            result.onSuccess {
+                load()
+                if (!arrived && isAdded) openAppointment(appointment.copy(status = AppointmentStatus.IN_PROGRESS))
+            }.onFailure {
                 if (isAdded) Toast.makeText(requireContext(), it.message ?: getString(R.string.doctor_start_failed), Toast.LENGTH_SHORT).show()
             }
         }
@@ -195,7 +197,7 @@ class DoctorDashboardFragment : Fragment() {
         AppointmentStatus.CANCELLED -> R.string.doctor_status_cancelled
     })
 
-    private fun openChat(a: Appointment) = startActivity(Intent(requireContext(), ConsultationChatActivity::class.java).putExtra(ConsultationChatActivity.EXTRA_APPOINTMENT_ID, a.id).putExtra(ConsultationChatActivity.EXTRA_TITLE, a.patientName))
+    private fun openChat(a: Appointment) = (activity as? DoctorHomeActivity)?.showChatWithPatient(a.patientId)
     private fun openAppointment(a: Appointment) = startActivity(Intent(requireContext(), CompleteAppointmentActivity::class.java).putExtra(CompleteAppointmentActivity.EXTRA_ID, a.id).putExtra(CompleteAppointmentActivity.EXTRA_PATIENT_ID, a.patientId).putExtra(CompleteAppointmentActivity.EXTRA_PATIENT_NAME, a.patientName).putExtra(CompleteAppointmentActivity.EXTRA_DOCTOR_ID, a.doctorId).putExtra(CompleteAppointmentActivity.EXTRA_DOCTOR_NAME, a.doctorName).putExtra(CompleteAppointmentActivity.EXTRA_SPECIALTY, a.specialtyName).putExtra(CompleteAppointmentActivity.EXTRA_SCHEDULE_ID, a.scheduleId).putExtra(CompleteAppointmentActivity.EXTRA_DATE, a.appointmentDate).putExtra(CompleteAppointmentActivity.EXTRA_START_TIME, a.startTime).putExtra(CompleteAppointmentActivity.EXTRA_END_TIME, a.endTime).putExtra(CompleteAppointmentActivity.EXTRA_REASON, a.reason).putExtra(CompleteAppointmentActivity.EXTRA_STATUS, a.status.name))
     override fun onDestroyView() { _binding = null; super.onDestroyView() }
 }

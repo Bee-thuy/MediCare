@@ -2,12 +2,16 @@ package com.example.medicare.doctor
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.WindowManager
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.RelativeSizeSpan
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import android.view.View
 import androidx.fragment.app.Fragment
 import com.example.medicare.R
 import com.example.medicare.databinding.ActivityDoctorShellBinding
@@ -21,6 +25,8 @@ import com.example.medicare.notification.NotificationRegistration
 import com.example.medicare.notification.NotificationPermission
 import com.example.medicare.notification.NotificationsActivity
 import com.example.medicare.ui.base.RoleCatalogDialog
+import com.example.medicare.ui.chat.StaffChatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.example.medicare.data.auth.AuthRepository
 import com.example.medicare.ui.auth.LoginActivity
 
@@ -28,11 +34,18 @@ import com.example.medicare.ui.auth.LoginActivity
 class DoctorHomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDoctorShellBinding
     private var selectedTab = TAB_HOME
+    private var requestedChatPatientId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         binding = ActivityDoctorShellBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            binding.doctorBottomNavigation.visibility =
+                if (insets.isVisible(WindowInsetsCompat.Type.ime())) View.GONE else View.VISIBLE
+            insets
+        }
         listOf(binding.doctorNavHome, binding.doctorNavAppointments, binding.doctorNavPatients,
             binding.doctorNavExam, binding.doctorNavCatalog).forEach(::styleNavIcon)
         NotificationRegistration.registerCurrentDevice()
@@ -59,9 +72,17 @@ class DoctorHomeActivity : AppCompatActivity() {
         updateNavigation()
     }
 
+    fun showChatWithPatient(patientId: String) {
+        requestedChatPatientId = patientId
+        showTab(TAB_CHATS)
+    }
+
     private fun fragmentFor(tab: Int): Fragment = when (tab) {
         TAB_PATIENTS -> DoctorPatientsFragment()
-        TAB_CHATS -> DoctorChatsFragment()
+        TAB_CHATS -> DoctorChatsFragment().apply {
+            arguments = Bundle().apply { putString(DoctorChatsFragment.ARG_PATIENT_ID, requestedChatPatientId) }
+            requestedChatPatientId = null
+        }
         TAB_SCHEDULE -> DoctorScheduleFragment()
         TAB_PRESCRIPTIONS -> DoctorPrescriptionsFragment()
         TAB_PROFILE -> DoctorProfileFragment()
@@ -101,7 +122,7 @@ class DoctorHomeActivity : AppCompatActivity() {
     private fun showCatalog() {
         val labels = arrayOf("🏠  Tổng quan bác sĩ", "📋  Lịch khám cá nhân", "👥  Bệnh nhân được phân công",
             "🩺  Kết quả khám", "💊  Đơn thuốc điện tử", "💬  Chat tư vấn",
-            "📅  Thời gian làm việc", "👤  Hồ sơ cá nhân")
+            "📅  Thời gian làm việc", "👤  Hồ sơ cá nhân", "💬  Chat với Admin")
         RoleCatalogDialog.show(this, "Bác sĩ · Các chức năng", getColor(R.color.doctor_teal), labels,
             selectedIndex = when (selectedTab) {
                 TAB_HOME -> 0; TAB_APPOINTMENTS -> 1; TAB_PATIENTS -> 2; TAB_EXAM -> 3
@@ -121,6 +142,11 @@ class DoctorHomeActivity : AppCompatActivity() {
                     5 -> showTab(TAB_CHATS)
                     6 -> showTab(TAB_SCHEDULE)
                     7 -> showTab(TAB_PROFILE)
+                    8 -> FirebaseAuth.getInstance().currentUser?.uid?.let { doctorId ->
+                        startActivity(Intent(this, StaffChatActivity::class.java)
+                            .putExtra(StaffChatActivity.EXTRA_DOCTOR_ID, doctorId)
+                            .putExtra(StaffChatActivity.EXTRA_TITLE, "Chat với Admin"))
+                    }
                 }
             }
     }

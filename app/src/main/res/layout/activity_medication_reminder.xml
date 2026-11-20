@@ -1,66 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/manager_background"
-    android:fillViewport="true">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
-        <TextView
-            android:id="@+id/medicationReminderBack"
-            android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:gravity="center_vertical"
-            android:text="@string/auth_back"
-            android:textColor="@color/patient_purple"
-            android:textStyle="bold" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/plus_jakarta_sans_bold"
-                android:text="@string/reminder_title"
-                android:textColor="@color/manager_ink"
-                android:textSize="24sp" />
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/medicationReminderAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="44dp"
-                android:text="@string/reminder_add"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                app:backgroundTint="@color/patient_purple"
-                app:cornerRadius="14dp" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/manager_background" android:orientation="vertical">
+    <include layout="@layout/view_patient_role_header" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+            <TextView android:id="@+id/medicationReminderBack" android:layout_width="0dp"
+                android:layout_height="0dp" android:visibility="gone" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="39dp"
+                android:gravity="center_vertical" android:orientation="horizontal">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:fontFamily="@font/inter_bold"
+                    android:text="Nhắc uống thuốc" android:textColor="@color/manager_ink"
+                    android:textSize="13sp" />
+                <TextView android:id="@+id/medicationReminderAdd" android:layout_width="wrap_content"
+                    android:layout_height="match_parent" android:gravity="center_vertical"
+                    android:text="+ Thêm ›" android:textColor="@color/patient_purple"
+                    android:textSize="11sp" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/medicationReminderList" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:orientation="vertical" />
+            <TextView android:id="@+id/medicationReminderEmpty" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="22dp"
+                android:gravity="center" android:text="Chưa có lời nhắc uống thuốc."
+                android:textColor="@color/manager_muted" android:textSize="11sp"
+                android:visibility="gone" />
+            <TextView android:id="@+id/medicationReminderBottomAdd" android:layout_width="match_parent"
+                android:layout_height="40dp" android:layout_marginTop="12dp"
+                android:background="@drawable/patient_booking_button_background"
+                android:gravity="center" android:text="+ Tạo lời nhắc thuốc"
+                android:textColor="@color/white" android:textSize="11sp"
+                android:textStyle="bold" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="13dp" android:background="@drawable/manager_info_background"
+                android:padding="13dp"
+                android:text="ℹ️ Nhắc thuốc chỉ hỗ trợ ghi nhớ; không thay đổi liều dùng đã được bác sĩ kê."
+                android:textColor="@color/patient_purple" android:textSize="11sp" />
         </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="@string/reminder_subtitle"
-            android:textColor="@color/manager_muted" />
-        <TextView
-            android:id="@+id/medicationReminderEmpty"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="52dp"
-            android:gravity="center"
-            android:text="@string/reminder_empty"
-            android:textColor="@color/manager_muted"
-            android:visibility="gone" />
-        <LinearLayout
-            android:id="@+id/medicationReminderList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:orientation="vertical" />
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+    <include layout="@layout/view_patient_role_bottom_navigation" />
+</LinearLayout>

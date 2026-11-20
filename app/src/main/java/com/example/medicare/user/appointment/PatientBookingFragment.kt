@@ -2,25 +2,29 @@ package com.example.medicare.user.appointment
 
 import android.os.Bundle
 import android.view.Gravity
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.medicare.R
 import com.example.medicare.data.appointment.AppointmentRepository
+import com.example.medicare.data.appointment.BookingSlotRepository
 import com.example.medicare.data.doctor.DoctorManagementRepository
+import com.example.medicare.data.review.DoctorReviewRepository
 import com.example.medicare.data.schedule.ScheduleRepository
 import com.example.medicare.databinding.FragmentPatientBookingBinding
-import com.example.medicare.databinding.ItemUserDoctorBinding
+import com.example.medicare.databinding.ItemPatientBookingDoctorBinding
 import com.example.medicare.model.Doctor
 import com.example.medicare.model.DoctorSchedule
 import com.example.medicare.user.PatientHomeActivity
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import com.google.firebase.firestore.ListenerRegistration
 import kotlin.math.max
 
 /** Four booking steps inside the patient shell. Firebase remains the source of doctors and shifts. */
@@ -29,10 +33,17 @@ class PatientBookingFragment : Fragment() {
     private val binding get() = _binding!!
     private val scheduleRepository = ScheduleRepository()
     private val appointmentRepository = AppointmentRepository()
+    private val bookingSlotRepository = BookingSlotRepository()
+    private var availabilityListener: ListenerRegistration? = null
+    private var reservedSlots: Set<String> = emptySet()
+    private var availabilityLoaded = false
+    private var availabilityError = false
     private var step = 1
     private var doctorId = ""
     private var doctorName = ""
     private var specialty = ""
+    private var doctors: List<Doctor> = emptyList()
+    private var ratings: Map<String, Double> = emptyMap()
     private var schedules: List<DoctorSchedule> = emptyList()
     private var selectedSchedule: DoctorSchedule? = null
     private var pendingScheduleId = ""
@@ -61,11 +72,13 @@ class PatientBookingFragment : Fragment() {
         binding.patientBookingReason.setText(state?.getString(STATE_REASON).orEmpty())
         binding.patientBookingBack.setOnClickListener { if (step > 1) { step--; renderStep() } }
         binding.patientBookingNext.setOnClickListener { advance() }
-        binding.patientBookingSchedule.setOnClickListener { binding.patientBookingSchedule.showDropDown() }
-        binding.patientBookingSchedule.setOnItemClickListener { _, _, position, _ ->
-            selectSchedule(schedules[position], restoreTime = false)
-        }
         loadDoctors()
+        DoctorReviewRepository().getAll { result ->
+            if (_binding == null) return@getAll
+            ratings = result.getOrDefault(emptyList()).groupBy { it.doctorId }
+                .mapValues { (_, reviews) -> reviews.map { it.rating }.average() }
+            renderDoctors()
+        }
         if (doctorId.isNotBlank()) loadSchedules(doctorId)
         renderStep()
     }
@@ -84,11 +97,15 @@ class PatientBookingFragment : Fragment() {
     private fun loadDoctors() {
         DoctorManagementRepository(requireContext()).getActiveDoctors { result ->
             if (_binding == null) return@getActiveDoctors
-            binding.patientBookingDoctors.removeAllViews()
-            result.onSuccess { doctors ->
-                binding.patientBookingDoctorsEmpty.visibility = if (doctors.isEmpty()) View.VISIBLE else View.GONE
-                binding.patientBookingDoctorsEmpty.text = "Chưa có bác sĩ đang hoạt động."
-                doctors.sortedBy { it.fullName }.forEach(::addDoctor)
+            result.onSuccess { loaded ->
+                doctors = loaded.sortedBy { it.fullName }
+                if (doctorId.isBlank() && doctors.isNotEmpty()) {
+                    doctorId = doctors.first().id
+                    doctorName = doctors.first().fullName
+                    specialty = doctors.first().specialty
+                    loadSchedules(doctorId)
+                }
+                renderDoctors()
             }.onFailure {
                 binding.patientBookingDoctorsEmpty.visibility = View.VISIBLE
                 binding.patientBookingDoctorsEmpty.text = it.message ?: "Không tải được danh sách bác sĩ."
@@ -96,13 +113,21 @@ class PatientBookingFragment : Fragment() {
         }
     }
 
+    private fun renderDoctors() {
+        if (_binding == null) return
+        binding.patientBookingDoctors.removeAllViews()
+        binding.patientBookingDoctorsEmpty.visibility = if (doctors.isEmpty()) View.VISIBLE else View.GONE
+        binding.patientBookingDoctorsEmpty.text = "Chưa có bác sĩ đang hoạt động."
+        doctors.forEach(::addDoctor)
+    }
+
     private fun addDoctor(doctor: Doctor) {
-        val row = ItemUserDoctorBinding.inflate(layoutInflater, binding.patientBookingDoctors, false)
-        row.userDoctorInitials.text = "👨‍⚕️"
-        row.userDoctorName.text = "BS. ${doctor.fullName}"
-        row.userDoctorSpecialty.text = doctor.specialty
-        row.userDoctorExperience.text = doctor.experienceYears.takeIf(String::isNotBlank)
-            ?.let { "$it năm kinh nghiệm" }.orEmpty()
+        val row = ItemPatientBookingDoctorBinding.inflate(layoutInflater, binding.patientBookingDoctors, false)
+        row.root.isSelected = doctor.id == doctorId
+        row.patientBookingDoctorRowName.text = "BS. ${doctor.fullName}"
+        val rating = ratings[doctor.id]?.let { " · ⭐ ${"%.1f".format(it)}" }.orEmpty()
+        row.patientBookingDoctorRowInfo.text = "${doctor.specialty}$rating"
+        row.patientBookingDoctorRowSelected.text = if (row.root.isSelected) "✅" else "○"
         row.root.setOnClickListener { selectDoctor(doctor) }
         binding.patientBookingDoctors.addView(row.root)
     }
@@ -118,25 +143,42 @@ class PatientBookingFragment : Fragment() {
         binding.patientBookingSlots.removeAllViews()
         binding.patientBookingSlotsEmpty.text = "Hãy chọn lịch làm việc để xem giờ trống."
         loadSchedules(doctorId)
-        step = 2
-        renderStep()
+        renderDoctors()
     }
 
     private fun loadSchedules(id: String) {
+        availabilityListener?.remove()
+        availabilityLoaded = false
+        availabilityError = false
+        reservedSlots = emptySet()
+        availabilityListener = bookingSlotRepository.observeReservedForDoctor(id) { result ->
+            if (_binding == null || doctorId != id) return@observeReservedForDoctor
+            result.onSuccess {
+                reservedSlots = it
+                availabilityLoaded = true
+                availabilityError = false
+                if (selectedSchedule?.let { schedule -> selectedStartTime?.let { time ->
+                        BookingSlotRepository.id(schedule.id, time) in reservedSlots } } == true)
+                    selectedStartTime = null
+                selectedSchedule?.let(::renderSlots)
+            }.onFailure {
+                availabilityLoaded = false
+                availabilityError = true
+                selectedSchedule?.let(::renderSlots)
+            }
+        }
         scheduleRepository.getOpenSchedulesForDoctor(id) { result ->
             if (_binding == null || doctorId != id) return@getOpenSchedulesForDoctor
             result.onSuccess { loaded ->
                 schedules = loaded
-                binding.patientBookingSchedule.setAdapter(ArrayAdapter(requireContext(),
-                    android.R.layout.simple_list_item_1,
-                    loaded.map { "${it.workDate} · ${it.shiftName} (${it.startTime} – ${it.endTime})" }))
                 val restored = loaded.find { it.id == pendingScheduleId }
                 if (restored != null) {
                     selectSchedule(restored, restoreTime = true)
                     renderStep()
-                }
-                else if (loaded.isEmpty()) binding.patientBookingSlotsEmpty.text =
+                } else if (loaded.isNotEmpty()) selectSchedule(loaded.first(), restoreTime = false)
+                else binding.patientBookingSlotsEmpty.text =
                     "Bác sĩ chưa có lịch làm việc đang mở. Hãy chọn bác sĩ khác."
+                renderWeek()
             }.onFailure { binding.patientBookingSlotsEmpty.text =
                 it.message ?: "Không tải được lịch làm việc của bác sĩ." }
         }
@@ -145,48 +187,117 @@ class PatientBookingFragment : Fragment() {
     private fun selectSchedule(schedule: DoctorSchedule, restoreTime: Boolean) {
         selectedSchedule = schedule
         pendingScheduleId = schedule.id
-        if (!restoreTime) selectedStartTime = null
+        if (!restoreTime || selectedStartTime !in timeSlots(schedule).map { it.first }) selectedStartTime = null
         val label = "${schedule.workDate} · ${schedule.shiftName} (${schedule.startTime} – ${schedule.endTime})"
         binding.patientBookingSchedule.setText(label, false)
         renderSlots(schedule)
+        renderWeek()
+    }
+
+    private fun renderWeek() {
+        if (_binding == null) return
+        binding.patientBookingWeek.removeAllViews()
+        val available = schedules.mapNotNull { runCatching { LocalDate.parse(it.workDate) }.getOrNull() }.distinct().sorted()
+        val first = available.firstOrNull() ?: LocalDate.now()
+        val dates = (0L..6L).map { first.plusDays(it) } + available.filter { it.isAfter(first.plusDays(6)) }
+        val formatter = DateTimeFormatter.ofPattern("E", java.util.Locale.forLanguageTag("vi"))
+        dates.distinct().forEach { date ->
+            val shifts = schedules.filter { it.workDate == date.toString() }
+            val active = selectedSchedule?.workDate == date.toString()
+            val day = TextView(requireContext()).apply {
+                text = "${date.format(formatter).uppercase()}\n${date.dayOfMonth}"
+                textSize = 10f
+                gravity = Gravity.CENTER
+                isSelected = active
+                setTextColor(requireContext().getColor(if (active) R.color.white else R.color.manager_muted))
+                setBackgroundResource(R.drawable.patient_booking_day_background)
+                alpha = if (shifts.isEmpty()) .55f else 1f
+                if (shifts.isNotEmpty()) setOnClickListener {
+                    selectSchedule(shifts.first(), restoreTime = false)
+                }
+            }
+            binding.patientBookingWeek.addView(day, LinearLayout.LayoutParams(dp(44), dp(54)).apply { marginEnd = dp(4) })
+        }
     }
 
     private fun renderSlots(schedule: DoctorSchedule) {
         binding.patientBookingSlots.removeAllViews()
-        val slots = timeSlots(schedule)
-        binding.patientBookingSlotsEmpty.visibility = if (slots.isEmpty()) View.VISIBLE else View.GONE
-        if (slots.isEmpty()) binding.patientBookingSlotsEmpty.text = "Không có khung giờ khả dụng trong lịch này."
-        slots.chunked(2).forEach { pair ->
+        if (!availabilityLoaded) {
+            binding.patientBookingSlotsEmpty.visibility = View.VISIBLE
+            binding.patientBookingSlotsEmpty.text = if (availabilityError)
+                "Không kiểm tra được giờ đã đặt. Vui lòng thử lại." else "Đang kiểm tra giờ đã đặt…"
+            return
+        }
+        val shifts = schedules.filter { it.workDate == schedule.workDate }.sortedBy { it.startTime }
+        val total = shifts.sumOf { shift -> timeSlots(shift).count { (start, _) ->
+            start !in shift.lockedSlots && BookingSlotRepository.id(shift.id, start) !in reservedSlots } }
+        val hasSlots = shifts.any { timeSlots(it).isNotEmpty() }
+        binding.patientBookingShiftSummary.text = when {
+            shifts.isEmpty() -> "Chưa có ca làm việc trong ngày."
+            shifts.size == 1 -> "${shifts.first().shiftName} · ${shifts.first().startTime}–${shifts.first().endTime}"
+            else -> "${shifts.size} ca làm việc trong ngày · $total khung giờ trống"
+        }
+        binding.patientBookingSlotsEmpty.visibility = if (total == 0) View.VISIBLE else View.GONE
+        if (total == 0) binding.patientBookingSlotsEmpty.text = if (hasSlots)
+            "Các giờ trong ngày đã được đặt hoặc khóa." else "Không có khung giờ khả dụng trong ngày này."
+        shifts.forEach { shift ->
+            val slots = timeSlots(shift)
+            if (slots.isEmpty()) return@forEach
+            binding.patientBookingSlots.addView(TextView(requireContext()).apply {
+                text = "${shift.shiftName}  ·  ${shift.startTime}–${shift.endTime}"
+                textSize = 12f
+                setTextColor(requireContext().getColor(R.color.manager_ink))
+                setTypeface(typeface, android.graphics.Typeface.BOLD)
+            }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(10); bottomMargin = dp(8) })
+            slots.chunked(3).forEach { pair ->
             val line = LinearLayout(requireContext()).apply { orientation = LinearLayout.HORIZONTAL }
-            pair.forEach { (start, end) ->
+            pair.forEach { (start, _) ->
+                val booked = BookingSlotRepository.id(shift.id, start) in reservedSlots
+                val locked = start in shift.lockedSlots
                 val slot = TextView(requireContext()).apply {
-                    text = "$start – $end"
+                    text = when { locked -> "$start\nĐã khóa"; else -> start }
                     textSize = 11f
                     gravity = Gravity.CENTER
-                    isSelected = start == selectedStartTime
-                    setTextColor(requireContext().getColor(if (isSelected) R.color.white else R.color.patient_purple))
-                    setBackgroundResource(R.drawable.patient_appointment_tab_background)
-                    setOnClickListener {
+                    isSelected = !booked && !locked && shift.id == selectedSchedule?.id && start == selectedStartTime
+                    setTextColor(requireContext().getColor(if (isSelected) R.color.white else if (booked) R.color.manager_red else R.color.manager_ink))
+                    setBackgroundResource(when {
+                        booked -> R.drawable.patient_booking_slot_booked_background
+                        locked -> R.drawable.patient_booking_slot_locked_background
+                        else -> R.drawable.patient_booking_slot_background
+                    })
+                    if (!booked && !locked) setOnClickListener {
+                        selectedSchedule = shift
+                        pendingScheduleId = shift.id
                         selectedStartTime = start
-                        renderSlots(schedule)
+                        renderSlots(shift)
                     }
                 }
-                line.addView(slot, LinearLayout.LayoutParams(0, dp(42), 1f).apply {
+                line.addView(slot, LinearLayout.LayoutParams(0, dp(48), 1f).apply {
+                    marginEnd = dp(6)
+                    bottomMargin = dp(7)
+                })
+            }
+            repeat(3 - pair.size) {
+                line.addView(View(requireContext()), LinearLayout.LayoutParams(0, dp(48), 1f).apply {
                     marginEnd = dp(6)
                     bottomMargin = dp(7)
                 })
             }
             binding.patientBookingSlots.addView(line)
+            }
         }
     }
 
     private fun advance() {
         when (step) {
             1 -> {
-                Toast.makeText(requireContext(), "Vui lòng chọn bác sĩ.", Toast.LENGTH_SHORT).show()
+                if (doctorId.isBlank()) Toast.makeText(requireContext(), "Vui lòng chọn bác sĩ.", Toast.LENGTH_SHORT).show()
+                else { step = 2; renderStep() }
             }
             2 -> {
-                if (selectedSchedule == null || selectedStartTime == null) {
+                if (!availabilityLoaded || selectedSchedule == null || selectedStartTime == null ||
+                    selectedStartTime in selectedSchedule?.lockedSlots.orEmpty() ||
+                    selectedSchedule?.let { BookingSlotRepository.id(it.id, selectedStartTime.orEmpty()) in reservedSlots } == true) {
                     Toast.makeText(requireContext(), "Vui lòng chọn ngày và khung giờ khám.", Toast.LENGTH_SHORT).show()
                 } else { step = 3; renderStep() }
             }
@@ -203,6 +314,12 @@ class PatientBookingFragment : Fragment() {
         if (_binding == null) return
         val labels = listOf("Bác sĩ", "Ngày & giờ", "Lý do", "Xác nhận")
         binding.patientBookingStepLabel.text = "Bước $step/4 · ${labels[step - 1]}"
+        listOf(binding.patientBookingCircle1, binding.patientBookingCircle2,
+            binding.patientBookingCircle3, binding.patientBookingCircle4).forEachIndexed { index, circle ->
+            circle.isSelected = index + 1 <= step
+            circle.text = if (index + 1 < step) "✓" else "${index + 1}"
+            circle.setTextColor(requireContext().getColor(if (circle.isSelected) R.color.white else R.color.manager_muted))
+        }
         binding.patientBookingDoctorStep.visibility = if (step == 1) View.VISIBLE else View.GONE
         binding.patientBookingDateStep.visibility = if (step == 2) View.VISIBLE else View.GONE
         binding.patientBookingReasonStep.visibility = if (step == 3) View.VISIBLE else View.GONE
@@ -214,11 +331,50 @@ class PatientBookingFragment : Fragment() {
         val schedule = selectedSchedule
         if (schedule != null) {
             val time = selectedStartTime.orEmpty()
-            binding.patientBookingReasonSummary.text = "BS. $doctorName\n${schedule.workDate} · $time"
-            binding.patientBookingConfirmation.text =
-                "👨‍⚕️ BS. $doctorName\n$specialty\n\nNgày khám: ${schedule.workDate}\nGiờ khám: $time\nLý do: ${binding.patientBookingReason.text.toString().trim()}\nTrạng thái sau gửi: Chờ duyệt"
+            val date = runCatching { LocalDate.parse(schedule.workDate)
+                .format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) }.getOrDefault(schedule.workDate)
+            binding.patientBookingReasonSummary.removeAllViews()
+            addKeyValue(binding.patientBookingReasonSummary, "Bác sĩ", "BS. $doctorName")
+            addKeyValue(binding.patientBookingReasonSummary, "Ngày khám", date)
+            addKeyValue(binding.patientBookingReasonSummary, "Giờ khám", time, last = true)
+            binding.patientBookingConfirmDoctorName.text = "BS. $doctorName"
+            binding.patientBookingConfirmSpecialty.text = specialty
+            binding.patientBookingConfirmation.removeAllViews()
+            addKeyValue(binding.patientBookingConfirmation, "Ngày khám", date)
+            addKeyValue(binding.patientBookingConfirmation, "Giờ khám", time)
+            addKeyValue(binding.patientBookingConfirmation, "Lý do", binding.patientBookingReason.text.toString().trim())
+            addKeyValue(binding.patientBookingConfirmation, "Trạng thái sau gửi", "Chờ duyệt", last = true, status = true)
         }
         binding.patientBookingScroll.post { _binding?.patientBookingScroll?.scrollTo(0, 0) }
+    }
+
+    private fun addKeyValue(container: LinearLayout, label: String, value: String,
+                            last: Boolean = false, status: Boolean = false) {
+        val row = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+        }
+        row.addView(TextView(requireContext()).apply {
+            text = label
+            textSize = 11f
+            setTextColor(requireContext().getColor(R.color.manager_muted))
+        }, LinearLayout.LayoutParams(0, dp(32), 1f).apply { gravity = Gravity.CENTER_VERTICAL })
+        row.addView(TextView(requireContext()).apply {
+            text = value
+            textSize = 11f
+            gravity = Gravity.END or Gravity.CENTER_VERTICAL
+            setTextColor(requireContext().getColor(if (status) R.color.manager_orange else R.color.manager_ink))
+            setTypeface(typeface, android.graphics.Typeface.BOLD)
+            if (status) {
+                setBackgroundResource(R.drawable.manager_appointment_pending_background)
+                setPadding(dp(7), dp(4), dp(7), dp(4))
+            }
+        }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT))
+        container.addView(row)
+        if (!last) container.addView(View(requireContext()).apply {
+            setBackgroundColor(Color.rgb(237, 240, 246))
+        }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(1)))
     }
 
     private fun submit() {
@@ -239,6 +395,7 @@ class PatientBookingFragment : Fragment() {
                 startActivity(android.content.Intent(requireContext(), MyAppointmentsActivity::class.java))
             }.onFailure {
                 Toast.makeText(requireContext(), it.message ?: "Không gửi được yêu cầu đặt lịch.", Toast.LENGTH_LONG).show()
+                loadSchedules(doctorId)
             }
         }
     }
@@ -264,6 +421,8 @@ class PatientBookingFragment : Fragment() {
     private fun dp(value: Int) = (value * resources.displayMetrics.density + .5f).toInt()
 
     override fun onDestroyView() {
+        availabilityListener?.remove()
+        availabilityListener = null
         _binding = null
         super.onDestroyView()
     }

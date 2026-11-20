@@ -31,11 +31,36 @@ class ConsultationRepository(
                             val readBy = (document.get("readBy") as? List<*>)
                                 ?.filterIsInstance<String>()
                                 .orEmpty()
-                            ChatMessage(document.id, senderId, content, readBy)
+                            ChatMessage(document.id, senderId, content, readBy, appointmentId,
+                                document.getTimestamp("createdAt")?.toDate()?.time ?: 0L)
                         },
                     ),
                 )
             }
+    }
+
+    /** A person pair may have several appointments, but appears as one conversation. */
+    fun observeConversation(
+        appointmentIds: List<String>,
+        callback: (Result<List<ChatMessage>>) -> Unit,
+    ): List<ListenerRegistration> {
+        val messagesByAppointment = mutableMapOf<String, List<ChatMessage>>()
+        return appointmentIds.distinct().map { appointmentId ->
+            observeMessages(appointmentId) { result ->
+                result.onSuccess { messages ->
+                    messagesByAppointment[appointmentId] = messages
+                    callback(Result.success(messagesByAppointment.values.flatten()
+                        .sortedWith(compareBy<ChatMessage> { it.createdAtMillis }
+                            .thenBy { it.appointmentId }.thenBy { it.id })))
+                }.onFailure { callback(Result.failure(it)) }
+            }
+        }
+    }
+
+    fun markConversationRead(messages: List<ChatMessage>) {
+        messages.groupBy { it.appointmentId }.forEach { (id, entries) ->
+            if (id.isNotBlank()) markIncomingMessagesRead(id, entries)
+        }
     }
 
     fun sendMessage(appointmentId: String, content: String, callback: (Result<Unit>) -> Unit) {
@@ -108,8 +133,45 @@ class ConsultationRepository(
             .addOnFailureListener { callback(Result.failure(it)) }
     }
 
+    fun observeStaffMessages(doctorId: String, callback: (Result<List<ChatMessage>>) -> Unit): ListenerRegistration =
+        firestore.collection(STAFF_CHATS_COLLECTION).document(doctorId).collection(MESSAGES_COLLECTION)
+            .orderBy("createdAt").addSnapshotListener { snapshot, error ->
+                if (error != null) { callback(Result.failure(error)); return@addSnapshotListener }
+                callback(Result.success(snapshot?.documents.orEmpty().mapNotNull { document ->
+                    val senderId = document.getString("senderId") ?: return@mapNotNull null
+                    val content = document.getString("content") ?: return@mapNotNull null
+                    ChatMessage(document.id, senderId, content,
+                        (document.get("readBy") as? List<*>)?.filterIsInstance<String>().orEmpty(),
+                        doctorId, document.getTimestamp("createdAt")?.toDate()?.time ?: 0L)
+                }))
+            }
+
+    fun sendStaffMessage(doctorId: String, content: String, callback: (Result<Unit>) -> Unit) {
+        val senderId = auth.currentUser?.uid ?: run {
+            callback(Result.failure(IllegalStateException("Vui lòng đăng nhập lại."))); return
+        }
+        val message = firestore.collection(STAFF_CHATS_COLLECTION).document(doctorId)
+            .collection(MESSAGES_COLLECTION).document()
+        message.set(mapOf("id" to message.id, "senderId" to senderId,
+            "content" to content.trim(), "readBy" to emptyList<String>(),
+            "createdAt" to FieldValue.serverTimestamp()))
+            .addOnSuccessListener { callback(Result.success(Unit)) }
+            .addOnFailureListener { callback(Result.failure(it)) }
+    }
+
+    fun markStaffMessagesRead(doctorId: String, messages: List<ChatMessage>) {
+        val uid = auth.currentUser?.uid ?: return
+        val unread = messages.filter { it.senderId != uid && uid !in it.readBy }
+        if (unread.isEmpty()) return
+        firestore.runBatch { batch -> unread.forEach { message ->
+            batch.update(firestore.collection(STAFF_CHATS_COLLECTION).document(doctorId)
+                .collection(MESSAGES_COLLECTION).document(message.id), "readBy", FieldValue.arrayUnion(uid))
+        } }
+    }
+
     private companion object {
         const val CONSULTATIONS_COLLECTION = "consultations"
+        const val STAFF_CHATS_COLLECTION = "staffChats"
         const val MESSAGES_COLLECTION = "messages"
     }
 }

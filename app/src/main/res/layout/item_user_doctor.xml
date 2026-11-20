@@ -1,77 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="12dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?attr/selectableItemBackground"
-    app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="18dp"
-    app:cardElevation="0dp"
-    app:strokeColor="@color/manager_border"
-    app:strokeWidth="1dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="16dp">
-
-        <TextView
-            android:id="@+id/userDoctorInitials"
-            android:layout_width="54dp"
-            android:layout_height="54dp"
-            android:background="@drawable/patient_avatar_background"
-            android:gravity="center"
-            android:textColor="@color/patient_purple"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/userDoctorName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/plus_jakarta_sans_bold"
-                android:textColor="@color/manager_ink"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/userDoctorSpecialty"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/patient_purple"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/userDoctorExperience"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="@color/manager_muted"
-                android:textSize="12sp" />
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_marginTop="10dp" app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="17dp" app:cardElevation="0dp"
+    app:strokeColor="@color/manager_border" app:strokeWidth="1dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="13dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:gravity="center_vertical" android:orientation="horizontal">
+            <TextView android:id="@+id/userDoctorInitials" android:layout_width="43dp"
+                android:layout_height="43dp" android:background="@drawable/patient_avatar_background"
+                android:gravity="center" android:text="👨‍⚕️" android:textSize="22sp" />
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_marginStart="10dp" android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView android:id="@+id/userDoctorName" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:fontFamily="@font/inter_bold"
+                    android:textColor="@color/manager_ink" android:textSize="12sp" />
+                <TextView android:id="@+id/userDoctorSpecialty" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_marginTop="2dp"
+                    android:textColor="@color/manager_muted" android:textSize="10sp" />
+                <TextView android:id="@+id/userDoctorExperience" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:visibility="gone" />
+                <TextView android:id="@+id/userDoctorRating" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_marginTop="2dp"
+                    android:textColor="@color/manager_muted" android:textSize="10sp" />
+            </LinearLayout>
+            <TextView android:layout_width="17dp" android:layout_height="wrap_content"
+                android:gravity="center" android:text="›" android:textColor="@color/manager_muted"
+                android:textSize="20sp" />
         </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:background="@drawable/patient_avatar_background"
-            android:gravity="center"
-            android:paddingHorizontal="11dp"
-            android:text="Đặt lịch"
-            android:textColor="@color/patient_purple"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="36dp"
+            android:layout_marginTop="9dp" android:orientation="horizontal">
+            <TextView android:id="@+id/userDoctorDetails" android:layout_width="0dp"
+                android:layout_height="match_parent" android:layout_weight="1"
+                android:background="@drawable/patient_secondary_button_background"
+                android:gravity="center" android:text="Xem chi tiết"
+                android:textColor="@color/patient_purple" android:textSize="11sp"
+                android:textStyle="bold" />
+            <TextView android:id="@+id/userDoctorBook" android:layout_width="0dp"
+                android:layout_height="match_parent" android:layout_marginStart="8dp"
+                android:layout_weight="1" android:background="@drawable/patient_booking_button_background"
+                android:gravity="center" android:text="Đặt lịch" android:textColor="@color/white"
+                android:textSize="11sp" android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

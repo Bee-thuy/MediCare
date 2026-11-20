@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.medicare.R
 import com.example.medicare.data.medical.MedicalRecordRepository
 import com.example.medicare.databinding.ActivityMedicalRecordBinding
+import com.example.medicare.user.PatientScreenChrome
 
 class MedicalRecordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMedicalRecordBinding
@@ -16,6 +17,7 @@ class MedicalRecordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMedicalRecordBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        PatientScreenChrome.bind(this, "Hồ sơ sức khỏe")
 
         binding.medicalRecordBack.setOnClickListener { finish() }
         binding.medicalRecordDoctor.text = intent.getStringExtra(EXTRA_DOCTOR_NAME).orEmpty()
@@ -41,6 +43,8 @@ class MedicalRecordActivity : AppCompatActivity() {
                 binding.medicalRecordInstructions.text = record.instructions.ifBlank { getString(R.string.patient_no_information) }
                 if (record.prescriptionItems.isEmpty()) {
                     binding.medicalRecordPrescriptionSection.visibility = View.GONE
+                    if (intent.getBooleanExtra(EXTRA_SHOW_PRESCRIPTION, false))
+                        Toast.makeText(this, "Lượt khám này chưa có đơn thuốc.", Toast.LENGTH_SHORT).show()
                 } else {
                     binding.medicalRecordPrescription.text = record.prescriptionItems.joinToString("\n\n") { item ->
                         getString(
@@ -51,6 +55,11 @@ class MedicalRecordActivity : AppCompatActivity() {
                             item.durationDays,
                         )
                     }
+                    if (intent.getBooleanExtra(EXTRA_SHOW_PRESCRIPTION, false))
+                        binding.medicalRecordScroll.post {
+                            binding.medicalRecordScroll.smoothScrollTo(
+                                0, binding.medicalRecordContent.top + binding.medicalRecordPrescriptionSection.top)
+                        }
                 }
             }.onFailure { error -> showError(error.message ?: getString(R.string.patient_record_load_failed)) }
         }
@@ -68,5 +77,6 @@ class MedicalRecordActivity : AppCompatActivity() {
         const val EXTRA_DOCTOR_NAME = "doctor_name"
         const val EXTRA_SPECIALTY = "specialty"
         const val EXTRA_DATE = "appointment_date"
+        const val EXTRA_SHOW_PRESCRIPTION = "show_prescription"
     }
 }

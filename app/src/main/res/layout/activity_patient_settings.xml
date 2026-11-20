@@ -2,44 +2,98 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@color/manager_background" android:orientation="vertical">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="74dp"
-        android:background="@color/patient_purple_dark" android:gravity="center_vertical"
-        android:orientation="horizontal" android:paddingHorizontal="16dp">
-        <TextView android:id="@+id/patientSettingsBack" android:layout_width="40dp" android:layout_height="40dp"
-            android:background="@drawable/role_header_action_background" android:gravity="center"
-            android:text="‹" android:textColor="@color/white" android:textSize="28sp" />
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:layout_marginStart="12dp" android:orientation="vertical">
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:text="Smart Healthcare · Bệnh nhân" android:textColor="#E5DFFF" android:textSize="10sp" />
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_bold" android:text="Thông báo &amp; cài đặt"
-                android:textColor="@color/white" android:textSize="18sp" />
-        </LinearLayout>
-    </LinearLayout>
-    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent" android:scrollbars="none">
+    <include layout="@layout/view_patient_role_header" />
+    <ScrollView android:id="@+id/patientSettingsScroll"
+        android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:focusableInTouchMode="true" android:scrollbars="none">
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
             android:orientation="vertical" android:padding="16dp">
-            <TextView android:id="@+id/patientSettingsAccount" style="@style/PatientSettingsRow"
-                android:text="👤   Tài khoản của tôi   ›" />
+            <TextView android:id="@+id/patientSettingsBack" android:layout_width="0dp"
+                android:layout_height="0dp" android:visibility="gone" />
+            <LinearLayout android:id="@+id/patientSettingsAccount"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:background="@drawable/manager_card_background"
+                android:orientation="vertical" android:padding="16dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:gravity="center_vertical" android:orientation="horizontal">
+                    <TextView android:layout_width="48dp" android:layout_height="48dp"
+                        android:background="@drawable/patient_avatar_background"
+                        android:gravity="center" android:text="👨🏻" android:textSize="24sp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp" android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView android:id="@+id/patientSettingsName"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_bold" android:text="Tài khoản của tôi"
+                            android:textColor="@color/manager_ink" android:textSize="15sp" />
+                        <TextView android:id="@+id/patientSettingsEmail"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp" android:textColor="@color/manager_muted"
+                            android:textSize="12sp" />
+                        <TextView android:id="@+id/patientSettingsId"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp" android:textColor="@color/manager_muted"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                    <TextView android:layout_width="20dp" android:layout_height="wrap_content"
+                        android:text="›" android:textColor="@color/manager_muted"
+                        android:textSize="22sp" />
+                </LinearLayout>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp" android:fontFamily="@font/inter_bold"
+                    android:text="Tài khoản hiện đang đăng nhập" android:textColor="@color/manager_muted"
+                    android:textSize="12sp" />
+                <TextView android:id="@+id/patientSettingsCurrentAccount"
+                    android:layout_width="match_parent" android:layout_height="48dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/patient_feedback_field_background"
+                    android:gravity="center_vertical" android:paddingHorizontal="13dp"
+                    android:textColor="@color/manager_ink" android:textSize="13sp" />
+            </LinearLayout>
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="20dp" android:text="Thông báo mới"
-                android:textColor="@color/manager_ink" android:textSize="14sp"
-                android:fontFamily="@font/inter_bold" />
-            <TextView android:id="@+id/patientSettingsNotifications" style="@style/PatientSettingsRow"
-                android:layout_marginTop="12dp" android:text="🔔   Thông báo của tôi   ›" />
+                android:layout_marginTop="18dp" android:fontFamily="@font/inter_bold"
+                android:text="Thông báo mới" android:textColor="@color/manager_ink"
+                android:textSize="16sp" />
+            <LinearLayout android:id="@+id/patientSettingsNotificationList"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" android:orientation="vertical" />
+            <TextView android:id="@+id/patientSettingsNotificationEmpty"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" android:background="@drawable/manager_card_background"
+                android:gravity="center" android:minHeight="65dp" android:text="Chưa có thông báo mới"
+                android:textColor="@color/manager_muted" android:textSize="13sp"
+                android:visibility="gone" />
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="18dp" android:fontFamily="@font/inter_bold"
                 android:text="Tùy chỉnh tài khoản" android:textColor="@color/manager_ink"
-                android:textSize="14sp" android:fontFamily="@font/inter_bold" />
-            <TextView android:id="@+id/patientSettingsProfile" style="@style/PatientSettingsRow"
-                android:layout_marginTop="12dp" android:text="👤   Chỉnh sửa hồ sơ   ›" />
-            <TextView android:id="@+id/patientSettingsPassword" style="@style/PatientSettingsRow"
-                android:layout_marginTop="10dp" android:text="🔒   Đổi mật khẩu   ›" />
-            <TextView android:id="@+id/patientSettingsNotificationPrefs" style="@style/PatientSettingsRow"
-                android:layout_marginTop="10dp" android:text="🔔   Cài đặt thông báo   ›" />
-            <TextView android:id="@+id/patientSettingsSignOut" style="@style/PatientSettingsRow"
-                android:layout_marginTop="10dp" android:text="🚪   Đăng xuất   ›" />
+                android:textSize="16sp" />
+            <LinearLayout android:id="@+id/patientSettingsProfile" style="@style/PatientSettingsRow"
+                android:layout_marginTop="10dp" android:orientation="horizontal">
+                <TextView style="@style/PatientSettingsRowIcon" android:text="👤" />
+                <TextView style="@style/PatientSettingsRowLabel" android:text="Chỉnh sửa hồ sơ" />
+                <TextView style="@style/PatientSettingsRowArrow" android:text="›" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/patientSettingsPassword" style="@style/PatientSettingsRow"
+                android:layout_marginTop="10dp" android:orientation="horizontal">
+                <TextView style="@style/PatientSettingsRowIcon" android:text="🔒" />
+                <TextView style="@style/PatientSettingsRowLabel" android:text="Đổi mật khẩu" />
+                <TextView style="@style/PatientSettingsRowArrow" android:text="›" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/patientSettingsNotificationPrefs" style="@style/PatientSettingsRow"
+                android:layout_marginTop="10dp" android:orientation="horizontal">
+                <TextView style="@style/PatientSettingsRowIcon" android:text="🔔" />
+                <TextView style="@style/PatientSettingsRowLabel" android:text="Cài đặt thông báo" />
+                <TextView style="@style/PatientSettingsRowArrow" android:text="›" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/patientSettingsSignOut" style="@style/PatientSettingsRow"
+                android:layout_marginTop="10dp" android:orientation="horizontal">
+                <TextView style="@style/PatientSettingsRowIcon" android:text="🚪" />
+                <TextView style="@style/PatientSettingsRowLabel" android:text="Đăng xuất" />
+                <TextView style="@style/PatientSettingsRowArrow" android:text="›" />
+            </LinearLayout>
+            <TextView android:id="@+id/patientSettingsNotifications"
+                android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
+    <include layout="@layout/view_patient_role_bottom_navigation" />
 </LinearLayout>

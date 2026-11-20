@@ -12,6 +12,7 @@ import com.example.medicare.data.doctor.DoctorManagementRepository
 import com.example.medicare.databinding.FragmentManagerDashboardBinding
 import com.example.medicare.databinding.ItemDashboardRequestBinding
 import com.example.medicare.manager.ManagerActivity
+import com.example.medicare.manager.ManagerDetailSheets
 import com.example.medicare.manager.appointment.DetailPatientActivity
 import com.example.medicare.model.Appointment
 import com.example.medicare.model.AppointmentStatus
@@ -114,24 +115,18 @@ class ManagerDashboardFragment : Fragment() {
                 appointment.appointmentDate + " · " + appointment.startTime + " · " +
                     appointment.specialtyName.ifBlank { appointment.doctorName }
             row.dashboardRequestStatus.text = getString(R.string.manager_pending)
-            row.root.setOnClickListener { openRequest(appointment) }
+            row.root.setOnClickListener { openRequest(appointment, all) }
             current.dashboardRequestsList.addView(row.root)
         }
     }
 
-    private fun openRequest(appointment: Appointment) {
-        startActivity(Intent(requireContext(), DetailPatientActivity::class.java)
-            .putExtra(DetailPatientActivity.EXTRA_APPOINTMENT_ID, appointment.id)
-            .putExtra(DetailPatientActivity.EXTRA_PATIENT_NAME, appointment.patientName)
-            .putExtra(DetailPatientActivity.EXTRA_PATIENT_ID, appointment.patientId)
-            .putExtra(DetailPatientActivity.EXTRA_PATIENT_INFO, "Mã bệnh nhân: ${appointment.patientId}")
-            .putExtra(DetailPatientActivity.EXTRA_TIME, "${appointment.startTime} - ${appointment.endTime}")
-            .putExtra(DetailPatientActivity.EXTRA_DATE, appointment.appointmentDate)
-            .putExtra(DetailPatientActivity.EXTRA_DOCTOR, appointment.doctorName)
-            .putExtra(DetailPatientActivity.EXTRA_SPECIALTY, appointment.specialtyName)
-            .putExtra(DetailPatientActivity.EXTRA_REASON, appointment.reason)
-            .putExtra(DetailPatientActivity.EXTRA_STATUS, appointment.status.name)
-            .putExtra(DetailPatientActivity.EXTRA_SCHEDULE_ID, appointment.scheduleId))
+    private fun openRequest(appointment: Appointment, all: List<Appointment>) {
+        ManagerDetailSheets.appointment(requireActivity(), appointment, all.any {
+                it.id != appointment.id && it.doctorId == appointment.doctorId &&
+                    it.appointmentDate == appointment.appointmentDate && it.startTime == appointment.startTime &&
+                    it.status in setOf(AppointmentStatus.CONFIRMED, AppointmentStatus.ARRIVED,
+                        AppointmentStatus.IN_PROGRESS)
+            }, ::loadSummary)
     }
 
     private fun formatCount(value: Int): String =

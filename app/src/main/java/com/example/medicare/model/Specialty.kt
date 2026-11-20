@@ -5,4 +5,5 @@ data class Specialty(
     val name: String,
     val description: String,
     val isActive: Boolean = true,
+    val iconKey: String = "",
 )

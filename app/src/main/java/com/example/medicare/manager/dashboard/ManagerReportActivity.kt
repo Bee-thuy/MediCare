@@ -24,6 +24,7 @@ import com.example.medicare.data.appointment.AppointmentRepository
 import com.example.medicare.databinding.ActivityManagerReportBinding
 import com.example.medicare.model.AppointmentStatus
 import com.example.medicare.model.Appointment
+import com.example.medicare.manager.ManagerAuxNavigation
 import java.time.LocalDate
 
 class ManagerReportActivity : AppCompatActivity() {
@@ -41,7 +42,8 @@ class ManagerReportActivity : AppCompatActivity() {
         super.onCreate(state)
         binding = ActivityManagerReportBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.reportBack.setOnClickListener { finish() }
+        ManagerAuxNavigation.bind(this)
+        binding.reportBack.setOnClickListener { ManagerAuxNavigation.showCatalog(this) }
         val choices = listOf("7 ngày gần nhất", "Tháng hiện tại", "Năm hiện tại")
         binding.reportPeriod.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, choices)
         binding.reportPeriod.setSelection(1)

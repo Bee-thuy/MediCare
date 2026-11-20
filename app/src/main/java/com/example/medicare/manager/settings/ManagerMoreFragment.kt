@@ -61,6 +61,7 @@ class ManagerMoreFragment : Fragment() {
                 .putExtra(PatientNotificationActivity.EXTRA_SEND_TO_ALL, true))
         }
         binding.managerMoreReviews.setOnClickListener { startActivity(Intent(requireContext(), ManagerReviewsActivity::class.java)) }
+        binding.managerMoreDoctorChat.setOnClickListener { (activity as? ManagerActivity)?.chooseDoctorForChat() }
         binding.managerMoreNotifications.setOnClickListener {
             (activity as? ManagerActivity)?.showTab(ManagerActivity.TAB_NOTIFICATIONS)
         }

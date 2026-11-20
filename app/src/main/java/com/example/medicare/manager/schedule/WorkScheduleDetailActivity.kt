@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.app.AlertDialog
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.GridLayout
+import android.widget.TextView
+import android.view.Gravity
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,10 +15,18 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.medicare.databinding.ActivityWorkScheduleDetailBinding
 import com.example.medicare.data.schedule.ScheduleRepository
 import com.example.medicare.model.DoctorSchedule
+import com.example.medicare.data.appointment.AppointmentRepository
+import com.example.medicare.model.AppointmentStatus
+import com.example.medicare.R
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class WorkScheduleDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWorkScheduleDetailBinding
     private val repository = ScheduleRepository()
+    private val appointments = AppointmentRepository()
     private var schedule: DoctorSchedule? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,10 +60,61 @@ class WorkScheduleDetailActivity : AppCompatActivity() {
             schedule = it
             binding.detailScheduleDoctorName.text = it.doctorName
             binding.detailScheduleSpecialty.text = it.specialtyName
-            binding.detailScheduleDoctorInfo.text = "${it.workDate} · ${it.startTime} - ${it.endTime} · ${it.room}"
+            val date = runCatching { LocalDate.parse(it.workDate)
+                .format(DateTimeFormatter.ofPattern("dd/MM/yyyy (EEEE)", Locale.forLanguageTag("vi"))) }.getOrDefault(it.workDate)
+            binding.detailScheduleDoctorInfo.text = "$date · ${it.startTime} - ${it.endTime} · ${it.room}"
+            binding.detailScheduleDate.text = "▣    Ngày làm việc                 $date"
+            binding.detailScheduleShift.text = "◷    Ca làm việc                    ${it.shiftName}"
+            binding.detailScheduleHours.text = "◷    Giờ làm việc                  ${it.startTime} - ${it.endTime}"
+            binding.detailScheduleRoom.text = "⌂    Phòng khám                    ${it.room.ifBlank { "Chưa cập nhật" }}"
+            binding.detailScheduleDuration.text = "♙    Thời gian khám              ${it.appointmentDurationMinutes} phút / lượt"
+            binding.detailScheduleCapacity.text = "▣    Số lượng lịch hẹn            Đang tải..."
+            binding.detailScheduleState.text = "✓    Trạng thái                    ${if (it.isLocked) "Đã khóa" else "Đang làm việc"}"
+            binding.detailScheduleState.setTextColor(getColor(if (it.isLocked) R.color.manager_red else R.color.manager_green))
+            binding.detailScheduleBadge.text = if (it.isLocked) "Đã khóa" else "Đang làm việc"
+            binding.detailScheduleBadge.setTextColor(getColor(if (it.isLocked) R.color.manager_red else R.color.manager_green))
+            binding.detailScheduleBadge.setBackgroundResource(if (it.isLocked) R.drawable.manager_status_inactive_background else R.drawable.manager_status_active_background)
+            binding.detailScheduleNote.text = "▤    Ghi chú                         ${it.note.ifBlank { "Không có" }}"
             binding.detailScheduleLock.text = if (it.isLocked) "Mở khóa lịch" else "Khóa lịch"
+            renderSlots(it, emptySet())
+            appointments.getAppointmentsForDoctor(it.doctorId) { appointmentResult ->
+                if (isFinishing || isDestroyed || schedule?.id != it.id) return@getAppointmentsForDoctor
+                appointmentResult.onSuccess { all ->
+                    val related = all.filter { appointment -> appointment.scheduleId == it.id &&
+                        appointment.status !in setOf(AppointmentStatus.CANCELLED, AppointmentStatus.REJECTED) }
+                    binding.detailScheduleCapacity.text = "▣    Số lượng lịch hẹn            ${related.size} / ${it.maximumAppointments} lượt"
+                    renderSlots(it, related.map { appointment -> appointment.startTime }.toSet())
+                }.onFailure { binding.detailScheduleCapacity.text = "▣    Số lượng lịch hẹn            Không tải được" }
+            }
         }.onFailure { Toast.makeText(this, it.message ?: "Không thể tải lịch.", Toast.LENGTH_LONG).show() }
     }
+
+    private fun renderSlots(item: DoctorSchedule, used: Set<String>) {
+        binding.detailScheduleSlots.removeAllViews()
+        val start = runCatching { LocalTime.parse(item.startTime) }.getOrNull() ?: return
+        val end = runCatching { LocalTime.parse(item.endTime) }.getOrNull() ?: return
+        val duration = item.appointmentDurationMinutes.coerceAtLeast(1).toLong()
+        var time = start
+        while (!time.plusMinutes(duration).isAfter(end)) {
+            val label = time.toString()
+            val unavailable = item.isLocked || label in item.lockedSlots || label in used
+            binding.detailScheduleSlots.addView(TextView(this).apply {
+                text = label
+                textSize = 13f
+                gravity = Gravity.CENTER
+                setTextColor(getColor(if (unavailable) R.color.manager_muted else R.color.manager_blue))
+                setBackgroundResource(R.drawable.manager_card_background)
+            }, GridLayout.LayoutParams().apply {
+                width = 0
+                height = dp(42)
+                columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                setMargins(dp(3), dp(3), dp(3), dp(3))
+            })
+            time = time.plusMinutes(duration)
+        }
+    }
+
+    private fun dp(value: Int) = (value * resources.displayMetrics.density + .5f).toInt()
 
     private fun toggleLock() {
         val item = schedule ?: return Toast.makeText(this, "Không tìm thấy lịch làm việc.", Toast.LENGTH_SHORT).show()

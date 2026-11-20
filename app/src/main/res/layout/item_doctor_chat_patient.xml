@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="72dp"
+    android:background="@drawable/manager_card_background"
+    android:clickable="true" android:focusable="true"
+    android:gravity="center_vertical" android:orientation="horizontal"
+    android:paddingHorizontal="13dp">
+    <TextView android:layout_width="46dp" android:layout_height="46dp"
+        android:background="@drawable/doctor_avatar_background"
+        android:gravity="center" android:text="👤" android:textSize="22sp" />
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+        android:layout_marginStart="11dp" android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView android:id="@+id/doctorChatRowName"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_bold" android:textColor="@color/manager_ink"
+            android:textSize="14sp" />
+        <TextView android:id="@+id/doctorChatRowSubtitle"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="4dp" android:textColor="@color/manager_muted"
+            android:textSize="11sp" />
+    </LinearLayout>
+    <TextView android:layout_width="24dp" android:layout_height="wrap_content"
+        android:gravity="center" android:text="›" android:textColor="@color/manager_muted"
+        android:textSize="23sp" />
+</LinearLayout>

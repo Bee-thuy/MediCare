@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:background="@drawable/patient_record_sheet_background"
+    android:focusableInTouchMode="true" android:orientation="vertical" android:padding="20dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="38dp"
+        android:gravity="center_vertical" android:orientation="horizontal">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:fontFamily="@font/inter_bold" android:text="⭐ Đánh giá sau khám"
+            android:textColor="@color/manager_ink" android:textSize="17sp" />
+        <TextView android:id="@+id/reviewDialogClose" android:layout_width="32dp"
+            android:layout_height="32dp" android:background="@drawable/patient_avatar_background"
+            android:gravity="center" android:text="×" android:textColor="@color/manager_muted"
+            android:textSize="21sp" />
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="15dp" android:background="@drawable/manager_card_background"
+        android:orientation="vertical" android:padding="15dp">
+        <TextView android:id="@+id/reviewDialogDoctor" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:fontFamily="@font/inter_bold"
+            android:textColor="@color/manager_ink" android:textSize="12sp" />
+        <TextView android:id="@+id/reviewDialogDate" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="4dp"
+            android:textColor="@color/manager_muted" android:textSize="11sp" />
+    </LinearLayout>
+    <RatingBar android:id="@+id/reviewDialogRating" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
+        android:layout_marginTop="18dp" android:numStars="5" android:rating="5" android:stepSize="1"
+        android:progressTint="#FFB020" android:progressBackgroundTint="#D7DFEA"
+        android:secondaryProgressTint="#FFB020" />
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="14dp" android:fontFamily="@font/inter_bold"
+        android:text="Nhận xét của bạn" android:textColor="@color/manager_ink" android:textSize="12sp" />
+    <EditText android:id="@+id/reviewDialogComment" android:layout_width="match_parent"
+        android:layout_height="100dp" android:layout_marginTop="7dp"
+        android:background="@drawable/patient_feedback_field_background" android:gravity="top"
+        android:hint="Bạn đánh giá thế nào về trải nghiệm?" android:inputType="textCapSentences|textMultiLine"
+        android:padding="13dp" android:textColor="@color/manager_ink"
+        android:textColorHint="@color/manager_muted" android:textSize="11sp" />
+    <TextView android:id="@+id/reviewDialogSend" android:layout_width="match_parent"
+        android:layout_height="42dp" android:layout_marginTop="14dp"
+        android:background="@drawable/patient_booking_button_background" android:gravity="center"
+        android:text="Gửi đánh giá" android:textColor="@color/white"
+        android:textSize="11sp" android:textStyle="bold" />
+</LinearLayout>

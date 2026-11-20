@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query
 
 class NotificationRepository(
     private val auth: FirebaseAuth = FirebaseAuth.getInstance(),
@@ -44,10 +45,20 @@ class NotificationRepository(
         title: String,
         body: String,
         callback: (Result<Int>) -> Unit,
-    ) {
-        firestore.collection(USERS_COLLECTION).whereEqualTo("type", "USER").get()
+    ) = createForAudience(title, body, "USER", callback)
+
+    /** Audience is ALL, DOCTOR, or USER; each recipient receives its own in-app record. */
+    fun createForAudience(title: String, body: String, audience: String, callback: (Result<Int>) -> Unit) {
+        if (audience !in setOf("ALL", "DOCTOR", "USER")) {
+            callback(Result.failure(IllegalArgumentException("Đối tượng nhận không hợp lệ.")))
+            return
+        }
+        firestore.collection(USERS_COLLECTION).get()
             .addOnSuccessListener { users ->
-                val ids = users.documents.map { it.id }
+                val ids = users.documents.filter { document ->
+                    val type = document.getString("type")
+                    type in setOf("USER", "DOCTOR") && (audience == "ALL" || type == audience)
+                }.map { it.id }
                 if (ids.isEmpty()) return@addOnSuccessListener callback(Result.success(0))
                 val batches = ids.chunked(400)
                 fun commitBatch(index: Int) {
@@ -61,6 +72,7 @@ class NotificationRepository(
                             "title" to title.trim(),
                             "body" to body.trim(),
                             "type" to "GENERAL",
+                            "audience" to audience,
                             "appointmentId" to "",
                             "isRead" to false,
                             "createdAt" to FieldValue.serverTimestamp(),
@@ -115,6 +127,29 @@ class NotificationRepository(
                     .sortedByDescending(AppNotification::createdAt)))
             }
             .addOnFailureListener { callback(Result.failure(it)) }
+    }
+
+    /** Admin history includes automatic appointment notices and messages sent to one patient. */
+    fun getAdminSentHistory(callback: (Result<List<AppNotification>>) -> Unit) {
+        firestore.collection(COLLECTION).orderBy("createdAt", Query.Direction.DESCENDING).limit(300).get()
+            .addOnSuccessListener { snapshot ->
+                val sentTypes = setOf("GENERAL", "ADMIN_MESSAGE", "APPOINTMENT_CONFIRMED",
+                    "APPOINTMENT_REJECTED", "APPOINTMENT_RESCHEDULED")
+                callback(Result.success(snapshot.documents.mapNotNull { document ->
+                    val type = document.getString("type").orEmpty()
+                    if (type !in sentTypes) return@mapNotNull null
+                    AppNotification(
+                        id = document.id,
+                        userId = document.getString("userId").orEmpty(),
+                        title = document.getString("title").orEmpty(),
+                        body = document.getString("body").orEmpty(),
+                        type = type,
+                        audience = document.getString("audience").orEmpty(),
+                        appointmentId = document.getString("appointmentId").orEmpty(),
+                        createdAt = document.getTimestamp("createdAt")?.toDate()?.time ?: 0L,
+                    )
+                }.distinctBy { if (it.type == "GENERAL") "${it.body}|${it.audience}|${it.createdAt / 60_000}" else it.id }))
+            }.addOnFailureListener { callback(Result.failure(it)) }
     }
 
     fun markRead(notificationId: String) {

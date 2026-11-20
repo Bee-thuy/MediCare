@@ -58,7 +58,8 @@ class DoctorLeaveRequestRepository(
             .addOnSuccessListener { schedules ->
                 firestore.collection("appointments").whereEqualTo("doctorId", request.doctorId).get()
                     .addOnSuccessListener { appointments ->
-                        val affected = if (approved) appointments.documents.filter { document ->
+                        val isShiftChange = request.reason.startsWith("Đổi ca:")
+                        val affected = if (approved && !isShiftChange) appointments.documents.filter { document ->
                             document.getString("appointmentDate") == request.date &&
                                 document.getString("status") in listOf("PENDING", "CONFIRMED", "ARRIVED")
                         } else emptyList()
@@ -67,7 +68,7 @@ class DoctorLeaveRequestRepository(
                             firestore.collection(COLLECTION).document(request.id),
                             mapOf("status" to if (approved) APPROVED else REJECTED, "updatedAt" to FieldValue.serverTimestamp()),
                         )
-                        if (approved) schedules.documents.forEach { schedule ->
+                        if (approved && !isShiftChange) schedules.documents.forEach { schedule ->
                             batch.update(schedule.reference, mapOf("isLocked" to true, "updatedAt" to FieldValue.serverTimestamp()))
                         }
                         affected.forEach { appointment ->
@@ -84,7 +85,11 @@ class DoctorLeaveRequestRepository(
                         batch.setNotification(
                             request.doctorId,
                             if (approved) "Yêu cầu nghỉ đã được duyệt" else "Yêu cầu nghỉ đã bị từ chối",
-                            if (approved) "Lịch làm việc ngày ${request.date} đã được khóa." else "Yêu cầu nghỉ ngày ${request.date} chưa được chấp thuận.",
+                            when {
+                                !approved -> "Yêu cầu ngày ${request.date} chưa được chấp thuận."
+                                isShiftChange -> "Đề nghị đổi ca ngày ${request.date} đã được duyệt. Admin sẽ cập nhật ca mới."
+                                else -> "Lịch làm việc ngày ${request.date} đã được khóa."
+                            },
                             "LEAVE_REQUEST",
                             "",
                         )

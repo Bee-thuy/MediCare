@@ -1,12 +1,10 @@
 package com.example.medicare.doctor.schedule
 
-import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -98,18 +96,8 @@ class DoctorScheduleFragment : Fragment() {
     }
 
     private fun requestLeave() {
-        val form = layoutInflater.inflate(R.layout.dialog_doctor_leave_request, null)
-        val date = form.findViewById<EditText>(R.id.doctorLeaveDate).apply { setText(selectedDate.toString()) }
-        val reason = form.findViewById<EditText>(R.id.doctorLeaveReason)
-        AlertDialog.Builder(requireContext()).setTitle(R.string.doctor_request_leave).setView(form).setNegativeButton(R.string.manager_cancel, null).setPositiveButton(R.string.doctor_submit_request) { _, _ ->
-            val requestedDate = date.text.toString().trim()
-            val detail = reason.text.toString().trim()
-            if (runCatching { LocalDate.parse(requestedDate) }.isFailure || detail.isBlank()) Toast.makeText(requireContext(), R.string.doctor_leave_invalid, Toast.LENGTH_LONG).show()
-            else leaveRequests.submit(requestedDate, detail) { result ->
-                if (!isAdded) return@submit
-                result.onSuccess { Toast.makeText(requireContext(), R.string.doctor_leave_submitted, Toast.LENGTH_LONG).show(); load() }.onFailure { Toast.makeText(requireContext(), it.message ?: getString(R.string.manager_save_failed), Toast.LENGTH_LONG).show() }
-            }
-        }.show()
+        DoctorLeaveRequestSheet.show(requireActivity() as androidx.appcompat.app.AppCompatActivity,
+            selectedDate, leaveRequests) { if (isAdded) load() }
     }
 
     private enum class Mode { DAY, WEEK, MONTH }

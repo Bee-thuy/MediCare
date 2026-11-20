@@ -6,6 +6,8 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.RelativeSizeSpan
 import android.view.View
+import android.view.Gravity
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
@@ -16,8 +18,10 @@ import com.example.medicare.user.appointment.MyAppointmentsActivity
 import com.example.medicare.user.doctor.DoctorDirectoryFragment
 import com.example.medicare.user.appointment.PatientBookingFragment
 import com.example.medicare.model.Doctor
+import com.example.medicare.model.Appointment
+import com.example.medicare.data.review.DoctorReviewRepository
+import java.time.format.DateTimeFormatter
 import com.example.medicare.user.reminder.MedicationReminderActivity
-import com.example.medicare.ui.profile.ProfileActivity
 import com.example.medicare.notification.NotificationRegistration
 import com.example.medicare.notification.NotificationPermission
 import com.example.medicare.data.appointment.AppointmentRepository
@@ -36,6 +40,7 @@ import java.time.LocalDate
 class PatientHomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPatientHomeBinding
     private val appointments = AppointmentRepository()
+    private var nextAppointment: Appointment? = null
     private var selectedTab = TAB_HOME
     private lateinit var tabBack: OnBackPressedCallback
 
@@ -46,15 +51,17 @@ class PatientHomeActivity : AppCompatActivity() {
         listOf(binding.patientNavAccount, binding.patientNavHome, binding.patientNavSearch,
             binding.patientNavBooking, binding.patientNavCatalog).forEach(::styleNavIcon)
         tabBack = onBackPressedDispatcher.addCallback(this, enabled = false) { showTab(TAB_HOME) }
-        selectedTab = savedInstanceState?.getInt(STATE_SELECTED_TAB, TAB_HOME) ?: TAB_HOME
+        selectedTab = savedInstanceState?.getInt(STATE_SELECTED_TAB)
+            ?: intent.getIntExtra(EXTRA_TAB, TAB_HOME)
         NotificationRegistration.registerCurrentDevice()
         NotificationPermission.requestIfNeeded(this)
 
         binding.patientBrowseDoctors.setOnClickListener { showTab(TAB_SEARCH) }
+        binding.patientAllDoctors.setOnClickListener { showTab(TAB_SEARCH) }
         binding.patientSearchShortcut.setOnClickListener { showTab(TAB_SEARCH) }
         binding.patientMenuButton.setOnClickListener { showCatalog() }
         binding.patientHeaderNotifications.setOnClickListener { startActivity(Intent(this, PatientSettingsActivity::class.java)) }
-        binding.patientNavAccount.setOnClickListener { startActivity(Intent(this, ProfileActivity::class.java)) }
+        binding.patientNavAccount.setOnClickListener { startActivity(Intent(this, PatientSettingsActivity::class.java)) }
         binding.patientNavHome.setOnClickListener { showTab(TAB_HOME); binding.patientHomeScroll.smoothScrollTo(0, 0) }
         binding.patientNavSearch.setOnClickListener { showTab(TAB_SEARCH) }
         binding.patientNavBooking.setOnClickListener { showTab(TAB_BOOKING) }
@@ -64,6 +71,10 @@ class PatientHomeActivity : AppCompatActivity() {
         binding.patientMyAppointments.setOnClickListener {
             startActivity(Intent(this, MyAppointmentsActivity::class.java))
         }
+        binding.patientUpcomingAppointment.setOnClickListener {
+            nextAppointment?.let { PatientDetailSheets.appointment(this, it, ::loadDashboard) }
+                ?: startActivity(Intent(this, MyAppointmentsActivity::class.java))
+        }
         binding.patientMedicationReminders.setOnClickListener {
             startActivity(Intent(this, MedicationReminderActivity::class.java))
         }
@@ -72,7 +83,15 @@ class PatientHomeActivity : AppCompatActivity() {
         if (savedInstanceState == null || (selectedTab != TAB_HOME && supportFragmentManager.findFragmentById(binding.patientFragmentContainer.id) == null)) {
             showTab(selectedTab)
         } else updateNavigation()
+        if (intent.getBooleanExtra(EXTRA_OPEN_CATALOG, false)) binding.root.post { showCatalog() }
         loadDashboard()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        showTab(intent.getIntExtra(EXTRA_TAB, TAB_HOME))
+        if (intent.getBooleanExtra(EXTRA_OPEN_CATALOG, false)) binding.root.post { showCatalog() }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -124,7 +143,7 @@ class PatientHomeActivity : AppCompatActivity() {
                 if (index == 2) { showTab(TAB_SEARCH); return@show }
                 if (index == 3) { showTab(TAB_BOOKING); return@show }
                 val destination = when (index) {
-                    0 -> ProfileActivity::class.java
+                    0 -> PatientSettingsActivity::class.java
                     9 -> PatientSettingsActivity::class.java
                     4 -> MyAppointmentsActivity::class.java
                     5 -> PatientChatsActivity::class.java
@@ -153,12 +172,66 @@ class PatientHomeActivity : AppCompatActivity() {
         }
         appointments.getAppointmentsForPatient(uid) { result ->
             val next = result.getOrDefault(emptyList()).filter { it.status in setOf(AppointmentStatus.PENDING, AppointmentStatus.CONFIRMED) && it.appointmentDate >= LocalDate.now().toString() }.minWithOrNull(compareBy({ it.appointmentDate }, { it.startTime }))
-            binding.patientUpcomingAppointment.text = next?.let { "${it.doctorName} · ${it.appointmentDate} · ${it.startTime}" } ?: getString(com.example.medicare.R.string.patient_no_upcoming)
+            nextAppointment = next
+            binding.patientUpcomingDoctor.text = next?.let { "BS. ${it.doctorName}" } ?: "Lịch khám sắp tới"
+            binding.patientUpcomingTime.text = next?.let {
+                "${runCatching { LocalDate.parse(it.appointmentDate).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) }.getOrDefault(it.appointmentDate)} · ${it.startTime} · ${it.specialtyName}"
+            } ?: getString(R.string.patient_no_upcoming)
+            binding.patientUpcomingStatus.text = when (next?.status) {
+                AppointmentStatus.PENDING -> "Chờ duyệt"
+                AppointmentStatus.CONFIRMED -> "Đã xác nhận"
+                else -> ""
+            }
         }
         DoctorManagementRepository(this).getActiveDoctors { result ->
             val doctors = result.getOrDefault(emptyList())
-            binding.patientPopularSpecialties.text = doctors.groupingBy { it.specialty }.eachCount().entries.sortedByDescending { it.value }.take(3).joinToString(" · ") { it.key }
-            binding.patientFeaturedDoctors.text = doctors.take(3).joinToString(" · ") { it.fullName }
+            DoctorReviewRepository().getAll { reviewsResult ->
+                if (isFinishing || isDestroyed) return@getAll
+                val ratings = reviewsResult.getOrDefault(emptyList()).groupBy { it.doctorId }.mapValues { (_, values) ->
+                    values.map { it.rating }.average() to values.size
+                }
+                renderFeaturedDoctors(doctors.take(2), ratings)
+            }
+        }
+    }
+
+    private fun renderFeaturedDoctors(doctors: List<Doctor>, ratings: Map<String, Pair<Double, Int>>) {
+        binding.patientFeaturedDoctorsList.removeAllViews()
+        if (doctors.isEmpty()) {
+            binding.patientFeaturedDoctorsList.addView(TextView(this).apply {
+                text = "Chưa có bác sĩ đang hoạt động."
+                setTextColor(getColor(R.color.manager_muted))
+                textSize = 11f
+            })
+            return
+        }
+        fun dp(value: Int) = (value * resources.displayMetrics.density + .5f).toInt()
+        doctors.forEach { doctor ->
+            val row = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                gravity = Gravity.CENTER_VERTICAL
+                setPadding(dp(13), dp(11), dp(13), dp(11))
+                setBackgroundResource(R.drawable.manager_card_background)
+                layoutParams = LinearLayout.LayoutParams(-1, dp(74)).apply { bottomMargin = dp(9) }
+            }
+            row.addView(TextView(this).apply {
+                text = "👨🏻‍⚕️"; textSize = 22f; gravity = Gravity.CENTER
+                setBackgroundResource(R.drawable.patient_avatar_background)
+            }, LinearLayout.LayoutParams(dp(43), dp(43)))
+            val detail = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(10), 0, 0, 0) }
+            detail.addView(TextView(this).apply {
+                text = "BS. ${doctor.fullName}"; textSize = 12f
+                typeface = resources.getFont(R.font.inter_bold); setTextColor(getColor(R.color.manager_ink))
+            })
+            detail.addView(TextView(this).apply {
+                val rating = ratings[doctor.id]?.let { "⭐ ${"%.1f".format(it.first)}" } ?: "Chưa có đánh giá"
+                text = "${doctor.specialty} · $rating"; textSize = 10f
+                setTextColor(getColor(R.color.manager_muted))
+            })
+            row.addView(detail, LinearLayout.LayoutParams(0, -2, 1f))
+            row.addView(TextView(this).apply { text = "›"; textSize = 22f; setTextColor(getColor(R.color.manager_muted)) })
+            row.setOnClickListener { PatientDetailSheets.doctor(this, doctor, ratings[doctor.id]) { showBooking(doctor) } }
+            binding.patientFeaturedDoctorsList.addView(row)
         }
     }
 
@@ -166,6 +239,8 @@ class PatientHomeActivity : AppCompatActivity() {
         const val TAB_HOME = 0
         const val TAB_SEARCH = 1
         const val TAB_BOOKING = 2
+        const val EXTRA_TAB = "patient_tab"
+        const val EXTRA_OPEN_CATALOG = "patient_open_catalog"
         private const val STATE_SELECTED_TAB = "patient_selected_tab"
     }
 }

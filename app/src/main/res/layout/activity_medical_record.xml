@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/manager_background">
+    android:background="@color/manager_background" android:orientation="vertical">
+    <include layout="@layout/view_patient_role_header" />
+    <ScrollView android:id="@+id/medicalRecordScroll"
+        android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+            android:padding="16dp">
 
         <TextView
             android:id="@+id/medicalRecordBack"
@@ -16,8 +20,8 @@
             android:layout_height="44dp"
             android:gravity="center_vertical"
             android:text="@string/auth_back"
-            android:textColor="@color/manager_blue"
-            android:textSize="15sp"
+            android:textColor="@color/patient_purple"
+            android:textSize="11sp"
             android:textStyle="bold" />
 
         <TextView
@@ -27,7 +31,7 @@
             android:fontFamily="@font/plus_jakarta_sans_bold"
             android:text="@string/patient_record_title"
             android:textColor="@color/manager_ink"
-            android:textSize="24sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/medicalRecordDoctor"
@@ -165,4 +169,6 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</ScrollView>
+    </ScrollView>
+    <include layout="@layout/view_patient_role_bottom_navigation" />
+</LinearLayout>

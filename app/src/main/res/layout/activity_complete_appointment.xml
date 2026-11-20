@@ -1,205 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/manager_background"
-    android:fillViewport="true"
-    android:scrollbars="none">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/patient_record_sheet_background" android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
-
-        <TextView
-            android:id="@+id/completeAppointmentBack"
-            android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:gravity="center_vertical"
-            android:text="@string/auth_back"
-            android:textColor="@color/manager_blue"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/completeAppointmentTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/plus_jakarta_sans_bold"
-            android:text="@string/doctor_complete_title"
-            android:textColor="@color/manager_ink"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/completeAppointmentPatientName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:fontFamily="@font/plus_jakarta_sans_bold"
-            android:textColor="@color/manager_ink"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/completeAppointmentInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/manager_muted"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/completeAppointmentReason"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/manager_muted"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:text="@string/doctor_symptoms"
-            android:textColor="@color/manager_ink"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/completeAppointmentSymptoms"
-            android:layout_width="match_parent"
-            android:layout_height="96dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/manager_card_background"
-            android:gravity="top|start"
-            android:hint="@string/doctor_symptoms_hint"
-            android:inputType="textMultiLine|textCapSentences"
-            android:padding="14dp"
-            android:textColor="@color/manager_ink"
-            android:textColorHint="@color/manager_muted"
-            android:textSize="15sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="@string/doctor_diagnosis"
-            android:textColor="@color/manager_ink"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/completeAppointmentDiagnosis"
-            android:layout_width="match_parent"
-            android:layout_height="96dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/manager_card_background"
-            android:gravity="top|start"
-            android:hint="@string/doctor_diagnosis_hint"
-            android:inputType="textMultiLine|textCapSentences"
-            android:padding="14dp"
-            android:textColor="@color/manager_ink"
-            android:textColorHint="@color/manager_muted"
-            android:textSize="15sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="@string/doctor_treatment_notes"
-            android:textColor="@color/manager_ink"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/completeAppointmentTreatment"
-            android:layout_width="match_parent"
-            android:layout_height="96dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/manager_card_background"
-            android:gravity="top|start"
-            android:hint="@string/doctor_treatment_notes_hint"
-            android:inputType="textMultiLine|textCapSentences"
-            android:padding="14dp"
-            android:textColor="@color/manager_ink"
-            android:textColorHint="@color/manager_muted"
-            android:textSize="15sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="@string/doctor_instructions"
-            android:textColor="@color/manager_ink"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/completeAppointmentInstructions"
-            android:layout_width="match_parent"
-            android:layout_height="96dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/manager_card_background"
-            android:gravity="top|start"
-            android:hint="@string/doctor_instructions_hint"
-            android:inputType="textMultiLine|textCapSentences"
-            android:padding="14dp"
-            android:textColor="@color/manager_ink"
-            android:textColorHint="@color/manager_muted"
-            android:textSize="15sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/doctor_prescription_title"
-            android:textColor="@color/manager_ink"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/doctor_prescription_optional"
-            android:textColor="@color/manager_muted"
-            android:textSize="13sp" />
-
-        <LinearLayout
-            android:id="@+id/completeAppointmentItems"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/completeAppointmentAddMedication"
-            android:layout_width="wrap_content"
-            android:layout_height="46dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/doctor_add_medication"
-            android:textAllCaps="false"
-            android:textColor="@color/manager_blue"
-            app:cornerRadius="12dp"
-            app:strokeColor="@color/manager_blue"
-            app:strokeWidth="1dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/completeAppointmentSave"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginTop="28dp"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/manager_button_background"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:text="@string/doctor_complete_save"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:backgroundTint="@null" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="56dp"
+        android:background="@color/white" android:gravity="center_vertical"
+        android:orientation="horizontal" android:paddingHorizontal="20dp">
+        <TextView android:id="@+id/completeAppointmentBack" android:layout_width="44dp"
+            android:layout_height="44dp" android:gravity="center" android:text="×"
+            android:textColor="@color/manager_muted" android:textSize="26sp" />
+        <TextView android:id="@+id/completeAppointmentTitle" android:layout_width="0dp"
+            android:layout_height="wrap_content" android:layout_weight="1"
+            android:fontFamily="@font/plus_jakarta_sans_bold" android:gravity="center_vertical"
+            android:text="🩺 Phiên khám &amp; kết quả" android:textColor="@color/manager_ink"
+            android:textSize="20sp" />
     </LinearLayout>
-</ScrollView>
+
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:fillViewport="true" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="20dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:background="@drawable/manager_card_background" android:orientation="vertical"
+                android:padding="16dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:gravity="center_vertical" android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="Bệnh nhân"
+                        android:textColor="@color/manager_muted" android:textSize="13sp" />
+                    <TextView android:id="@+id/completeAppointmentPatientName" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:fontFamily="@font/plus_jakarta_sans_bold"
+                        android:textColor="@color/manager_ink" android:textSize="13sp" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp" android:gravity="center_vertical" android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="Ngày / giờ"
+                        android:textColor="@color/manager_muted" android:textSize="13sp" />
+                    <TextView android:id="@+id/completeAppointmentInfo" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:fontFamily="@font/plus_jakarta_sans_bold"
+                        android:textColor="@color/manager_ink" android:textSize="13sp" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp" android:gravity="center_vertical" android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="Lý do"
+                        android:textColor="@color/manager_muted" android:textSize="13sp" />
+                    <TextView android:id="@+id/completeAppointmentReason" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:fontFamily="@font/plus_jakarta_sans_bold"
+                        android:textColor="@color/manager_ink" android:textSize="13sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="20dp" android:text="Triệu chứng"
+                android:textColor="@color/manager_ink" android:textSize="15sp" android:textStyle="bold" />
+            <EditText android:id="@+id/completeAppointmentSymptoms" style="@style/DoctorResultField"
+                android:hint="Nhập triệu chứng sau khám" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="18dp" android:text="Chẩn đoán"
+                android:textColor="@color/manager_ink" android:textSize="15sp" android:textStyle="bold" />
+            <EditText android:id="@+id/completeAppointmentDiagnosis" style="@style/DoctorResultField"
+                android:hint="Nhập chẩn đoán sau khám" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="18dp" android:text="Hướng điều trị"
+                android:textColor="@color/manager_ink" android:textSize="15sp" android:textStyle="bold" />
+            <EditText android:id="@+id/completeAppointmentTreatment" style="@style/DoctorResultField"
+                android:hint="Nhập hướng điều trị" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="18dp" android:text="Lời dặn"
+                android:textColor="@color/manager_ink" android:textSize="15sp" android:textStyle="bold" />
+            <EditText android:id="@+id/completeAppointmentInstructions" style="@style/DoctorResultField"
+                android:hint="Lời dặn bệnh nhân" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="24dp" android:text="Đơn thuốc (tùy chọn)"
+                android:textColor="@color/manager_ink" android:textSize="16sp" android:textStyle="bold" />
+            <LinearLayout android:id="@+id/completeAppointmentItems" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="10dp"
+                android:orientation="vertical" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/completeAppointmentAddMedication" android:layout_width="wrap_content"
+                android:layout_height="46dp" android:layout_marginTop="8dp"
+                android:text="+ Thêm thuốc" android:textAllCaps="false"
+                android:textColor="@color/doctor_teal" app:cornerRadius="12dp"
+                app:strokeColor="@color/doctor_teal" app:strokeWidth="1dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="@color/white" android:orientation="horizontal"
+        android:paddingHorizontal="16dp" android:paddingTop="10dp" android:paddingBottom="16dp">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/completeAppointmentDraft" android:layout_width="0dp"
+            android:layout_height="52dp" android:layout_weight="1"
+            android:text="Lưu nháp" android:textAllCaps="false"
+            android:textColor="@color/doctor_teal_dark" app:backgroundTint="@color/doctor_teal_soft"
+            app:cornerRadius="14dp" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/completeAppointmentSave" android:layout_width="0dp"
+            android:layout_height="52dp" android:layout_marginStart="8dp" android:layout_weight="1"
+            android:text="Hoàn tất &amp; công bố" android:textAllCaps="false"
+            android:textColor="@color/white" app:backgroundTint="@color/doctor_teal"
+            app:cornerRadius="14dp" />
+    </LinearLayout>
+</LinearLayout>

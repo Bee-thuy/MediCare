@@ -27,6 +27,13 @@ class LeaveRequestsActivity : AppCompatActivity() {
             row.setOnClickListener { decide(request) }; binding.leaveRequestsList.addView(row)
         }
     }
-    private fun decide(request: DoctorLeaveRequest) { AlertDialog.Builder(this).setTitle(R.string.manager_leave_requests).setMessage("Duyệt yêu cầu sẽ khóa các lịch làm việc của bác sĩ trong ngày ${request.date}.").setNegativeButton(R.string.manager_reject) { _, _ -> saveDecision(request, false) }.setPositiveButton(R.string.manager_accept) { _, _ -> saveDecision(request, true) }.show() }
+    private fun decide(request: DoctorLeaveRequest) {
+        val message = if (request.reason.startsWith("Đổi ca:"))
+            "Đề nghị đổi ca ngày ${request.date}: ${request.reason.removePrefix("Đổi ca:").trim()}\n\nSau khi duyệt, hãy phân công ca mới cho bác sĩ."
+        else "Duyệt yêu cầu sẽ khóa các lịch làm việc của bác sĩ trong ngày ${request.date}."
+        AlertDialog.Builder(this).setTitle(R.string.manager_leave_requests).setMessage(message)
+            .setNegativeButton(R.string.manager_reject) { _, _ -> saveDecision(request, false) }
+            .setPositiveButton(R.string.manager_accept) { _, _ -> saveDecision(request, true) }.show()
+    }
     private fun saveDecision(request: DoctorLeaveRequest, approved: Boolean) { repository.decide(request, approved) { result -> result.onSuccess { load() }.onFailure { Toast.makeText(this, it.message ?: getString(R.string.manager_save_failed), Toast.LENGTH_LONG).show() } } }
 }

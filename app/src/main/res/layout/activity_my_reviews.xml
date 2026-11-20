@@ -1,7 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/manager_background" android:orientation="vertical" android:padding="20dp">
- <TextView android:id="@+id/myReviewsBack" android:layout_width="wrap_content" android:layout_height="42dp" android:gravity="center_vertical" android:text="‹" android:textColor="@color/patient_purple" android:textSize="38sp"/>
- <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:fontFamily="@font/plus_jakarta_sans_bold" android:text="@string/patient_my_reviews" android:textColor="@color/manager_ink" android:textSize="24sp"/>
- <TextView android:id="@+id/myReviewsEmpty" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="48dp" android:gravity="center" android:text="@string/review_empty" android:textColor="@color/manager_muted" android:visibility="gone"/>
- <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_marginTop="16dp" android:layout_weight="1"><LinearLayout android:id="@+id/myReviewsList" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"/></ScrollView>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/manager_background" android:orientation="vertical">
+    <include layout="@layout/view_patient_role_header" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+            <TextView android:id="@+id/myReviewsBack" android:layout_width="0dp"
+                android:layout_height="0dp" android:visibility="gone" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="12dp" android:fontFamily="@font/inter_bold"
+                android:text="Đánh giá bác sĩ sau khám" android:textColor="@color/manager_ink"
+                android:textSize="13sp" />
+            <LinearLayout android:id="@+id/myReviewsList" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="10dp"
+                android:orientation="vertical" />
+            <TextView android:id="@+id/myReviewsEmpty" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="10dp"
+                android:background="@drawable/manager_card_background" android:gravity="center"
+                android:minHeight="72dp" android:text="Chưa có lịch hoàn thành để đánh giá"
+                android:textColor="@color/manager_muted" android:textSize="11sp"
+                android:visibility="gone" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="18dp" android:fontFamily="@font/inter_bold"
+                android:text="Phản hồi dịch vụ" android:textColor="@color/manager_ink"
+                android:textSize="13sp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" android:background="@drawable/manager_card_background"
+                android:orientation="vertical" android:padding="14dp">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold" android:text="Bạn có góp ý gì?"
+                    android:textColor="@color/manager_ink" android:textSize="11sp" />
+                <EditText android:id="@+id/myReviewsFeedback" android:layout_width="match_parent"
+                    android:layout_height="86dp" android:layout_marginTop="6dp"
+                    android:background="@drawable/patient_feedback_field_background"
+                    android:gravity="top" android:hint="Chất lượng dịch vụ, trải nghiệm đặt khám..."
+                    android:inputType="textCapSentences|textMultiLine" android:padding="12dp"
+                    android:textColor="@color/manager_ink" android:textColorHint="@color/manager_muted"
+                    android:textSize="11sp" />
+                <TextView android:id="@+id/myReviewsSendFeedback"
+                    android:layout_width="match_parent" android:layout_height="40dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/patient_booking_button_background"
+                    android:gravity="center" android:fontFamily="@font/inter_bold"
+                    android:text="Gửi phản hồi" android:textColor="@color/white"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <include layout="@layout/view_patient_role_bottom_navigation" />
 </LinearLayout>

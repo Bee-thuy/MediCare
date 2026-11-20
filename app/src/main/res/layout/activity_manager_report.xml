@@ -7,15 +7,19 @@
         android:orientation="horizontal" android:paddingHorizontal="16dp">
         <TextView android:id="@+id/reportBack" android:layout_width="40dp" android:layout_height="40dp"
             android:background="@drawable/role_header_action_background" android:gravity="center"
-            android:text="‹" android:textColor="@color/white" android:textSize="28sp" />
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:layout_marginStart="12dp" android:orientation="vertical">
+            android:text="☰" android:textColor="@color/white" android:textSize="24sp" />
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:layout_weight="1" android:orientation="vertical">
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                 android:text="Smart Healthcare · Quản trị viên" android:textColor="#DDEBFF" android:textSize="10sp" />
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                 android:fontFamily="@font/plus_jakarta_sans_bold" android:text="Thống kê báo cáo"
                 android:textColor="@color/white" android:textSize="18sp" />
         </LinearLayout>
+        <TextView android:id="@+id/managerAuxNotificationButton"
+            android:layout_width="42dp" android:layout_height="42dp"
+            android:background="@drawable/role_header_action_background"
+            android:gravity="center" android:text="🔔" android:textSize="21sp" />
     </LinearLayout>
     <ScrollView android:layout_width="match_parent" android:layout_height="0dp"
         android:layout_weight="1" android:fillViewport="true" android:scrollbars="none">
@@ -69,4 +73,5 @@
                 android:textColor="@color/white" />
         </LinearLayout>
     </ScrollView>
+    <include layout="@layout/view_manager_aux_navigation" />
 </LinearLayout>

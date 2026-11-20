@@ -23,7 +23,12 @@ class DoctorProfileActivity : AppCompatActivity() {
         binding = ActivityDoctorProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.doctorProfileBack.setOnClickListener { finish() }
-        binding.doctorProfileEdit.setOnClickListener { startActivity(Intent(this, ProfileActivity::class.java)) }
+        binding.doctorProfileEdit.setOnClickListener {
+            DoctorProfileEditor.show(this) { name, phone ->
+                binding.doctorProfileName.text = "BS. $name"
+                binding.doctorProfilePhone.text = phone.ifBlank { "Chưa cập nhật" }
+            }
+        }
         binding.doctorProfilePassword.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java)
                 .putExtra(ProfileActivity.EXTRA_OPEN_PASSWORD, true))

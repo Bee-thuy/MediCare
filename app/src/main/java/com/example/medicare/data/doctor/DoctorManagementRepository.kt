@@ -9,6 +9,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.example.medicare.model.Doctor
 import com.example.medicare.model.Specialty
 import com.example.medicare.model.WorkShift
+import com.example.medicare.model.ShiftTimeNormalizer
+import java.time.LocalTime
 
 /** Firebase-backed manager data. A secondary Auth instance preserves the admin session. */
 class DoctorManagementRepository(
@@ -180,19 +182,21 @@ class DoctorManagementRepository(
                         name = document.getString("name").orEmpty(),
                         description = document.getString("description").orEmpty(),
                         isActive = document.getBoolean("isActive") ?: true,
+                        iconKey = document.getString("iconKey").orEmpty(),
                     )
                 }))
             }
             .addOnFailureListener { callback(Result.failure(it)) }
     }
 
-    fun addSpecialty(name: String, description: String, callback: (Result<Unit>) -> Unit) {
+    fun addSpecialty(name: String, description: String, iconKey: String, callback: (Result<Unit>) -> Unit) {
         val document = firestore.collection(SPECIALTIES_COLLECTION).document()
         document.set(
             hashMapOf(
                 "id" to document.id,
                 "name" to name,
                 "description" to description,
+                "iconKey" to iconKey,
                 "isActive" to true,
                 "createdAt" to FieldValue.serverTimestamp(),
                 "updatedAt" to FieldValue.serverTimestamp(),
@@ -202,9 +206,10 @@ class DoctorManagementRepository(
             .addOnFailureListener { callback(Result.failure(it)) }
     }
 
-    fun updateSpecialty(specialty: Specialty, name: String, description: String, callback: (Result<Unit>) -> Unit) {
+    fun updateSpecialty(specialty: Specialty, name: String, description: String, iconKey: String, callback: (Result<Unit>) -> Unit) {
         firestore.collection(SPECIALTIES_COLLECTION).document(specialty.id).update(mapOf(
-            "name" to name.trim(), "description" to description.trim(), "updatedAt" to FieldValue.serverTimestamp(),
+            "name" to name.trim(), "description" to description.trim(), "iconKey" to iconKey,
+            "updatedAt" to FieldValue.serverTimestamp(),
         )).addOnSuccessListener { callback(Result.success(Unit)) }
             .addOnFailureListener { callback(Result.failure(it)) }
     }
@@ -237,8 +242,10 @@ class DoctorManagementRepository(
                     WorkShift(
                         id = document.id,
                         name = document.getString("name").orEmpty(),
-                        startTime = document.getString("startTime").orEmpty(),
-                        endTime = document.getString("endTime").orEmpty(),
+                        startTime = ShiftTimeNormalizer.normalize(document.getString("name").orEmpty(),
+                            document.getString("startTime").orEmpty(), document.getString("endTime").orEmpty()).first,
+                        endTime = ShiftTimeNormalizer.normalize(document.getString("name").orEmpty(),
+                            document.getString("startTime").orEmpty(), document.getString("endTime").orEmpty()).second,
                         description = document.getString("description").orEmpty(),
                         isActive = document.getBoolean("isActive") ?: true,
                     )
@@ -255,6 +262,10 @@ class DoctorManagementRepository(
         isActive: Boolean,
         callback: (Result<Unit>) -> Unit,
     ) {
+        validateShiftTime(name, startTime, endTime)?.let {
+            callback(Result.failure(IllegalArgumentException(it)))
+            return
+        }
         val document = firestore.collection(WORK_SHIFTS_COLLECTION).document()
         document.set(
             hashMapOf(
@@ -273,11 +284,24 @@ class DoctorManagementRepository(
     }
 
     fun updateWorkShift(shift: WorkShift, name: String, startTime: String, endTime: String, description: String, callback: (Result<Unit>) -> Unit) {
+        validateShiftTime(name, startTime, endTime)?.let {
+            callback(Result.failure(IllegalArgumentException(it)))
+            return
+        }
         firestore.collection(WORK_SHIFTS_COLLECTION).document(shift.id).update(mapOf(
             "name" to name.trim(), "startTime" to startTime.trim(), "endTime" to endTime.trim(),
             "description" to description.trim(), "updatedAt" to FieldValue.serverTimestamp(),
         )).addOnSuccessListener { callback(Result.success(Unit)) }
             .addOnFailureListener { callback(Result.failure(it)) }
+    }
+
+    private fun validateShiftTime(name: String, start: String, end: String): String? {
+        val first = runCatching { LocalTime.parse(start) }.getOrNull() ?: return "Giờ bắt đầu không hợp lệ."
+        val last = runCatching { LocalTime.parse(end) }.getOrNull() ?: return "Giờ kết thúc không hợp lệ."
+        if (!last.isAfter(first)) return "Giờ kết thúc phải sau giờ bắt đầu."
+        if (ShiftTimeNormalizer.isAfternoonName(name) && first.hour < 12)
+            return "Ca chiều cần nhập giờ 24 giờ, ví dụ 13:30–17:30."
+        return null
     }
 
     fun setWorkShiftActive(shiftId: String, active: Boolean, callback: (Result<Unit>) -> Unit) {

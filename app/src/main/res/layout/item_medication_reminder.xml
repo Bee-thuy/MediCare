@@ -1,30 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="16dp"
-    app:strokeColor="@color/manager_border"
-    app:strokeWidth="1dp">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-        <TextView android:id="@+id/reminderMedicationName" android:layout_width="match_parent" android:layout_height="wrap_content" android:fontFamily="@font/plus_jakarta_sans_bold" android:textColor="@color/manager_ink" android:textSize="16sp" />
-        <TextView android:id="@+id/reminderDosage" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:textColor="@color/manager_muted" />
-        <TextView android:id="@+id/reminderSchedule" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:textColor="@color/patient_purple" android:textStyle="bold" />
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/reminderTaken"
-            android:layout_width="wrap_content"
-            android:layout_height="42dp"
-            android:layout_marginTop="10dp"
-            android:textAllCaps="false"
-            android:textColor="@color/manager_green"
-            app:cornerRadius="12dp"
-            app:strokeColor="@color/manager_green"
-            app:strokeWidth="1dp" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp" android:background="@drawable/manager_card_background"
+    android:orientation="vertical" android:padding="15dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="34dp"
+        android:gravity="center_vertical" android:orientation="horizontal">
+        <TextView android:id="@+id/reminderMedicationName" android:layout_width="0dp"
+            android:layout_height="wrap_content" android:layout_weight="1"
+            android:fontFamily="@font/inter_bold" android:textColor="@color/manager_ink"
+            android:textSize="13sp" />
+        <androidx.appcompat.widget.SwitchCompat android:id="@+id/reminderToggle"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:showText="false" />
     </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+    <TextView android:id="@+id/reminderDosage" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginTop="6dp"
+        android:textColor="@color/manager_muted" android:textSize="11sp" />
+    <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="7dp" android:scrollbars="none">
+        <LinearLayout android:id="@+id/reminderTimeChips" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:orientation="horizontal" />
+    </HorizontalScrollView>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="34dp"
+        android:layout_marginTop="13dp" android:orientation="horizontal">
+        <TextView android:id="@+id/reminderTaken" android:layout_width="0dp"
+            android:layout_height="match_parent" android:layout_weight="1"
+            android:background="@drawable/patient_secondary_button_background"
+            android:gravity="center" android:textColor="@color/patient_purple"
+            android:textSize="10sp" android:textStyle="bold" />
+        <TextView android:id="@+id/reminderEdit" android:layout_width="0dp"
+            android:layout_height="match_parent" android:layout_marginStart="8dp"
+            android:layout_weight="1" android:background="@drawable/manager_card_background"
+            android:gravity="center" android:text="Sửa"
+            android:textColor="@color/manager_ink" android:textSize="10sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

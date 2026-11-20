@@ -1,281 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:clipToPadding="false"
-    android:fillViewport="true">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingHorizontal="32dp"
-        android:paddingTop="38dp"
-        android:paddingBottom="30dp">
-
-        <ImageButton
-            android:id="@+id/loginBackButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="start"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/auth_back"
-            android:padding="12dp"
-            android:src="@drawable/ic_auth_back" />
-
-        <ImageView
-            android:layout_width="132dp"
-            android:layout_height="126dp"
-            android:layout_marginTop="38dp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/logo_app" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:fontFamily="@font/plus_jakarta_sans_bold"
-            android:gravity="center"
-            android:text="@string/login_title"
-            android:textColor="@color/auth_text"
-            android:textSize="29sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="@string/login_subtitle"
-            android:textColor="@color/onboarding_body"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/loginMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:background="@drawable/auth_message_background"
-            android:gravity="center"
-            android:padding="12dp"
-            android:textColor="@color/auth_text"
-            android:textSize="14sp"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/loginEmailInput"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginTop="30dp"
-            android:hint="@string/auth_email"
-            android:autofillHints="emailAddress"
-            android:background="@drawable/auth_edit_text_background"
-            android:drawableStart="@drawable/ic_auth_email"
-            android:drawableTint="@color/auth_input_icon"
-            android:drawablePadding="12dp"
-            android:fontFamily="@font/plu_jakarta_sans_regular"
-            android:gravity="center_vertical"
-            android:inputType="textEmailAddress"
-            android:paddingHorizontal="18dp"
-            android:textColor="@color/auth_text"
-            android:textColorHint="@color/auth_hint"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/loginPasswordInput"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginTop="14dp"
-            android:hint="@string/auth_password"
-            android:autofillHints="password"
-            android:background="@drawable/auth_edit_text_background"
-            android:drawableStart="@drawable/ic_auth_lock"
-            android:drawableTint="@color/auth_input_icon"
-            android:drawablePadding="12dp"
-            android:fontFamily="@font/plu_jakarta_sans_regular"
-            android:gravity="center_vertical"
-            android:inputType="textPassword"
-            android:paddingHorizontal="18dp"
-            android:textColor="@color/auth_text"
-            android:textColorHint="@color/auth_hint"
-            android:textSize="16sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/loginRememberMe"
-                android:layout_width="wrap_content"
-                android:layout_height="44dp"
-                android:text="@string/auth_remember_me"
-                android:textColor="@color/auth_text"
-                android:textSize="14sp"
-                app:buttonTint="@color/auth_blue" />
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/loginForgotPasswordLink"
-                android:layout_width="wrap_content"
-                android:layout_height="44dp"
-                android:gravity="center_vertical"
-                android:text="@string/login_forgot_password"
-                android:textColor="@color/auth_blue"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/manager_background" android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="92dp"
+            android:background="@drawable/patient_header_background" android:gravity="center_vertical"
+            android:paddingHorizontal="20dp">
+            <ImageButton android:id="@+id/loginBackButton" android:layout_width="40dp"
+                android:layout_height="40dp" android:background="@drawable/patient_auth_header_button_background"
+                android:contentDescription="@string/auth_back" android:padding="10dp"
+                android:src="@drawable/ic_auth_back" android:tint="@color/white" />
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_marginStart="12dp" android:layout_weight="1" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Smart Healthcare · Bệnh nhân" android:textColor="#DCD4FF" android:textSize="12sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Đăng ký &amp; đăng nhập" android:textColor="@color/white"
+                    android:textSize="19sp" android:textStyle="bold" />
+            </LinearLayout>
+            <TextView android:layout_width="40dp" android:layout_height="40dp"
+                android:background="@drawable/patient_auth_header_button_background"
+                android:gravity="center" android:text="🔔" android:textSize="20sp" />
         </LinearLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/loginButton"
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginTop="8dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:text="@string/login_action"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            app:backgroundTint="@color/auth_blue"
-            app:cornerRadius="30dp" />
-
-        <ProgressBar
-            android:id="@+id/loginLoading"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="12dp"
-            android:indeterminateTint="@color/auth_blue"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/loginQuickAccounts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Đăng nhập nhanh để kiểm thử"
-                android:textColor="@color/auth_text"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/loginQuickAdmin"
-                style="@style/QuickTestAccountButton"
-                android:text="Quản trị viên" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/loginQuickDoctor"
-                style="@style/QuickTestAccountButton"
-                android:layout_marginTop="8dp"
-                android:text="Bác sĩ" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/loginQuickPatient"
-                style="@style/QuickTestAccountButton"
-                android:layout_marginTop="8dp"
-                android:text="Bệnh nhân" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:gravity="center_horizontal" android:orientation="vertical"
+            android:paddingHorizontal="24dp" android:paddingTop="22dp" android:paddingBottom="32dp">
+            <TextView android:layout_width="72dp" android:layout_height="72dp"
+                android:background="@drawable/patient_auth_hero_background"
+                android:gravity="center" android:text="💙" android:textSize="40sp" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="12dp" android:gravity="center"
+                android:text="Chào mừng đến với&#10;Smart Healthcare"
+                android:textColor="@color/manager_ink" android:textSize="21sp" android:textStyle="bold" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" android:gravity="center"
+                android:text="Bảo vệ sức khỏe của bạn mỗi ngày"
+                android:textColor="@color/manager_muted" android:textSize="12sp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="18dp" android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="36dp"
+                    android:background="@drawable/patient_auth_selected_chip_background"
+                    android:gravity="center" android:paddingHorizontal="16dp" android:text="Đăng nhập"
+                    android:textColor="@color/white" android:textSize="12sp" android:textStyle="bold" />
+                <TextView android:id="@+id/loginRegisterLink" android:layout_width="wrap_content"
+                    android:layout_height="36dp" android:layout_marginStart="7dp"
+                    android:background="@drawable/patient_auth_chip_background"
+                    android:gravity="center" android:paddingHorizontal="16dp" android:text="Đăng ký"
+                    android:textColor="@color/manager_muted" android:textSize="12sp" />
+                <TextView android:id="@+id/loginForgotPasswordLink" android:layout_width="wrap_content"
+                    android:layout_height="36dp" android:layout_marginStart="7dp"
+                    android:background="@drawable/patient_auth_chip_background"
+                    android:gravity="center" android:paddingHorizontal="13dp"
+                    android:text="Quên mật khẩu" android:textColor="@color/manager_muted" android:textSize="12sp" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="15dp" android:background="@drawable/patient_auth_card_background"
+                android:elevation="2dp" android:orientation="vertical" android:padding="16dp">
+                <TextView style="@style/PatientProfileFieldLabel" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:text="Email" />
+                <EditText android:id="@+id/loginEmailInput" android:layout_width="match_parent"
+                    android:layout_height="48dp" android:layout_marginTop="6dp"
+                    android:autofillHints="emailAddress" android:background="@drawable/patient_profile_field_background"
+                    android:hint="ten@email.com" android:inputType="textEmailAddress"
+                    android:paddingHorizontal="14dp" android:singleLine="true"
+                    android:textColor="@color/manager_ink" android:textSize="14sp" />
+                <TextView style="@style/PatientProfileFieldLabel" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_marginTop="14dp" android:text="Mật khẩu" />
+                <EditText android:id="@+id/loginPasswordInput" android:layout_width="match_parent"
+                    android:layout_height="48dp" android:layout_marginTop="6dp"
+                    android:autofillHints="password" android:background="@drawable/patient_profile_field_background"
+                    android:hint="Ít nhất 6 ký tự" android:inputType="textPassword"
+                    android:paddingHorizontal="14dp" android:singleLine="true"
+                    android:textColor="@color/manager_ink" android:textSize="14sp" />
+                <TextView android:id="@+id/loginMessage" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_marginTop="12dp"
+                    android:background="@drawable/auth_message_background" android:padding="10dp"
+                    android:textColor="@color/manager_ink" android:textSize="13sp" android:visibility="gone" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/loginButton"
+                    android:layout_width="match_parent" android:layout_height="48dp"
+                    android:layout_marginTop="14dp" android:insetTop="0dp" android:insetBottom="0dp"
+                    android:text="Đăng nhập" android:textAllCaps="false" android:textColor="@color/white"
+                    android:textSize="14sp" android:textStyle="bold"
+                    app:backgroundTint="@color/patient_purple" app:cornerRadius="12dp" />
+                <ProgressBar android:id="@+id/loginLoading" android:layout_width="28dp"
+                    android:layout_height="28dp" android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp" android:indeterminateTint="@color/patient_purple"
+                    android:visibility="gone" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/loginQuickAccounts" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="16dp"
+                android:orientation="vertical" android:visibility="gone">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp" android:text="Đăng nhập nhanh để kiểm thử"
+                    android:textColor="@color/manager_ink" android:textSize="14sp" android:textStyle="bold" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/loginQuickAdmin"
+                    style="@style/QuickTestAccountButton" android:text="Quản trị viên" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/loginQuickDoctor"
+                    style="@style/QuickTestAccountButton" android:layout_marginTop="8dp" android:text="Bác sĩ" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/loginQuickPatient"
+                    style="@style/QuickTestAccountButton" android:layout_marginTop="8dp" android:text="Bệnh nhân" />
+            </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="@color/auth_divider" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="18dp"
-                android:text="@string/auth_or_continue_with"
-                android:textColor="@color/onboarding_body"
-                android:textSize="16sp" />
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="@color/auth_divider" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/viewLoginFb"
-                android:layout_width="0dp"
-                android:layout_height="64dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/auth_continue_facebook"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                app:backgroundTint="@android:color/transparent"
-                app:cornerRadius="18dp"
-                app:icon="@drawable/ic_social_facebook"
-                app:iconGravity="textStart"
-                app:strokeColor="@color/auth_divider"
-                app:strokeWidth="1dp" />
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/viewLoginGoogle"
-                android:layout_width="0dp"
-                android:layout_height="64dp"
-                android:layout_marginHorizontal="8dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/auth_continue_google"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                app:backgroundTint="@android:color/transparent"
-                app:cornerRadius="18dp"
-                app:icon="@drawable/ic_social_google"
-                app:iconGravity="textStart"
-                app:strokeColor="@color/auth_divider"
-                app:strokeWidth="1dp" />
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/viewLoginApple"
-                android:layout_width="0dp"
-                android:layout_height="64dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/auth_continue_apple"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                app:backgroundTint="@android:color/transparent"
-                app:cornerRadius="18dp"
-                app:icon="@drawable/ic_social_apple"
-                app:iconGravity="textStart"
-                app:strokeColor="@color/auth_divider"
-                app:strokeWidth="1dp" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/loginRegisterLink"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:text="@string/login_register_link"
-            android:textColor="@color/auth_blue"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

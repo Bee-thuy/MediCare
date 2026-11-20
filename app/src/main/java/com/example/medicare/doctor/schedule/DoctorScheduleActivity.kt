@@ -1,10 +1,8 @@
 package com.example.medicare.doctor.schedule
 
-import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -99,23 +97,7 @@ class DoctorScheduleActivity : AppCompatActivity() {
     }
 
     private fun requestLeave() {
-        val view = layoutInflater.inflate(R.layout.dialog_doctor_leave_request, null)
-        val date = view.findViewById<EditText>(R.id.doctorLeaveDate).apply { setText(selectedDate.toString()) }
-        val reason = view.findViewById<EditText>(R.id.doctorLeaveReason)
-        AlertDialog.Builder(this)
-            .setTitle(R.string.doctor_request_leave)
-            .setView(view)
-            .setNegativeButton(R.string.manager_cancel, null)
-            .setPositiveButton(R.string.doctor_submit_request) { _, _ ->
-                val day = date.text.toString().trim()
-                val detail = reason.text.toString().trim()
-                if (runCatching { LocalDate.parse(day) }.isFailure || detail.isBlank()) {
-                    Toast.makeText(this, R.string.doctor_leave_invalid, Toast.LENGTH_LONG).show()
-                } else leaveRequests.submit(day, detail) { result ->
-                    result.onSuccess { Toast.makeText(this, R.string.doctor_leave_submitted, Toast.LENGTH_LONG).show(); load() }
-                        .onFailure { Toast.makeText(this, it.message ?: getString(R.string.manager_save_failed), Toast.LENGTH_LONG).show() }
-                }
-            }.show()
+        DoctorLeaveRequestSheet.show(this, selectedDate, leaveRequests) { load() }
     }
 
     private enum class Mode { DAY, WEEK, MONTH }

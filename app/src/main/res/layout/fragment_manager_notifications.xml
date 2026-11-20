@@ -55,7 +55,7 @@
         <TextView android:id="@+id/managerNotificationsHistoryEmpty"
             android:layout_width="match_parent" android:layout_height="wrap_content"
             android:layout_marginTop="12dp" android:gravity="center" android:padding="18dp"
-            android:text="Chưa có thông báo chung đã gửi."
+            android:text="Chưa có thông báo đã gửi."
             android:textColor="@color/manager_muted" android:textSize="11sp" />
         <LinearLayout android:id="@+id/managerNotificationsHistoryList"
             android:layout_width="match_parent" android:layout_height="wrap_content"

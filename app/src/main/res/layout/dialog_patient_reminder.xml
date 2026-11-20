@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:background="@drawable/patient_record_sheet_background"
+    android:focusableInTouchMode="true" android:orientation="vertical" android:padding="20dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="38dp"
+        android:gravity="center_vertical" android:orientation="horizontal">
+        <TextView android:id="@+id/reminderDialogTitle" android:layout_width="0dp"
+            android:layout_height="wrap_content" android:layout_weight="1"
+            android:fontFamily="@font/inter_bold" android:text="Tạo nhắc thuốc"
+            android:textColor="@color/manager_ink" android:textSize="17sp" />
+        <TextView android:id="@+id/reminderDialogClose" android:layout_width="32dp"
+            android:layout_height="32dp" android:background="@drawable/patient_avatar_background"
+            android:gravity="center" android:text="×" android:textColor="@color/manager_muted"
+            android:textSize="21sp" />
+    </LinearLayout>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" android:fontFamily="@font/inter_bold"
+        android:text="Tên thuốc" android:textColor="@color/manager_ink" android:textSize="11sp" />
+    <EditText android:id="@+id/reminderDialogName" android:layout_width="match_parent"
+        android:layout_height="43dp" android:layout_marginTop="5dp"
+        android:background="@drawable/patient_feedback_field_background"
+        android:hint="Tên thuốc theo đơn" android:inputType="textCapSentences"
+        android:paddingHorizontal="12dp" android:textColor="@color/manager_ink" android:textSize="11sp" />
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="11dp" android:fontFamily="@font/inter_bold"
+        android:text="Liều dùng (theo đơn bác sĩ)" android:textColor="@color/manager_ink" android:textSize="11sp" />
+    <EditText android:id="@+id/reminderDialogDosage" android:layout_width="match_parent"
+        android:layout_height="43dp" android:layout_marginTop="5dp"
+        android:background="@drawable/patient_feedback_field_background"
+        android:hint="VD: 1 viên mỗi lần" android:inputType="textCapSentences"
+        android:paddingHorizontal="12dp" android:textColor="@color/manager_ink" android:textSize="11sp" />
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="11dp" android:fontFamily="@font/inter_bold"
+        android:text="Các giờ nhắc (ngăn cách bằng dấu phẩy)"
+        android:textColor="@color/manager_ink" android:textSize="11sp" />
+    <EditText android:id="@+id/reminderDialogTimes" android:layout_width="match_parent"
+        android:layout_height="43dp" android:layout_marginTop="5dp"
+        android:background="@drawable/patient_feedback_field_background"
+        android:hint="08:00, 20:00" android:inputType="text"
+        android:paddingHorizontal="12dp" android:textColor="@color/manager_ink" android:textSize="11sp" />
+    <TextView android:id="@+id/reminderDialogSave" android:layout_width="match_parent"
+        android:layout_height="42dp" android:layout_marginTop="12dp"
+        android:background="@drawable/patient_booking_button_background" android:gravity="center"
+        android:text="Lưu lời nhắc" android:textColor="@color/white"
+        android:textSize="11sp" android:textStyle="bold" />
+</LinearLayout>

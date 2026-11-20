@@ -20,6 +20,11 @@ import com.example.medicare.manager.patient.ManagerPatientsFragment
 import com.example.medicare.manager.schedule.ManagerWorkScheduleFragment
 import com.example.medicare.manager.settings.ManagerMoreFragment
 import com.example.medicare.manager.doctor.SpecialtyActivity
+import com.example.medicare.data.doctor.DoctorManagementRepository
+import com.example.medicare.data.appointment.BookingSlotRepository
+import com.example.medicare.ui.chat.StaffChatActivity
+import androidx.appcompat.app.AlertDialog
+import android.widget.Toast
 import com.example.medicare.manager.dashboard.ManagerReportActivity
 import com.example.medicare.notification.NotificationRegistration
 import com.example.medicare.notification.NotificationPermission
@@ -37,10 +42,12 @@ open class ManagerActivity : AppCompatActivity() {
         hideSystemBars()
         binding = ActivityManagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        BookingSlotRepository().backfillExistingAppointments()
         NotificationRegistration.registerCurrentDevice()
         NotificationPermission.requestIfNeeded(this)
 
-        selectedTab = savedInstanceState?.getInt(STATE_SELECTED_TAB, TAB_HOME) ?: TAB_HOME
+        selectedTab = savedInstanceState?.getInt(STATE_SELECTED_TAB)
+            ?: intent.getIntExtra(EXTRA_INITIAL_TAB, TAB_HOME)
         binding.managerNavHomeInclude.root.setOnClickListener { showTab(TAB_HOME) }
         binding.managerNavDoctorsInclude.root.setOnClickListener { showTab(TAB_APPOINTMENTS) }
         binding.managerNavPatientsInclude.root.setOnClickListener { showTab(TAB_DOCTORS) }
@@ -55,6 +62,12 @@ open class ManagerActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putInt(STATE_SELECTED_TAB, selectedTab)
         super.onSaveInstanceState(outState)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        showTab(intent.getIntExtra(EXTRA_INITIAL_TAB, TAB_HOME))
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -117,7 +130,7 @@ open class ManagerActivity : AppCompatActivity() {
     private fun showCatalog() {
         val labels = arrayOf("📊  Tổng quan", "🗓️  Yêu cầu đặt lịch", "👨‍⚕️  Quản lý bác sĩ",
             "👥  Quản lý bệnh nhân", "📅  Lịch làm việc", "🧬  Danh mục chuyên khoa",
-            "🔔  Thông báo", "📈  Thống kê báo cáo")
+            "🔔  Thông báo", "📈  Thống kê báo cáo", "💬  Chat với bác sĩ")
         RoleCatalogDialog.show(this, "Quản trị viên · Các chức năng", getColor(R.color.manager_blue), labels,
             selectedIndex = when (selectedTab) {
                 TAB_HOME -> 0; TAB_APPOINTMENTS -> 1; TAB_DOCTORS -> 2; TAB_PATIENTS -> 3
@@ -132,7 +145,27 @@ open class ManagerActivity : AppCompatActivity() {
                 5 -> startActivity(Intent(this, SpecialtyActivity::class.java))
                 6 -> showTab(TAB_NOTIFICATIONS)
                 7 -> startActivity(Intent(this, ManagerReportActivity::class.java))
+                8 -> chooseDoctorForChat()
             }
+        }
+    }
+
+    fun chooseDoctorForChat() {
+        DoctorManagementRepository(this).getDoctors { result ->
+            if (isFinishing || isDestroyed) return@getDoctors
+            result.onSuccess { doctors ->
+                if (doctors.isEmpty()) {
+                    Toast.makeText(this, "Chưa có bác sĩ để trò chuyện.", Toast.LENGTH_SHORT).show()
+                    return@onSuccess
+                }
+                AlertDialog.Builder(this).setTitle("Chat với bác sĩ")
+                    .setItems(doctors.map { it.fullName }.toTypedArray()) { _, index ->
+                        val doctor = doctors[index]
+                        startActivity(Intent(this, StaffChatActivity::class.java)
+                            .putExtra(StaffChatActivity.EXTRA_DOCTOR_ID, doctor.id)
+                            .putExtra(StaffChatActivity.EXTRA_TITLE, "BS. ${doctor.fullName}"))
+                    }.show()
+            }.onFailure { Toast.makeText(this, it.message ?: "Không tải được danh sách bác sĩ.", Toast.LENGTH_LONG).show() }
         }
     }
 
@@ -145,6 +178,7 @@ open class ManagerActivity : AppCompatActivity() {
 
     companion object {
         const val STATE_SELECTED_TAB = "selected_manager_tab"
+        const val EXTRA_INITIAL_TAB = "manager_initial_tab"
         const val TAB_HOME = 0
         const val TAB_APPOINTMENTS = 1
         const val TAB_DOCTORS = 2

@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import com.example.medicare.R
+import com.example.medicare.manager.ManagerDetailSheets
 import com.example.medicare.data.appointment.AppointmentRepository
 import com.example.medicare.data.patient.PatientManagementRepository
 import com.example.medicare.databinding.FragmentManagerPatientsDirectoryBinding
@@ -72,13 +73,7 @@ class ManagerPatientsFragment : Fragment() {
     }
 
     private fun showActions(patient: Patient) {
-        AlertDialog.Builder(requireContext())
-            .setTitle(patient.fullName)
-            .setMessage("Điện thoại: ${patient.phone.ifBlank { "Chưa cập nhật" }}\nEmail: ${patient.email.ifBlank { "Chưa cập nhật" }}\nTrạng thái: ${if (patient.accountStatus == AccountStatus.ACTIVE) "Đang dùng" else "Đã khóa"}")
-            .setNegativeButton("Đóng", null)
-            .setNeutralButton(if (patient.accountStatus == AccountStatus.ACTIVE) "Khóa" else "Mở khóa") { _, _ -> togglePatientStatus(patient) }
-            .setPositiveButton("Lịch sử khám") { _, _ -> showAppointmentHistory(patient) }
-            .show()
+        ManagerDetailSheets.patient(requireActivity(), patient) { togglePatientStatus(patient) }
     }
 
     private fun showAppointmentHistory(patient: Patient) {

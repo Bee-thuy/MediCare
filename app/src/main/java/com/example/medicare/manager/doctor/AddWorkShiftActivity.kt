@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.medicare.R
 import com.example.medicare.databinding.ActivityAddWorkShiftBinding
 import java.util.Calendar
+import java.time.LocalTime
 
 class AddWorkShiftActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddWorkShiftBinding
@@ -43,6 +44,12 @@ class AddWorkShiftActivity : AppCompatActivity() {
         binding.addWorkShiftNameLayout.error = if (name.isEmpty()) getString(R.string.manager_required_field) else null
         binding.addWorkShiftStartLayout.error = if (startTime.isEmpty()) getString(R.string.manager_required_field) else null
         binding.addWorkShiftEndLayout.error = if (endTime.isEmpty()) getString(R.string.manager_required_field) else null
+        val start = runCatching { LocalTime.parse(startTime) }.getOrNull()
+        val end = runCatching { LocalTime.parse(endTime) }.getOrNull()
+        if (start != null && end != null && !end.isAfter(start))
+            binding.addWorkShiftEndLayout.error = "Giờ kết thúc phải sau giờ bắt đầu."
+        if (com.example.medicare.model.ShiftTimeNormalizer.isAfternoonName(name) && start != null && start.hour < 12)
+            binding.addWorkShiftStartLayout.error = "Ca chiều dùng giờ 24 giờ, ví dụ 13:30."
         if (listOf(
                 binding.addWorkShiftNameLayout.error,
                 binding.addWorkShiftStartLayout.error,

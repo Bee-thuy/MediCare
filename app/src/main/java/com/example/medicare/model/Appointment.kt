@@ -13,4 +13,5 @@ data class Appointment(
     val endTime: String,
     val reason: String,
     val status: AppointmentStatus,
+    val rescheduledFromId: String = "",
 )

@@ -100,12 +100,13 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/detailScheduleBadge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/manager_status_active_background"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="6dp"
-                    android:text="@string/work_schedule_status_active"
+                    android:text="Đang tải"
                     android:textColor="@color/manager_green"
                     android:textSize="10sp" />
             </LinearLayout>
@@ -128,65 +129,73 @@
                 android:padding="16dp">
 
                 <TextView
-                    android:text="▣    Ngày làm việc                 26/05/2025 (Thứ 2)"
+                    android:id="@+id/detailScheduleDate"
+                    android:text="▣    Ngày làm việc                 Đang tải"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/manager_ink"
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/detailScheduleShift"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="◷    Ca làm việc                    Ca sáng"
+                    android:text="◷    Ca làm việc                    Đang tải"
                     android:textColor="@color/manager_ink"
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/detailScheduleHours"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="◷    Giờ làm việc                  08:00 - 12:00"
+                    android:text="◷    Giờ làm việc                  Đang tải"
                     android:textColor="@color/manager_ink"
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/detailScheduleRoom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="⌂    Phòng khám                    Phòng 201"
+                    android:text="⌂    Phòng khám                    Đang tải"
                     android:textColor="@color/manager_ink"
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/detailScheduleDuration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="♙    Thời gian khám              30 phút / lượt"
+                    android:text="♙    Thời gian khám              Đang tải"
                     android:textColor="@color/manager_ink"
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/detailScheduleCapacity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="▣    Số lượng lịch hẹn            8 lượt"
+                    android:text="▣    Số lượng lịch hẹn            Đang tải"
                     android:textColor="@color/manager_ink"
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/detailScheduleState"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="✓    Trạng thái                    Đang làm việc"
+                    android:text="✓    Trạng thái                    Đang tải"
                     android:textColor="@color/manager_green"
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/detailScheduleNote"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="▤    Ghi chú                         Khám bệnh theo lịch hẹn"
+                    android:text="▤    Ghi chú                         Đang tải"
                     android:textColor="@color/manager_ink"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -201,92 +210,11 @@
                 android:textSize="17sp" />
 
             <GridLayout
+                android:id="@+id/detailScheduleSlots"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:columnCount="4">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="42dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/manager_card_background"
-                    android:gravity="center"
-                    android:text="08:00"
-                    android:textColor="@color/manager_blue"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="42dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/manager_card_background"
-                    android:gravity="center"
-                    android:text="08:30"
-                    android:textColor="@color/manager_blue"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="42dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/manager_card_background"
-                    android:gravity="center"
-                    android:text="09:00"
-                    android:textColor="@color/manager_blue"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="42dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/manager_card_background"
-                    android:gravity="center"
-                    android:text="09:30"
-                    android:textColor="@color/manager_blue"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="42dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/manager_card_background"
-                    android:gravity="center"
-                    android:text="10:00"
-                    android:textColor="@color/manager_blue"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="42dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/manager_card_background"
-                    android:gravity="center"
-                    android:text="10:30"
-                    android:textColor="@color/manager_blue"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="42dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/manager_card_background"
-                    android:gravity="center"
-                    android:text="11:00"
-                    android:textColor="@color/manager_blue"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="42dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/manager_card_background"
-                    android:gravity="center"
-                    android:text="11:30"
-                    android:textColor="@color/manager_blue"
-                    android:textStyle="bold" />
-            </GridLayout>
+                android:columnCount="4" />
         </LinearLayout>
     </ScrollView>
 
@@ -298,7 +226,7 @@
         android:orientation="horizontal"
         android:paddingHorizontal="20dp">
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/detailScheduleEdit"
             android:layout_width="0dp"
             android:layout_height="48dp"
@@ -311,7 +239,7 @@
             android:textAllCaps="false"
             android:textColor="@color/manager_blue" />
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/detailScheduleLock"
             android:layout_width="0dp"
             android:layout_height="48dp"

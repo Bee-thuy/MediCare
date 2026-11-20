@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.medicare.data.schedule.ScheduleRepository
+import com.example.medicare.data.appointment.AppointmentRepository
 import com.example.medicare.data.doctor.DoctorManagementRepository
 import com.example.medicare.databinding.ActivityWorkScheduleBinding
 import java.time.LocalDate
@@ -22,6 +23,7 @@ class ManagerWorkScheduleFragment : Fragment() {
     private var _binding: ActivityWorkScheduleBinding? = null
     private val binding get() = _binding!!
     private val repository = ScheduleRepository()
+    private val appointments = AppointmentRepository()
     private var selectedDate = LocalDate.now()
     private var selectedDoctorId: String? = null
     private val addSchedule = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -82,7 +84,7 @@ class ManagerWorkScheduleFragment : Fragment() {
 
     private fun updateDate() {
         binding.workScheduleDate.setText(WorkScheduleWeekStrip.formatDate(selectedDate))
-        binding.workScheduleSection.text = "Các ca ngày ${WorkScheduleWeekStrip.formatDate(selectedDate)}"
+        binding.workScheduleSection.text = "Các khung giờ ngày ${WorkScheduleWeekStrip.formatDate(selectedDate)}"
         WorkScheduleWeekStrip.render(requireContext(), binding.workScheduleWeekStrip, selectedDate) { date ->
             selectedDate = date
             updateDate()
@@ -96,11 +98,14 @@ class ManagerWorkScheduleFragment : Fragment() {
             val doctors = result.getOrDefault(emptyList())
             val labels = listOf("Tất cả bác sĩ") + doctors.map { "BS. ${it.fullName}" }
             binding.workScheduleDoctorFilter.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, labels))
-            binding.workScheduleDoctorFilter.setText(labels.first(), false)
+            if (selectedDoctorId == null && doctors.isNotEmpty()) selectedDoctorId = doctors.first().id
+            val selected = doctors.indexOfFirst { it.id == selectedDoctorId }
+            binding.workScheduleDoctorFilter.setText(labels.getOrElse(selected + 1) { labels.first() }, false)
             binding.workScheduleDoctorFilter.setOnItemClickListener { _, _, position, _ ->
                 selectedDoctorId = doctors.getOrNull(position - 1)?.id
                 loadSchedules()
             }
+            loadSchedules()
         }
     }
 
@@ -109,11 +114,23 @@ class ManagerWorkScheduleFragment : Fragment() {
             if (_binding != null) {
                 result.onSuccess {
                     val visible = it.filter { schedule -> selectedDoctorId == null || schedule.doctorId == selectedDoctorId }
-                    ScheduleListRenderer.render(requireContext(), binding.workScheduleList, binding.workScheduleEmpty, visible) { schedule ->
-                        startActivity(Intent(requireContext(), WorkScheduleDetailActivity::class.java)
-                            .putExtra(WorkScheduleDetailActivity.EXTRA_SCHEDULE_ID, schedule.id)
-                            .putExtra(WorkScheduleDetailActivity.EXTRA_DOCTOR_NAME, schedule.doctorName)
-                            .putExtra(WorkScheduleDetailActivity.EXTRA_SPECIALTY, schedule.specialtyName))
+                    appointments.getAppointments { appointmentResult ->
+                        if (_binding == null) return@getAppointments
+                        appointmentResult.onSuccess { all ->
+                            ScheduleListRenderer.renderSlots(requireContext(), binding.workScheduleList,
+                                binding.workScheduleEmpty, visible, all.filter { item -> item.appointmentDate == selectedDate.toString() },
+                                ::openSchedule) { schedule, time, locked ->
+                                repository.setSlotLocked(schedule.id, time, locked) { update ->
+                                    if (_binding == null) return@setSlotLocked
+                                    update.onSuccess { loadSchedules() }.onFailure { error ->
+                                        Toast.makeText(requireContext(), error.message ?: "Không thể cập nhật khung giờ.", Toast.LENGTH_LONG).show()
+                                    }
+                                }
+                            }
+                        }.onFailure { error ->
+                            binding.workScheduleEmpty.text = error.message ?: "Không tải được lịch hẹn."
+                            binding.workScheduleEmpty.visibility = View.VISIBLE
+                        }
                     }
                 }.onFailure {
                     binding.workScheduleEmpty.text = getString(com.example.medicare.R.string.manager_no_data)
@@ -122,6 +139,13 @@ class ManagerWorkScheduleFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun openSchedule(schedule: com.example.medicare.model.DoctorSchedule) {
+        startActivity(Intent(requireContext(), WorkScheduleDetailActivity::class.java)
+            .putExtra(WorkScheduleDetailActivity.EXTRA_SCHEDULE_ID, schedule.id)
+            .putExtra(WorkScheduleDetailActivity.EXTRA_DOCTOR_NAME, schedule.doctorName)
+            .putExtra(WorkScheduleDetailActivity.EXTRA_SPECIALTY, schedule.specialtyName))
     }
 
     override fun onDestroyView() {

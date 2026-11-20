@@ -10,10 +10,15 @@ class ReminderWorker(context: Context, params: WorkerParameters) : Worker(contex
         val body = inputData.getString("body") ?: return Result.failure()
         AppNotificationManager.show(applicationContext, title, body, (title + body).hashCode())
         if (inputData.getBoolean("repeatDaily", false)) {
-            val id = inputData.getString("id").orEmpty()
-            val time = body.substringAfter("· ", "")
-            val name = body.substringBefore(" ·")
-            if (id.isNotBlank() && time.isNotBlank()) ReminderScheduler.medication(applicationContext, id, name, time)
+            val workName = inputData.getString("workName")
+            val time = inputData.getString("reminderTime") ?: body.substringAfter("· ", "")
+            val name = inputData.getString("medicineName") ?: body.substringBefore(" ·")
+            if (!workName.isNullOrBlank() && time.isNotBlank())
+                ReminderScheduler.rescheduleMedication(applicationContext, workName, name, time)
+            else {
+                val legacyId = inputData.getString("id").orEmpty()
+                if (legacyId.isNotBlank() && time.isNotBlank()) ReminderScheduler.medication(applicationContext, legacyId, name, time)
+            }
         }
         return Result.success()
     }

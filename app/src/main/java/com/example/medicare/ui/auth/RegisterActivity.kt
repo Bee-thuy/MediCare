@@ -1,6 +1,7 @@
 package com.example.medicare.ui.auth
 
 import android.os.Bundle
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.view.View
@@ -36,7 +37,14 @@ class RegisterActivity : FullscreenActivity() {
         setContentView(binding.root)
 
         binding.registerBackButton.setOnClickListener { finish() }
-        binding.registerLoginLink.setOnClickListener { finish() }
+        binding.registerLoginLink.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            finish()
+        }
+        binding.registerForgotLink.setOnClickListener {
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
+            finish()
+        }
         binding.registerButton.setOnClickListener { register() }
     }
 

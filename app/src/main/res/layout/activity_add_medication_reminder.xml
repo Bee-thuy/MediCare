@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/manager_background">
+    android:background="@color/manager_background" android:orientation="vertical">
+    <include layout="@layout/view_patient_role_header" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:scrollbars="none">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="16dp">
         <TextView
             android:id="@+id/addReminderBack"
             android:layout_width="wrap_content"
@@ -24,7 +27,7 @@
             android:fontFamily="@font/plus_jakarta_sans_bold"
             android:text="@string/reminder_add_title"
             android:textColor="@color/manager_ink"
-            android:textSize="24sp" />
+            android:textSize="14sp" />
         <EditText
             android:id="@+id/addReminderMedicationName"
             android:layout_width="match_parent"
@@ -68,4 +71,6 @@
             android:textAllCaps="false"
             app:backgroundTint="@color/patient_purple" />
     </LinearLayout>
-</ScrollView>
+    </ScrollView>
+    <include layout="@layout/view_patient_role_bottom_navigation" />
+</LinearLayout>

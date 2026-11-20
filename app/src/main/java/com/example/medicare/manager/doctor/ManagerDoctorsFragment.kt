@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AlertDialog
 import android.widget.Toast
 import com.example.medicare.R
+import com.example.medicare.manager.ManagerDetailSheets
 import com.example.medicare.databinding.FragmentManagerDoctorsBinding
 import com.example.medicare.databinding.ItemManagedDoctorBinding
 import com.example.medicare.data.doctor.DoctorManagementRepository
@@ -73,7 +74,7 @@ class ManagerDoctorsFragment : Fragment() {
     }
 
     private fun openAddDoctor() {
-        addDoctor.launch(Intent(requireContext(), AddDoctorActivity::class.java))
+        ManagerDoctorFormSheet.show(requireActivity(), ::renderDoctors)
     }
 
     private fun loadSpecialties() {
@@ -129,20 +130,8 @@ class ManagerDoctorsFragment : Fragment() {
     }
 
     private fun showDoctorDetail(doctor: Doctor) {
-        val details = listOf(
-            "Chuyên khoa: ${doctor.specialty}",
-            "Điện thoại: ${doctor.phone.ifBlank { "Chưa cập nhật" }}",
-            "Email: ${doctor.email.ifBlank { "Chưa cập nhật" }}",
-            "Kinh nghiệm: ${doctor.experienceYears.takeIf { it.isNotBlank() }?.let { "$it năm" } ?: "Chưa cập nhật"}",
-            "Trạng thái: ${if (doctor.isActive) "Hoạt động" else "Đã khóa"}",
-        ).joinToString("\n")
-        AlertDialog.Builder(requireContext())
-            .setTitle("BS. ${doctor.fullName}")
-            .setMessage(details)
-            .setNegativeButton("Đóng", null)
-            .setNeutralButton(if (doctor.isActive) "Khóa" else "Mở khóa") { _, _ -> confirmStatusChange(doctor) }
-            .setPositiveButton("Sửa thông tin") { _, _ -> editDoctor(doctor) }
-            .show()
+        ManagerDetailSheets.doctor(requireActivity(), doctor,
+            onEdit = { editDoctor(doctor) }, onToggle = { confirmStatusChange(doctor) })
     }
 
     private fun editDoctor(doctor: Doctor) {

@@ -1,7 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/manager_background" android:orientation="vertical" android:padding="20dp">
-  <TextView android:id="@+id/medicalHistoryBack" android:layout_width="wrap_content" android:layout_height="42dp" android:gravity="center_vertical" android:text="‹" android:textColor="@color/patient_purple" android:textSize="38sp"/>
-  <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:fontFamily="@font/plus_jakarta_sans_bold" android:text="@string/patient_medical_history" android:textColor="@color/manager_ink" android:textSize="24sp"/>
-  <TextView android:id="@+id/medicalHistoryEmpty" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="48dp" android:gravity="center" android:text="@string/patient_history_empty" android:textColor="@color/manager_muted" android:visibility="gone"/>
-  <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_marginTop="16dp" android:layout_weight="1"><LinearLayout android:id="@+id/medicalHistoryList" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"/></ScrollView>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/manager_background" android:orientation="vertical">
+    <include layout="@layout/view_patient_role_header" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+            <TextView android:id="@+id/medicalHistoryBack" android:layout_width="0dp"
+                android:layout_height="0dp" android:visibility="gone" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_bold" android:text="Lịch sử thăm khám"
+                android:textColor="@color/manager_ink" android:textSize="13sp" />
+            <LinearLayout android:id="@+id/medicalHistoryList" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:orientation="vertical" />
+            <TextView android:id="@+id/medicalHistoryEmpty" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="22dp"
+                android:gravity="center" android:text="Chưa có kết quả khám đã công bố."
+                android:textColor="@color/manager_muted" android:textSize="11sp"
+                android:visibility="gone" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="13dp" android:background="@drawable/manager_info_background"
+                android:padding="13dp"
+                android:text="ℹ️ Bệnh nhân chỉ được xem kết quả do bác sĩ đã công bố, không sửa nội dung chuyên môn."
+                android:textColor="@color/patient_purple" android:textSize="11sp" />
+        </LinearLayout>
+    </ScrollView>
+    <include layout="@layout/view_patient_role_bottom_navigation" />
 </LinearLayout>

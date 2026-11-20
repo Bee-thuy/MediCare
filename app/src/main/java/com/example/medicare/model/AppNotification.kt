@@ -9,4 +9,5 @@ data class AppNotification(
     val appointmentId: String = "",
     val isRead: Boolean = false,
     val createdAt: Long = 0L,
+    val audience: String = "",
 )

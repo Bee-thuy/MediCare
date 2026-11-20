@@ -73,6 +73,23 @@ class MedicationReminderRepository(
             .addOnFailureListener { callback(Result.failure(it)) }
     }
 
+    fun setActive(reminderId: String, active: Boolean, callback: (Result<Unit>) -> Unit) {
+        firestore.collection(REMINDERS_COLLECTION).document(reminderId)
+            .update(mapOf("isActive" to active, "updatedAt" to FieldValue.serverTimestamp()))
+            .addOnSuccessListener { callback(Result.success(Unit)) }
+            .addOnFailureListener { callback(Result.failure(it)) }
+    }
+
+    fun updateReminder(reminderId: String, medicationName: String, dosage: String,
+                       reminderTime: String, frequency: String, callback: (Result<Unit>) -> Unit) {
+        firestore.collection(REMINDERS_COLLECTION).document(reminderId)
+            .update(mapOf("medicationName" to medicationName, "dosage" to dosage,
+                "reminderTime" to reminderTime, "frequency" to frequency,
+                "updatedAt" to FieldValue.serverTimestamp()))
+            .addOnSuccessListener { callback(Result.success(Unit)) }
+            .addOnFailureListener { callback(Result.failure(it)) }
+    }
+
     private companion object {
         const val REMINDERS_COLLECTION = "medicationReminders"
     }

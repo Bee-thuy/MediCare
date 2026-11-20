@@ -77,6 +77,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/patientNotificationTypeLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -84,6 +85,16 @@
                 android:text="@string/manager_notification_type"
                 android:textColor="@color/manager_ink"
                 android:textSize="18sp" />
+
+            <TextView android:id="@+id/patientNotificationAudienceLabel"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="12dp" android:text="Đối tượng nhận"
+                android:textColor="@color/manager_ink" android:textSize="14sp"
+                android:visibility="gone" />
+            <Spinner android:id="@+id/patientNotificationAudience"
+                android:layout_width="match_parent" android:layout_height="48dp"
+                android:background="@drawable/manager_card_background"
+                android:visibility="gone" />
 
             <RadioGroup
                 android:id="@+id/patientNotificationTypes"

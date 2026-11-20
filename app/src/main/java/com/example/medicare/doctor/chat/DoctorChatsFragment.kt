@@ -1,8 +1,6 @@
 package com.example.medicare.doctor.chat
 
-import android.app.AlertDialog
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -10,29 +8,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import com.example.medicare.R
 import com.example.medicare.data.appointment.AppointmentRepository
-import com.example.medicare.data.chat.ConsultationRepository
 import com.example.medicare.databinding.FragmentDoctorChatsBinding
+import com.example.medicare.databinding.ItemDoctorChatPatientBinding
 import com.example.medicare.model.Appointment
 import com.example.medicare.model.AppointmentStatus
-import com.example.medicare.model.ChatMessage
+import com.example.medicare.ui.chat.StaffChatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ListenerRegistration
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-/** One active Firebase conversation, matching the doctor chat screen in the HTML prototype. */
+/** The doctor chooses a patient before entering a conversation. */
 class DoctorChatsFragment : Fragment() {
+    companion object { const val ARG_PATIENT_ID = "patient_id" }
+
     private var _binding: FragmentDoctorChatsBinding? = null
     private val binding get() = _binding!!
-    private val repository = ConsultationRepository()
     private var conversations: List<Appointment> = emptyList()
-    private var active: Appointment? = null
-    private var messageListener: ListenerRegistration? = null
-    private var typingListener: ListenerRegistration? = null
-    private var isTyping = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, state: Bundle?): View {
         _binding = FragmentDoctorChatsBinding.inflate(inflater, container, false)
@@ -40,16 +35,15 @@ class DoctorChatsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, state: Bundle?) {
-        binding.doctorChatPatientCard.setOnClickListener { chooseConversation() }
-        binding.doctorChatSend.setOnClickListener { sendMessage() }
-        binding.doctorChatInput.doAfterTextChanged {
-            val shouldType = !it.isNullOrBlank() && active != null
-            if (isTyping != shouldType) {
-                isTyping = shouldType
-                active?.id?.let { id -> repository.setTyping(id, shouldType) }
+        binding.doctorChatAdmin.setOnClickListener {
+            FirebaseAuth.getInstance().currentUser?.uid?.let { doctorId ->
+                startActivity(Intent(requireContext(), StaffChatActivity::class.java)
+                    .putExtra(StaffChatActivity.EXTRA_DOCTOR_ID, doctorId)
+                    .putExtra(StaffChatActivity.EXTRA_TITLE, "Chat với Admin"))
             }
         }
-        showEmpty("Đang tải cuộc trò chuyện…")
+        binding.doctorChatSearch.doAfterTextChanged { renderList(it.toString()) }
+        showMessage("Đang tải danh sách bệnh nhân…")
     }
 
     override fun onResume() {
@@ -61,126 +55,64 @@ class DoctorChatsFragment : Fragment() {
                 conversations = appointments.filter {
                     it.status in setOf(AppointmentStatus.CONFIRMED, AppointmentStatus.ARRIVED,
                         AppointmentStatus.IN_PROGRESS, AppointmentStatus.COMPLETED)
-                }.sortedWith(compareByDescending<Appointment> { it.appointmentDate }.thenByDescending { it.startTime })
-                val selected = conversations.find { it.id == active?.id } ?: conversations.firstOrNull()
-                if (selected == null) {
-                    active = null
-                    binding.doctorChatPatientName.text = "Chưa có cuộc trò chuyện"
-                    binding.doctorChatPatientStatus.text = "Lịch khám được duyệt sẽ xuất hiện tại đây"
-                    binding.doctorChatInput.isEnabled = false
-                    binding.doctorChatSend.isEnabled = false
-                    showEmpty("Chưa có lịch khám để tư vấn.")
-                } else selectConversation(selected)
-            }.onFailure {
-                showEmpty(it.message ?: "Không tải được cuộc trò chuyện.")
-            }
+                }.sortedWith(compareByDescending<Appointment> { it.appointmentDate }
+                    .thenByDescending { it.startTime })
+                    .distinctBy { it.patientId }
+                renderList(binding.doctorChatSearch.text.toString())
+                val requestedId = arguments?.getString(ARG_PATIENT_ID)
+                arguments?.remove(ARG_PATIENT_ID)
+                conversations.firstOrNull { it.patientId == requestedId }?.let(::openConversation)
+            }.onFailure { showMessage(it.message ?: "Không tải được danh sách bệnh nhân.") }
         }
     }
 
-    private fun chooseConversation() {
-        if (conversations.isEmpty()) return
-        val labels = conversations.map {
-            "${it.patientName.ifBlank { "Bệnh nhân" }} · ${it.appointmentDate} ${it.startTime}"
-        }.toTypedArray()
-        AlertDialog.Builder(requireContext()).setTitle("Chọn cuộc trò chuyện")
-            .setSingleChoiceItems(labels, conversations.indexOfFirst { it.id == active?.id }) { dialog, index ->
-                dialog.dismiss()
-                selectConversation(conversations[index])
-            }.setNegativeButton("Đóng", null).show()
-    }
-
-    private fun selectConversation(appointment: Appointment) {
-        val previousId = active?.id
-        if (isTyping && previousId != null) repository.setTyping(previousId, false)
-        isTyping = false
-        active = appointment
-        messageListener?.remove()
-        typingListener?.remove()
-        binding.doctorChatPatientName.text = appointment.patientName.ifBlank { "Bệnh nhân" }
-        binding.doctorChatPatientStatus.text = "🟢 Lịch khám ${appointment.appointmentDate} · Chạm để đổi"
-        binding.doctorChatInput.isEnabled = true
-        binding.doctorChatSend.isEnabled = true
-        binding.doctorChatInput.text?.clear()
-        showEmpty("Đang tải tin nhắn…")
-        messageListener = repository.observeMessages(appointment.id) { result ->
-            if (_binding == null || active?.id != appointment.id) return@observeMessages
-            result.onSuccess { messages ->
-                repository.markIncomingMessagesRead(appointment.id, messages)
-                renderMessages(messages)
-            }.onFailure { showEmpty(it.message ?: "Không tải được tin nhắn.") }
+    private fun renderList(query: String) {
+        if (_binding == null) return
+        binding.doctorChatPatientList.removeAllViews()
+        val matches = conversations.filter {
+            it.patientName.contains(query.trim(), ignoreCase = true)
         }
-        typingListener = repository.observeTyping(appointment.id) { result ->
-            if (_binding == null || active?.id != appointment.id) return@observeTyping
-            val mine = FirebaseAuth.getInstance().currentUser?.uid
-            binding.doctorChatTyping.visibility = if (result.getOrDefault(emptyList()).any { it != mine })
-                View.VISIBLE else View.GONE
-        }
-    }
-
-    private fun renderMessages(messages: List<ChatMessage>) {
-        binding.doctorChatMessages.removeAllViews()
-        if (messages.isEmpty()) {
-            showEmpty("Chưa có tin nhắn. Bạn có thể bắt đầu tư vấn tại đây.")
+        if (matches.isEmpty()) {
+            showMessage(if (conversations.isEmpty()) "Chưa có bệnh nhân để trò chuyện."
+                else "Không tìm thấy bệnh nhân phù hợp.")
             return
         }
-        val mine = FirebaseAuth.getInstance().currentUser?.uid
-        messages.forEach { message ->
-            val own = message.senderId == mine
-            val bubble = TextView(requireContext()).apply {
-                text = message.content
-                textSize = 11f
-                setTextColor(if (own) Color.WHITE else requireContext().getColor(R.color.manager_ink))
-                setPadding(dp(13), dp(11), dp(13), dp(11))
-                background = GradientDrawable().apply {
-                    setColor(if (own) requireContext().getColor(R.color.doctor_teal) else Color.WHITE)
-                    cornerRadii = if (own) floatArrayOf(dp(15).toFloat(), dp(15).toFloat(), dp(15).toFloat(), dp(15).toFloat(), dp(4).toFloat(), dp(4).toFloat(), dp(15).toFloat(), dp(15).toFloat())
-                        else floatArrayOf(dp(15).toFloat(), dp(15).toFloat(), dp(15).toFloat(), dp(15).toFloat(), dp(15).toFloat(), dp(15).toFloat(), dp(4).toFloat(), dp(4).toFloat())
-                    if (!own) setStroke(dp(1), requireContext().getColor(R.color.manager_border))
-                }
-                maxWidth = resources.displayMetrics.widthPixels * 3 / 4
+        matches.forEach { appointment ->
+            val row = ItemDoctorChatPatientBinding.inflate(layoutInflater,
+                binding.doctorChatPatientList, false)
+            row.doctorChatRowName.text = appointment.patientName.ifBlank { "Bệnh nhân" }
+            val date = runCatching { LocalDate.parse(appointment.appointmentDate)
+                .format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) }
+                .getOrDefault(appointment.appointmentDate)
+            row.doctorChatRowSubtitle.text = "Lần khám gần nhất · $date"
+            row.root.layoutParams = LinearLayout.LayoutParams(-1, dp(72)).apply {
+                bottomMargin = dp(10)
             }
-            binding.doctorChatMessages.addView(bubble, LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-                gravity = if (own) Gravity.END else Gravity.START
-                topMargin = dp(10)
-            })
+            row.root.setOnClickListener { openConversation(appointment) }
+            binding.doctorChatPatientList.addView(row.root)
         }
-        binding.doctorChatScroll.post { _binding?.doctorChatScroll?.fullScroll(View.FOCUS_DOWN) }
     }
 
-    private fun showEmpty(message: String) {
+    private fun openConversation(appointment: Appointment) {
+        startActivity(Intent(requireContext(), DoctorConversationActivity::class.java)
+            .putExtra(DoctorConversationActivity.EXTRA_PATIENT_ID, appointment.patientId))
+    }
+
+    private fun showMessage(message: String) {
         if (_binding == null) return
-        binding.doctorChatMessages.removeAllViews()
-        binding.doctorChatMessages.addView(TextView(requireContext()).apply {
+        binding.doctorChatPatientList.removeAllViews()
+        binding.doctorChatPatientList.addView(TextView(requireContext()).apply {
             text = message
-            textSize = 11f
             gravity = Gravity.CENTER
+            textSize = 12f
             setTextColor(requireContext().getColor(R.color.manager_muted))
-            setPadding(0, dp(26), 0, 0)
+            setPadding(dp(12), dp(32), dp(12), dp(12))
         })
-    }
-
-    private fun sendMessage() {
-        val appointment = active ?: return
-        val content = binding.doctorChatInput.text.toString().trim()
-        if (content.isEmpty()) return
-        binding.doctorChatSend.isEnabled = false
-        repository.sendMessage(appointment.id, content) { result ->
-            if (_binding == null) return@sendMessage
-            binding.doctorChatSend.isEnabled = true
-            result.onSuccess { binding.doctorChatInput.text?.clear() }
-                .onFailure { Toast.makeText(requireContext(), it.message ?: "Không gửi được tin nhắn.", Toast.LENGTH_SHORT).show() }
-        }
     }
 
     private fun dp(value: Int) = (value * resources.displayMetrics.density + .5f).toInt()
 
     override fun onDestroyView() {
-        if (isTyping) active?.id?.let { repository.setTyping(it, false) }
-        messageListener?.remove()
-        typingListener?.remove()
-        messageListener = null
-        typingListener = null
         _binding = null
         super.onDestroyView()
     }

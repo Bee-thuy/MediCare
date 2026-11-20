@@ -54,16 +54,16 @@ class DetailPatientActivity : AppCompatActivity() {
     }
 
     private fun bindAppointment() {
-        patientName = intent.getStringExtra(EXTRA_PATIENT_NAME) ?: "Nguyễn Thị Mai"
+        patientName = intent.getStringExtra(EXTRA_PATIENT_NAME).orEmpty().ifBlank { "Bệnh nhân" }
         patientId = intent.getStringExtra(EXTRA_PATIENT_ID).orEmpty()
         binding.detailPatientInitials.text = initialsOf(patientName)
         binding.detailPatientName.text = patientName
-        binding.detailPatientInfo.text = intent.getStringExtra(EXTRA_PATIENT_INFO) ?: "Nữ · 28 tuổi · 0123 456 789"
-        binding.detailAppointmentDate.text = intent.getStringExtra(EXTRA_DATE) ?: "26/05/2025 (Thứ 2)"
-        binding.detailAppointmentTime.text = intent.getStringExtra(EXTRA_TIME) ?: "08:00 - 08:30"
-        binding.detailAppointmentDoctor.text = intent.getStringExtra(EXTRA_DOCTOR) ?: "BS. Nguyễn Văn A\nChuyên khoa Tim mạch"
-        binding.detailAppointmentSpecialty.text = intent.getStringExtra(EXTRA_SPECIALTY) ?: "Tim mạch"
-        binding.detailAppointmentReason.text = intent.getStringExtra(EXTRA_REASON) ?: "Khám tổng quát"
+        binding.detailPatientInfo.text = intent.getStringExtra(EXTRA_PATIENT_INFO).orEmpty()
+        binding.detailAppointmentDate.text = intent.getStringExtra(EXTRA_DATE).orEmpty()
+        binding.detailAppointmentTime.text = intent.getStringExtra(EXTRA_TIME).orEmpty()
+        binding.detailAppointmentDoctor.text = intent.getStringExtra(EXTRA_DOCTOR).orEmpty()
+        binding.detailAppointmentSpecialty.text = intent.getStringExtra(EXTRA_SPECIALTY).orEmpty()
+        binding.detailAppointmentReason.text = intent.getStringExtra(EXTRA_REASON).orEmpty()
         binding.detailAppointmentNote.text = intent.getStringExtra(EXTRA_NOTE) ?: getString(R.string.manager_no_note)
         renderStatus()
     }
@@ -109,6 +109,7 @@ class DetailPatientActivity : AppCompatActivity() {
                 Intent(this, ProposeScheduleActivity::class.java)
                     .putExtra(ProposeScheduleActivity.EXTRA_DATE, binding.detailAppointmentDate.text.toString())
                     .putExtra(ProposeScheduleActivity.EXTRA_APPOINTMENT_ID, appointmentId)
+                    .putExtra(ProposeScheduleActivity.EXTRA_SCHEDULE_ID, intent.getStringExtra(EXTRA_SCHEDULE_ID))
                     .putExtra(ProposeScheduleActivity.EXTRA_PATIENT_ID, patientId)
                     .putExtra(ProposeScheduleActivity.EXTRA_CURRENT_TIME, binding.detailAppointmentTime.text.toString()),
             )
@@ -129,13 +130,17 @@ class DetailPatientActivity : AppCompatActivity() {
             conflictNeedsResolution -> getString(R.string.manager_time_conflict)
             appointmentStatus == STATUS_CONFIRMED -> getString(R.string.manager_confirmed)
             appointmentStatus == STATUS_REJECTED -> getString(R.string.manager_reject)
+            appointmentStatus == "ARRIVED" -> getString(R.string.doctor_status_arrived)
+            appointmentStatus == "IN_PROGRESS" -> getString(R.string.doctor_status_in_progress)
+            appointmentStatus == "COMPLETED" -> getString(R.string.doctor_status_completed)
+            appointmentStatus == "CANCELLED" -> getString(R.string.doctor_status_cancelled)
             else -> getString(R.string.manager_pending)
         }
         binding.detailAppointmentStatus.setBackgroundResource(
             when {
                 conflictNeedsResolution -> R.drawable.manager_status_inactive_background
                 pending -> R.drawable.manager_appointment_pending_background
-                rejected -> R.drawable.manager_status_inactive_background
+                rejected || appointmentStatus == "CANCELLED" -> R.drawable.manager_status_inactive_background
                 else -> R.drawable.manager_status_active_background
             },
         )
@@ -145,7 +150,7 @@ class DetailPatientActivity : AppCompatActivity() {
                 when {
                     conflictNeedsResolution -> R.color.manager_red
                     pending -> R.color.manager_orange
-                    rejected -> R.color.manager_red
+                    rejected || appointmentStatus == "CANCELLED" -> R.color.manager_red
                     else -> R.color.manager_green
                 },
             ),
@@ -161,7 +166,8 @@ class DetailPatientActivity : AppCompatActivity() {
             if (conflictNeedsResolution) R.string.manager_resolve_conflict else R.string.manager_accept,
         )
         binding.detailSendNotificationButton.visibility = if (appointmentStatus == STATUS_CONFIRMED) View.VISIBLE else View.GONE
-        binding.detailAppointmentActions.visibility = if (rejected) View.GONE else View.VISIBLE
+        binding.detailAppointmentActions.visibility = if (rejected || appointmentStatus == "CANCELLED" ||
+            appointmentStatus == "COMPLETED") View.GONE else View.VISIBLE
     }
 
     private fun updateAppointmentStatus(status: String) {
@@ -177,14 +183,10 @@ class DetailPatientActivity : AppCompatActivity() {
         } else {
             "Yêu cầu đặt lịch ${binding.detailAppointmentDate.text} · ${binding.detailAppointmentTime.text} chưa được duyệt."
         }
-        appointmentRepository.updateAppointmentStatusWithNotification(
-            appointmentId = appointmentId,
-            status = com.example.medicare.model.AppointmentStatus.valueOf(status),
-            title = notificationTitle,
-            body = notificationBody,
-        ) { result ->
+        val onUpdated: (Result<Unit>) -> Unit = { result ->
             result.onSuccess {
                 appointmentStatus = status
+                hasTimeConflict = false
                 renderStatus()
                 Toast.makeText(
                     this,
@@ -196,6 +198,17 @@ class DetailPatientActivity : AppCompatActivity() {
                 binding.detailRejectButton.isEnabled = true
                 Toast.makeText(this, error.message ?: "Không thể cập nhật lịch hẹn.", Toast.LENGTH_SHORT).show()
             }
+        }
+        if (status == STATUS_CONFIRMED) {
+            appointmentRepository.approveAppointmentWithNotification(appointmentId, onUpdated)
+        } else {
+            appointmentRepository.updateAppointmentStatusWithNotification(
+                appointmentId = appointmentId,
+                status = com.example.medicare.model.AppointmentStatus.valueOf(status),
+                title = notificationTitle,
+                body = notificationBody,
+                callback = onUpdated,
+            )
         }
     }
 
