@@ -1,137 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/manager_background"
-    android:fillViewport="true">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
-
-        <TextView
-            android:id="@+id/assignScheduleBack"
-            android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:gravity="center_vertical"
-            android:text="‹"
-            android:textColor="@color/manager_ink"
-            android:textSize="40sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/plus_jakarta_sans_bold"
-            android:text="Phân lịch làm việc"
-            android:textColor="@color/manager_ink"
-            android:textSize="24sp" />
-
-        <AutoCompleteTextView
-            android:id="@+id/assignScheduleDoctor"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/manager_card_background"
-            android:hint="Chọn bác sĩ"
-            android:inputType="none"
-            android:paddingHorizontal="16dp"
-            android:textColor="@color/manager_ink"
-            android:textColorHint="@color/manager_muted" />
-
-        <EditText
-            android:id="@+id/assignScheduleDate"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginTop="14dp"
-            android:background="@drawable/manager_card_background"
-            android:focusable="false"
-            android:hint="Ngày làm việc"
-            android:inputType="none"
-            android:paddingHorizontal="16dp"
-            android:textColor="@color/manager_ink"
-            android:textColorHint="@color/manager_muted" />
-
-        <AutoCompleteTextView
-            android:id="@+id/assignScheduleShift"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginTop="14dp"
-            android:background="@drawable/manager_card_background"
-            android:hint="Chọn ca làm việc"
-            android:inputType="none"
-            android:paddingHorizontal="16dp"
-            android:textColor="@color/manager_ink"
-            android:textColorHint="@color/manager_muted" />
-
-        <EditText
-            android:id="@+id/assignScheduleRoom"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginTop="14dp"
-            android:background="@drawable/manager_card_background"
-            android:hint="Phòng khám, ví dụ: Phòng 201"
-            android:paddingHorizontal="16dp"
-            android:textColor="@color/manager_ink"
-            android:textColorHint="@color/manager_muted" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/assignScheduleDuration"
-                android:layout_width="0dp"
-                android:layout_height="54dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/manager_card_background"
-                android:hint="Phút/lượt"
-                android:inputType="number"
-                android:paddingHorizontal="16dp"
-                android:textColor="@color/manager_ink"
-                android:textColorHint="@color/manager_muted" />
-
-            <EditText
-                android:id="@+id/assignScheduleCapacity"
-                android:layout_width="0dp"
-                android:layout_height="54dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/manager_card_background"
-                android:hint="Số lượt tối đa"
-                android:inputType="number"
-                android:paddingHorizontal="16dp"
-                android:textColor="@color/manager_ink"
-                android:textColorHint="@color/manager_muted" />
-        </LinearLayout>
-
-        <EditText
-            android:id="@+id/assignScheduleNote"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="14dp"
-            android:background="@drawable/manager_card_background"
-            android:gravity="top"
-            android:hint="Ghi chú (không bắt buộc)"
-            android:inputType="textMultiLine"
-            android:padding="16dp"
-            android:textColor="@color/manager_ink"
-            android:textColorHint="@color/manager_muted" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/assignScheduleSave"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginTop="28dp"
-            android:background="@drawable/manager_button_background"
-            android:text="Lưu lịch làm việc"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:backgroundTint="@null" />
+<?xml version='1.0' encoding='utf-8'?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="@drawable/patient_record_sheet_background" android:padding="20dp" android:focusableInTouchMode="true" android:focusable="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
+        <TextView style="@style/PatientAccountSheetTitle" android:text="Tạo ca làm việc" />
+        <TextView android:id="@+id/assignScheduleBack" style="@style/PatientAccountSheetClose" android:layout_width="44dp" android:layout_height="44dp" android:contentDescription="Đóng" />
     </LinearLayout>
-</ScrollView>
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingBottom="16dp">
+            <TextView style="@style/ClinicalLabel" android:text="Bác sĩ" />
+            <EditText android:id="@+id/assignScheduleDoctor" style="@style/ClinicalField" android:hint="Chọn bác sĩ  ▾" android:inputType="none" android:focusable="false" />
+            <TextView style="@style/ClinicalLabel" android:text="Ngày" />
+            <EditText android:id="@+id/assignScheduleDate" style="@style/ClinicalField" android:hint="" android:focusable="false" android:inputType="none" />
+            <TextView style="@style/ClinicalLabel" android:text="Ca làm việc" />
+            <EditText android:id="@+id/assignScheduleShift" style="@style/ClinicalField" android:hint="Chọn ca làm việc  ▾" android:inputType="none" android:focusable="false" />
+            <TextView style="@style/ClinicalLabel" android:text="Phòng khám" />
+            <EditText android:id="@+id/assignScheduleRoom" style="@style/ClinicalField" android:hint="Ví dụ: Phòng 201" android:inputType="textCapSentences" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="12dp">
+                    <TextView style="@style/ClinicalLabel" android:text="Phút / lượt" />
+                    <EditText android:id="@+id/assignScheduleDuration" style="@style/ClinicalField" android:hint="" android:inputType="number" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                    <TextView style="@style/ClinicalLabel" android:text="Số lượt tối đa" />
+                    <EditText android:id="@+id/assignScheduleCapacity" style="@style/ClinicalField" android:hint="" android:inputType="number" />
+                </LinearLayout>
+            </LinearLayout>
+            <TextView style="@style/ClinicalLabel" android:text="Ghi chú (tùy chọn)" />
+            <EditText android:id="@+id/assignScheduleNote" style="@style/ClinicalField" android:hint="Thông tin thêm cho ca làm việc" android:layout_height="80dp" android:gravity="top|start" android:inputType="textMultiLine|textCapSentences" />
+        </LinearLayout>
+    </ScrollView>
+    <com.google.android.material.button.MaterialButton android:id="@+id/assignScheduleSave" style="@style/ClinicalButton" android:text="Tạo ca làm việc" app:backgroundTint="@color/manager_blue" />
+</LinearLayout>

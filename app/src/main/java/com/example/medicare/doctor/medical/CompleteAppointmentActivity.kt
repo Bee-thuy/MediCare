@@ -56,7 +56,9 @@ class CompleteAppointmentActivity : AppCompatActivity() {
         setInputsEnabled(false)
         binding.completeAppointmentTitle.setText(R.string.doctor_record_title)
         medicalRecordRepository.getMedicalRecord(appointment.id) { result ->
+            if (isFinishing || isDestroyed) return@getMedicalRecord
             result.onSuccess { record ->
+                binding.completeAppointmentPublished.visibility = if (record != null) View.VISIBLE else View.GONE
                 binding.completeAppointmentSymptoms.setText(record?.symptoms.orEmpty())
                 binding.completeAppointmentDiagnosis.setText(record?.diagnosis.orEmpty())
                 binding.completeAppointmentTreatment.setText(record?.treatmentNotes.orEmpty())

@@ -36,11 +36,11 @@ class WorkScheduleActivity : AppCompatActivity() {
             startActivity(Intent(this, WeeklyScheduleActivity::class.java))
         }
         binding.workScheduleAdd.setOnClickListener {
-            addSchedule.launch(Intent(this, AssignDoctorScheduleActivity::class.java))
+            addSchedule.launch(Intent(this, AssignDoctorScheduleActivity::class.java).putExtra(AssignDoctorScheduleActivity.EXTRA_DOCTOR_ID, selectedDoctorId).putExtra(AssignDoctorScheduleActivity.EXTRA_DATE, selectedDate.toString()))
         }
         binding.workScheduleAddInline.setOnClickListener {
             AlertDialog.Builder(this).setItems(arrayOf("Tạo ca làm việc", "Xem yêu cầu nghỉ / đổi ca")) { _, index ->
-                if (index == 0) addSchedule.launch(Intent(this, AssignDoctorScheduleActivity::class.java))
+                if (index == 0) addSchedule.launch(Intent(this, AssignDoctorScheduleActivity::class.java).putExtra(AssignDoctorScheduleActivity.EXTRA_DOCTOR_ID, selectedDoctorId).putExtra(AssignDoctorScheduleActivity.EXTRA_DATE, selectedDate.toString()))
                 else startActivity(Intent(this, LeaveRequestsActivity::class.java))
             }.show()
         }

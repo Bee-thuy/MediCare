@@ -48,11 +48,11 @@ class ManagerWorkScheduleFragment : Fragment() {
             startActivity(Intent(requireContext(), WeeklyScheduleActivity::class.java))
         }
         binding.workScheduleAdd.setOnClickListener {
-            addSchedule.launch(Intent(requireContext(), AssignDoctorScheduleActivity::class.java))
+            addSchedule.launch(Intent(requireContext(), AssignDoctorScheduleActivity::class.java).putExtra(AssignDoctorScheduleActivity.EXTRA_DOCTOR_ID, selectedDoctorId).putExtra(AssignDoctorScheduleActivity.EXTRA_DATE, selectedDate.toString()))
         }
         binding.workScheduleAddInline.setOnClickListener {
             AlertDialog.Builder(requireContext()).setItems(arrayOf("Tạo ca làm việc", "Xem yêu cầu nghỉ / đổi ca")) { _, index ->
-                if (index == 0) addSchedule.launch(Intent(requireContext(), AssignDoctorScheduleActivity::class.java))
+                if (index == 0) addSchedule.launch(Intent(requireContext(), AssignDoctorScheduleActivity::class.java).putExtra(AssignDoctorScheduleActivity.EXTRA_DOCTOR_ID, selectedDoctorId).putExtra(AssignDoctorScheduleActivity.EXTRA_DATE, selectedDate.toString()))
                 else startActivity(Intent(requireContext(), LeaveRequestsActivity::class.java))
             }.show()
         }

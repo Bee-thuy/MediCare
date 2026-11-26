@@ -30,7 +30,8 @@ import com.example.medicare.model.AppointmentStatus
 import com.example.medicare.user.medical.MedicalHistoryActivity
 import com.example.medicare.user.review.MyReviewsActivity
 import com.example.medicare.user.chat.PatientChatsActivity
-import com.example.medicare.user.settings.PatientSettingsActivity
+import com.example.medicare.user.settings.PatientSettingsFragment
+import com.example.medicare.notification.NotificationsActivity
 import com.example.medicare.ui.base.RoleCatalogDialog
 import com.example.medicare.R
 import com.google.firebase.auth.FirebaseAuth
@@ -60,8 +61,11 @@ class PatientHomeActivity : AppCompatActivity() {
         binding.patientAllDoctors.setOnClickListener { showTab(TAB_SEARCH) }
         binding.patientSearchShortcut.setOnClickListener { showTab(TAB_SEARCH) }
         binding.patientMenuButton.setOnClickListener { showCatalog() }
-        binding.patientHeaderNotifications.setOnClickListener { startActivity(Intent(this, PatientSettingsActivity::class.java)) }
-        binding.patientNavAccount.setOnClickListener { startActivity(Intent(this, PatientSettingsActivity::class.java)) }
+        binding.patientHeaderNotifications.setOnClickListener {
+            if (selectedTab == TAB_ACCOUNT) startActivity(Intent(this, NotificationsActivity::class.java))
+            else showTab(TAB_ACCOUNT)
+        }
+        binding.patientNavAccount.setOnClickListener { showTab(TAB_ACCOUNT) }
         binding.patientNavHome.setOnClickListener { showTab(TAB_HOME); binding.patientHomeScroll.smoothScrollTo(0, 0) }
         binding.patientNavSearch.setOnClickListener { showTab(TAB_SEARCH) }
         binding.patientNavBooking.setOnClickListener { showTab(TAB_BOOKING) }
@@ -106,11 +110,19 @@ class PatientHomeActivity : AppCompatActivity() {
     fun showTab(tab: Int, doctor: Doctor? = null) {
         selectedTab = tab
         if (tab != TAB_HOME) {
-            val fragment = if (tab == TAB_SEARCH) DoctorDirectoryFragment()
-                else PatientBookingFragment.newInstance(doctor)
+            val fragment = when (tab) {
+                TAB_ACCOUNT -> PatientSettingsFragment()
+                TAB_SEARCH -> DoctorDirectoryFragment()
+                else -> PatientBookingFragment.newInstance(doctor)
+            }
             supportFragmentManager.beginTransaction()
                 .replace(binding.patientFragmentContainer.id, fragment)
                 .commit()
+        } else {
+            supportFragmentManager.findFragmentById(binding.patientFragmentContainer.id)?.let {
+                supportFragmentManager.beginTransaction().remove(it).commit()
+            }
+            loadDashboard()
         }
         updateNavigation()
     }
@@ -119,12 +131,13 @@ class PatientHomeActivity : AppCompatActivity() {
         binding.patientHomeScroll.visibility = if (selectedTab == TAB_HOME) View.VISIBLE else View.GONE
         binding.patientFragmentContainer.visibility = if (selectedTab == TAB_HOME) View.GONE else View.VISIBLE
         binding.patientHeaderTitle.text = when (selectedTab) {
+            TAB_ACCOUNT -> "Tài khoản"
             TAB_SEARCH -> "Tìm bác sĩ & chuyên khoa"
             TAB_BOOKING -> "Đặt lịch khám"
             else -> "Trang chủ bệnh nhân"
         }
         listOf(binding.patientNavHome to TAB_HOME, binding.patientNavSearch to TAB_SEARCH,
-            binding.patientNavBooking to TAB_BOOKING).forEach { (view, tab) ->
+            binding.patientNavBooking to TAB_BOOKING, binding.patientNavAccount to TAB_ACCOUNT).forEach { (view, tab) ->
             view.isSelected = selectedTab == tab
             view.setTextColor(ContextCompat.getColor(this,
                 if (view.isSelected) R.color.patient_purple else R.color.manager_muted))
@@ -138,13 +151,12 @@ class PatientHomeActivity : AppCompatActivity() {
             "💬  Chat tư vấn bác sĩ", "📂  Hồ sơ sức khỏe", "💊  Nhắc thuốc & tái khám",
             "⭐  Đánh giá & phản hồi", "⚙️  Thông báo & cài đặt")
         RoleCatalogDialog.show(this, "Bệnh nhân · Các chức năng", getColor(R.color.patient_purple), labels,
-            selectedIndex = when (selectedTab) { TAB_SEARCH -> 2; TAB_BOOKING -> 3; else -> 1 }) { index ->
+            selectedIndex = when (selectedTab) { TAB_ACCOUNT -> 9; TAB_SEARCH -> 2; TAB_BOOKING -> 3; else -> 1 }) { index ->
                 if (index == 1) { showTab(TAB_HOME); return@show }
                 if (index == 2) { showTab(TAB_SEARCH); return@show }
                 if (index == 3) { showTab(TAB_BOOKING); return@show }
+                if (index == 0 || index == 9) { showTab(TAB_ACCOUNT); return@show }
                 val destination = when (index) {
-                    0 -> PatientSettingsActivity::class.java
-                    9 -> PatientSettingsActivity::class.java
                     4 -> MyAppointmentsActivity::class.java
                     5 -> PatientChatsActivity::class.java
                     6 -> MedicalHistoryActivity::class.java
@@ -239,6 +251,7 @@ class PatientHomeActivity : AppCompatActivity() {
         const val TAB_HOME = 0
         const val TAB_SEARCH = 1
         const val TAB_BOOKING = 2
+        const val TAB_ACCOUNT = 3
         const val EXTRA_TAB = "patient_tab"
         const val EXTRA_OPEN_CATALOG = "patient_open_catalog"
         private const val STATE_SELECTED_TAB = "patient_selected_tab"

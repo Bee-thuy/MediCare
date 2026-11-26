@@ -15,6 +15,9 @@ import com.example.medicare.R
 import com.example.medicare.data.appointment.AppointmentRepository
 import com.example.medicare.databinding.ActivityDoctorHomeBinding
 import com.example.medicare.databinding.ItemDoctorAppointmentBinding
+import com.example.medicare.databinding.SheetDoctorVisitBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.example.medicare.doctor.DoctorHomeActivity
 import com.example.medicare.doctor.medical.CompleteAppointmentActivity
 import com.example.medicare.model.Appointment
@@ -33,6 +36,7 @@ class DoctorDashboardFragment : Fragment() {
     private var _binding: ActivityDoctorHomeBinding? = null
     private val binding get() = _binding!!
     private val repository = AppointmentRepository()
+    private var visitDialog: BottomSheetDialog? = null
     private var appointments: List<Appointment> = emptyList()
     private var selectedDate: LocalDate? = null
     private var selectedStatus: AppointmentStatus? = null
@@ -89,7 +93,7 @@ class DoctorDashboardFragment : Fragment() {
     private fun load() {
         val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
         repository.getAppointmentsForDoctor(uid) { result ->
-            if (!isAdded) return@getAppointmentsForDoctor
+            if (_binding == null) return@getAppointmentsForDoctor
             result.onSuccess { appointments = it; render() }.onFailure {
                 binding.doctorAppointmentsEmpty.text = it.message ?: getString(R.string.doctor_appointments_load_failed)
                 binding.doctorAppointmentsEmpty.visibility = View.VISIBLE
@@ -158,33 +162,70 @@ class DoctorDashboardFragment : Fragment() {
     }
 
     private fun showAppointmentActions(appointment: Appointment) {
-        val actions = when (appointment.status) {
-            AppointmentStatus.CONFIRMED -> arrayOf("Ghi nhận bệnh nhân đến", "Xem lượt khám", "Chat tư vấn")
-            AppointmentStatus.ARRIVED -> arrayOf("Bắt đầu khám", "Xem lượt khám", "Chat tư vấn")
-            AppointmentStatus.IN_PROGRESS -> arrayOf("Nhập kết quả khám", "Chat tư vấn")
-            AppointmentStatus.COMPLETED -> arrayOf("Xem kết quả khám", "Chat tư vấn")
-            else -> arrayOf("Xem lượt khám")
-        }
-        AlertDialog.Builder(requireContext()).setTitle(appointment.patientName).setItems(actions) { _, index ->
-            when {
-                appointment.status == AppointmentStatus.CONFIRMED && index == 0 -> updateStatus(appointment, true)
-                appointment.status == AppointmentStatus.ARRIVED && index == 0 -> updateStatus(appointment, false)
-                actions[index].contains("Chat") -> openChat(appointment)
-                else -> openAppointment(appointment)
+        visitDialog?.dismiss()
+        val sheet = SheetDoctorVisitBinding.inflate(layoutInflater)
+        val dialog = BottomSheetDialog(requireContext())
+        visitDialog = dialog
+        dialog.setContentView(sheet.root)
+        var current = appointment
+        sheet.doctorVisitName.text = appointment.patientName
+        sheet.doctorVisitId.text = appointment.id
+        sheet.doctorVisitDoctor.text = "BS. ${appointment.doctorName}"
+        sheet.doctorVisitSpecialty.text = appointment.specialtyName
+        sheet.doctorVisitDate.text = runCatching { LocalDate.parse(appointment.appointmentDate)
+            .format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) }.getOrDefault(appointment.appointmentDate)
+        sheet.doctorVisitTime.text = "${appointment.startTime} – ${appointment.endTime}"
+        sheet.doctorVisitReason.text = appointment.reason.ifBlank { getString(R.string.doctor_no_reason) }
+        fun renderState() {
+            sheet.doctorVisitStatus.text = label(current.status)
+            sheet.doctorVisitArrived.visibility = if (current.status == AppointmentStatus.CONFIRMED) View.VISIBLE else View.GONE
+            sheet.doctorVisitExam.visibility = if (current.status in setOf(AppointmentStatus.CONFIRMED,
+                AppointmentStatus.ARRIVED, AppointmentStatus.IN_PROGRESS, AppointmentStatus.COMPLETED)) View.VISIBLE else View.GONE
+            sheet.doctorVisitExam.isEnabled = current.status != AppointmentStatus.CONFIRMED
+            sheet.doctorVisitExam.text = when (current.status) {
+                AppointmentStatus.IN_PROGRESS -> "Ghi kết quả khám"
+                AppointmentStatus.COMPLETED -> "Xem kết quả khám"
+                else -> "Bắt đầu khám"
             }
-        }.show()
-    }
-
-    private fun updateStatus(appointment: Appointment, arrived: Boolean) {
-        val action = if (arrived) repository::markPatientArrived else repository::startAppointment
-        action(appointment.id) { result ->
-            result.onSuccess {
-                load()
-                if (!arrived && isAdded) openAppointment(appointment.copy(status = AppointmentStatus.IN_PROGRESS))
-            }.onFailure {
-                if (isAdded) Toast.makeText(requireContext(), it.message ?: getString(R.string.doctor_start_failed), Toast.LENGTH_SHORT).show()
+            sheet.doctorVisitHint.text = when (current.status) {
+                AppointmentStatus.CONFIRMED -> "Xác nhận bệnh nhân đã đến trước khi bắt đầu khám."
+                AppointmentStatus.ARRIVED -> "✓ Đã ghi nhận bệnh nhân đến. Bạn có thể bắt đầu khám."
+                AppointmentStatus.IN_PROGRESS -> "Đang khám · Nhập kết quả và lưu nháp hoặc hoàn tất lượt khám."
+                AppointmentStatus.COMPLETED -> "✓ Lượt khám đã hoàn tất."
+                else -> "Lịch khám chưa sẵn sàng để tiếp nhận."
+            }
+            sheet.doctorVisitChat.visibility = sheet.doctorVisitExam.visibility
+        }
+        fun updateStatus(arrived: Boolean) {
+            sheet.doctorVisitArrived.isEnabled = false
+            sheet.doctorVisitExam.isEnabled = false
+            val action = if (arrived) repository::markPatientArrived else repository::startAppointment
+            action(current.id) { result ->
+                if (_binding == null) return@action
+                result.onSuccess {
+                    current = current.copy(status = if (arrived) AppointmentStatus.ARRIVED else AppointmentStatus.IN_PROGRESS)
+                    load()
+                    if (!dialog.isShowing) return@onSuccess
+                    if (arrived) renderState() else { dialog.dismiss(); openAppointment(current) }
+                }.onFailure {
+                    if (!dialog.isShowing) return@onFailure
+                    sheet.doctorVisitArrived.isEnabled = true
+                    renderState()
+                    Toast.makeText(requireContext(), it.message ?: getString(R.string.doctor_start_failed), Toast.LENGTH_LONG).show()
+                }
             }
         }
+        sheet.doctorVisitClose.setOnClickListener { dialog.dismiss() }
+        sheet.doctorVisitArrived.setOnClickListener { updateStatus(true) }
+        sheet.doctorVisitExam.setOnClickListener {
+            if (current.status == AppointmentStatus.ARRIVED) updateStatus(false)
+            else { dialog.dismiss(); openAppointment(current) }
+        }
+        sheet.doctorVisitChat.setOnClickListener { dialog.dismiss(); openChat(current) }
+        renderState()
+        dialog.show()
+        dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        dialog.behavior.skipCollapsed = true
     }
 
     private fun label(status: AppointmentStatus) = getString(when (status) {
@@ -199,5 +240,5 @@ class DoctorDashboardFragment : Fragment() {
 
     private fun openChat(a: Appointment) = (activity as? DoctorHomeActivity)?.showChatWithPatient(a.patientId)
     private fun openAppointment(a: Appointment) = startActivity(Intent(requireContext(), CompleteAppointmentActivity::class.java).putExtra(CompleteAppointmentActivity.EXTRA_ID, a.id).putExtra(CompleteAppointmentActivity.EXTRA_PATIENT_ID, a.patientId).putExtra(CompleteAppointmentActivity.EXTRA_PATIENT_NAME, a.patientName).putExtra(CompleteAppointmentActivity.EXTRA_DOCTOR_ID, a.doctorId).putExtra(CompleteAppointmentActivity.EXTRA_DOCTOR_NAME, a.doctorName).putExtra(CompleteAppointmentActivity.EXTRA_SPECIALTY, a.specialtyName).putExtra(CompleteAppointmentActivity.EXTRA_SCHEDULE_ID, a.scheduleId).putExtra(CompleteAppointmentActivity.EXTRA_DATE, a.appointmentDate).putExtra(CompleteAppointmentActivity.EXTRA_START_TIME, a.startTime).putExtra(CompleteAppointmentActivity.EXTRA_END_TIME, a.endTime).putExtra(CompleteAppointmentActivity.EXTRA_REASON, a.reason).putExtra(CompleteAppointmentActivity.EXTRA_STATUS, a.status.name))
-    override fun onDestroyView() { _binding = null; super.onDestroyView() }
+    override fun onDestroyView() { visitDialog?.dismiss(); visitDialog = null; _binding = null; super.onDestroyView() }
 }

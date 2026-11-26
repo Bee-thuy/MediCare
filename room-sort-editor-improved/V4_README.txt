@@ -1,0 +1,1 @@
+V4: Density selector: Rai nhe / Gom cum / Chong nhieu. Generate favors nearby anchors and partial visual overlap; support and footprint checks remain active. Existing Edit Zones and export remain unchanged.
