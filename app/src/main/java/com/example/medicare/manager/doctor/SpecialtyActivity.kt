@@ -14,11 +14,7 @@ import com.example.medicare.model.Doctor
 import com.example.medicare.model.Specialty
 import com.example.medicare.manager.ManagerDetailSheets
 import com.example.medicare.manager.ManagerAuxNavigation
-import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.Toast
-import android.widget.Spinner
-import android.widget.ArrayAdapter
 
 class SpecialtyActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySpecialtyBinding
@@ -76,7 +72,15 @@ class SpecialtyActivity : AppCompatActivity() {
                 R.plurals.manager_doctor_count,
                 totalDoctors,
                 totalDoctors,
-            ) + if (specialty.isActive) " · Đang hiển thị" else " · Đã ẩn"
+            )
+            itemBinding.managedSpecialtyStatus.text = if (specialty.isActive) "Hiển thị" else "Đã ẩn"
+            itemBinding.managedSpecialtyStatus.setBackgroundResource(
+                if (specialty.isActive) R.drawable.manager_status_active_background
+                else R.drawable.manager_status_inactive_background,
+            )
+            itemBinding.managedSpecialtyStatus.setTextColor(
+                getColor(if (specialty.isActive) R.color.manager_green else R.color.manager_muted),
+            )
             itemBinding.root.setOnClickListener { showActions(specialty) }
             itemBinding.root.setOnLongClickListener { confirmDelete(specialty); true }
             binding.manageSpecialtiesList.addView(itemBinding.root)
@@ -101,24 +105,14 @@ class SpecialtyActivity : AppCompatActivity() {
     }
 
     private fun editSpecialty(specialty: Specialty) {
-        val box = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(52, 16, 52, 0) }
-        val name = EditText(this).apply { hint = "Tên chuyên khoa"; setText(specialty.name) }
-        val description = EditText(this).apply { hint = "Mô tả"; setText(specialty.description); minLines = 3 }
-        val iconOptions = SpecialtyVisuals.options
-        val image = Spinner(this).apply {
-            adapter = ArrayAdapter(this@SpecialtyActivity, android.R.layout.simple_spinner_dropdown_item,
-                iconOptions.map { "${it.symbol}  ${it.label}" })
-            setSelection(iconOptions.indexOfFirst { it.key == SpecialtyVisuals.forSpecialty(specialty).key }.coerceAtLeast(0))
-        }
-        box.addView(name); box.addView(description); box.addView(image)
-        AlertDialog.Builder(this).setTitle("Chỉnh sửa chuyên khoa").setView(box)
-            .setNegativeButton(R.string.manager_cancel, null)
-            .setPositiveButton("Lưu") { _, _ ->
-                val value = name.text.toString().trim()
-                if (value.isBlank()) Toast.makeText(this, "Tên chuyên khoa không được để trống.", Toast.LENGTH_SHORT).show()
-                else DoctorManagementRepository(this).updateSpecialty(specialty, value,
-                    description.text.toString(), iconOptions[image.selectedItemPosition].key, ::handleResult)
-            }.show()
+        addSpecialty.launch(
+            Intent(this, AddSpecialtyActivity::class.java)
+                .putExtra(AddSpecialtyActivity.EXTRA_SPECIALTY_ID, specialty.id)
+                .putExtra(AddSpecialtyActivity.EXTRA_SPECIALTY_NAME, specialty.name)
+                .putExtra(AddSpecialtyActivity.EXTRA_SPECIALTY_DESCRIPTION, specialty.description)
+                .putExtra(AddSpecialtyActivity.EXTRA_SPECIALTY_ICON, SpecialtyVisuals.forSpecialty(specialty).key)
+                .putExtra(AddSpecialtyActivity.EXTRA_SPECIALTY_ACTIVE, specialty.isActive),
+        )
     }
 
     private fun handleResult(result: Result<Unit>) {

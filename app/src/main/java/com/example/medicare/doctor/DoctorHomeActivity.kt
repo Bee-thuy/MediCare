@@ -16,6 +16,7 @@ import com.example.medicare.doctor.medical.DoctorPrescriptionsFragment
 import com.example.medicare.doctor.patient.DoctorPatientsFragment
 import com.example.medicare.doctor.profile.DoctorProfileFragment
 import com.example.medicare.doctor.schedule.DoctorScheduleFragment
+import com.example.medicare.notification.NotificationBadge
 import com.example.medicare.notification.NotificationPermission
 import com.example.medicare.notification.NotificationRegistration
 import com.example.medicare.notification.NotificationsActivity
@@ -43,9 +44,12 @@ class DoctorHomeActivity : FullscreenActivity() {
         }
         NotificationRegistration.registerCurrentDevice()
         NotificationPermission.requestIfNeeded(this)
+        NotificationBadge.bind(this, binding.doctorNotificationBadge)
         selectedTab = savedInstanceState?.getInt(STATE_SELECTED_TAB, TAB_HOME) ?: TAB_HOME
         binding.doctorMenuButton.setOnClickListener { showCatalog() }
-        binding.doctorHeaderNotifications.setOnClickListener { startActivity(Intent(this, NotificationsActivity::class.java)) }
+        binding.doctorHeaderNotifications.setOnClickListener {
+            startActivity(Intent(this, NotificationsActivity::class.java))
+        }
         binding.doctorNavHome.setOnClickListener { showTab(TAB_HOME) }
         binding.doctorNavAppointments.setOnClickListener { showTab(TAB_APPOINTMENTS) }
         binding.doctorNavPatients.setOnClickListener { showTab(TAB_PATIENTS) }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/assign_schedule_option_background"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingHorizontal="14dp"
+    android:paddingVertical="12dp">
+
+    <ImageView
+        android:id="@+id/specialtyIconOptionImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/manager_appointment_avatar_background"
+        android:contentDescription="@null"
+        android:padding="8dp"
+        android:src="@drawable/ic_manager_specialty" />
+
+    <TextView
+        android:id="@+id/specialtyIconOptionLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/plus_jakarta_sans_bold"
+        android:textColor="@color/manager_ink"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/specialtyIconOptionCheck"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_visit_check"
+        android:tint="@color/manager_blue"
+        android:visibility="gone" />
+</LinearLayout>

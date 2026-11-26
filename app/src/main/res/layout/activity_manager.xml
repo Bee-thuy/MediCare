@@ -51,6 +51,20 @@
     android:layout_gravity="center"
     android:src="@drawable/ic_manager_notifications"
     android:tint="@color/white"/>
+      <TextView
+        android:id="@+id/managerNotificationBadge"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:background="@drawable/notification_badge_background"
+        android:fontFamily="@font/inter_bold"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:textSize="9sp"
+        android:visibility="gone" />
     </FrameLayout>
   </LinearLayout>
   <androidx.fragment.app.FragmentContainerView

@@ -18,6 +18,7 @@ import com.example.medicare.databinding.ActivityPatientHomeBinding
 import com.example.medicare.model.Appointment
 import com.example.medicare.model.AppointmentStatus
 import com.example.medicare.model.Doctor
+import com.example.medicare.notification.NotificationBadge
 import com.example.medicare.notification.NotificationPermission
 import com.example.medicare.notification.NotificationRegistration
 import com.example.medicare.notification.NotificationsActivity
@@ -51,14 +52,14 @@ class PatientHomeActivity : FullscreenActivity() {
             ?: intent.getIntExtra(EXTRA_TAB, TAB_HOME)
         NotificationRegistration.registerCurrentDevice()
         NotificationPermission.requestIfNeeded(this)
+        NotificationBadge.bind(this, binding.patientNotificationBadge)
 
         binding.patientBrowseDoctors.setOnClickListener { showTab(TAB_SEARCH) }
         binding.patientAllDoctors.setOnClickListener { showTab(TAB_SEARCH) }
         binding.patientSearchShortcut.setOnClickListener { showTab(TAB_SEARCH) }
         binding.patientMenuButton.setOnClickListener { showCatalog() }
         binding.patientHeaderNotifications.setOnClickListener {
-            if (selectedTab == TAB_ACCOUNT) startActivity(Intent(this, NotificationsActivity::class.java))
-            else showTab(TAB_ACCOUNT)
+            startActivity(Intent(this, NotificationsActivity::class.java))
         }
         binding.patientNavAccount.setOnClickListener { showTab(TAB_ACCOUNT) }
         binding.patientNavHome.setOnClickListener { showTab(TAB_HOME); binding.patientHomeScroll.smoothScrollTo(0, 0) }

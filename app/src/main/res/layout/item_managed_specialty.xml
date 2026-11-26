@@ -1,29 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:layout_marginBottom="9dp" android:clickable="true" android:focusable="true"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/manager_card_background"
+    android:clickable="true"
+    android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    app:cardBackgroundColor="@color/white" app:cardCornerRadius="16dp"
-    app:cardElevation="0dp" app:strokeColor="@color/manager_border" app:strokeWidth="1dp">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:gravity="center_vertical" android:orientation="horizontal" android:padding="13dp">
-        <ImageView android:id="@+id/managedSpecialtyIcon"
-            android:layout_width="43dp" android:layout_height="43dp"
-            android:background="@drawable/manager_appointment_avatar_background"
-            android:contentDescription="Ảnh minh họa chuyên khoa"
-            android:padding="8dp" android:src="@drawable/ic_manager_specialty" />
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-            android:layout_marginStart="11dp" android:layout_weight="1" android:orientation="vertical">
-            <TextView android:id="@+id/managedSpecialtyName" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:fontFamily="@font/plus_jakarta_sans_bold"
-                android:textColor="@color/manager_ink" android:textSize="12sp" />
-            <TextView android:id="@+id/managedSpecialtyCount" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_marginTop="3dp"
-                android:textColor="@color/manager_muted" android:textSize="10sp" />
-        </LinearLayout>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="›" android:textColor="@color/manager_muted" android:textSize="18sp" />
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="14dp">
+
+    <ImageView
+        android:id="@+id/managedSpecialtyIcon"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:background="@drawable/manager_appointment_avatar_background"
+        android:contentDescription="@null"
+        android:padding="9dp"
+        android:src="@drawable/ic_manager_specialty" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/managedSpecialtyName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/plus_jakarta_sans_bold"
+            android:maxLines="1"
+            android:textColor="@color/manager_ink"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/managedSpecialtyCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/manager_muted"
+            android:textSize="12sp" />
     </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/managedSpecialtyStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/inter_bold"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="4dp"
+        android:textSize="10sp" />
+
+    <ImageView
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_select_chevron"
+        android:tint="@color/manager_muted" />
+</LinearLayout>

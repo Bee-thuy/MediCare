@@ -5,6 +5,8 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.medicare.R
+import com.example.medicare.notification.NotificationBadge
+import com.example.medicare.notification.NotificationsActivity
 
 /** Shared header and bottom navigation for patient screens outside the home tab. */
 object PatientScreenChrome {
@@ -13,8 +15,11 @@ object PatientScreenChrome {
         activity.findViewById<TextView>(R.id.patientChromeMenu)?.setOnClickListener {
             openHome(activity, PatientHomeActivity.TAB_HOME, catalog = true)
         }
-        activity.findViewById<TextView>(R.id.patientChromeNotifications)?.setOnClickListener {
-            openHome(activity, PatientHomeActivity.TAB_ACCOUNT)
+        activity.findViewById<View>(R.id.patientChromeNotifications)?.setOnClickListener {
+            activity.startActivity(Intent(activity, NotificationsActivity::class.java))
+        }
+        activity.findViewById<TextView>(R.id.patientChromeNotificationBadge)?.let { badge ->
+            NotificationBadge.bind(activity, badge)
         }
         val nav = listOf(
             R.id.patientChromeNavAccount to {

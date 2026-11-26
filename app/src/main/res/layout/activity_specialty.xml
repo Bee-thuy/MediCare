@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@color/manager_background" android:orientation="vertical">
     <LinearLayout android:layout_width="match_parent" android:layout_height="74dp"
@@ -41,12 +42,19 @@
                     android:textSize="11sp" android:textStyle="bold" />
             </LinearLayout>
             <EditText android:id="@+id/manageSpecialtiesSearch"
-                android:layout_width="match_parent" android:layout_height="43dp"
-                android:layout_marginTop="10dp" android:background="@drawable/manager_card_background"
-                android:hint="🔍 Tìm chuyên khoa..." android:inputType="text"
-                android:paddingHorizontal="13dp" android:singleLine="true"
-                android:textColor="@color/manager_ink" android:textColorHint="@color/manager_muted"
-                android:textSize="12sp" />
+                android:layout_width="match_parent" android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/assign_schedule_select_background"
+                android:drawableStart="@drawable/ic_nav_search"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/manager_muted"
+                android:hint="Tìm chuyên khoa..."
+                android:inputType="text"
+                android:paddingHorizontal="14dp"
+                android:singleLine="true"
+                android:textColor="@color/manager_ink"
+                android:textColorHint="@color/manager_muted"
+                android:textSize="13sp" />
             <TextView android:id="@+id/manageSpecialtiesEmpty"
                 android:layout_width="match_parent" android:layout_height="wrap_content"
                 android:layout_marginTop="30dp" android:gravity="center" android:padding="20dp"
@@ -57,16 +65,22 @@
                 android:layout_marginTop="12dp" android:orientation="vertical" />
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                 android:layout_marginTop="12dp" android:background="@drawable/manager_info_background"
-                android:padding="13dp"
-                android:text="ℹ️  Chuyên khoa có liên kết với bác sĩ hoặc lịch khám sẽ được ẩn thay vì xóa cứng."
-                android:textColor="@color/manager_blue_dark" android:textSize="11sp" />
+                android:fontFamily="@font/inter_medium"
+                android:lineSpacingExtra="2dp"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="12dp"
+                android:text="Chuyên khoa đang gắn bác sĩ/lịch khám sẽ được ẩn thay vì xóa cứng."
+                android:textColor="@color/manager_blue" android:textSize="12sp" />
         </LinearLayout>
     </ScrollView>
-    <TextView android:id="@+id/manageSpecialtiesBottomAdd"
-        android:layout_width="match_parent" android:layout_height="48dp"
-        android:layout_marginHorizontal="16dp" android:layout_marginVertical="8dp"
-        android:background="@drawable/manager_button_background"
-        android:gravity="center" android:text="+ Thêm chuyên khoa"
-        android:textColor="@color/white" android:textSize="13sp" android:textStyle="bold" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/manageSpecialtiesBottomAdd"
+        style="@style/ClinicalButton"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:text="+ Thêm chuyên khoa"
+        app:backgroundTint="@color/manager_blue"
+        app:icon="@null" />
     <include layout="@layout/view_manager_aux_navigation" />
 </LinearLayout>

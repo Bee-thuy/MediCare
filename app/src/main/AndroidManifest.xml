@@ -135,7 +135,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".manager.doctor.AddSpecialtyActivity"
-            android:theme="@style/Theme.MediCare.BottomSheet"
+            android:theme="@style/Theme.MediCare.ClinicalSheet"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

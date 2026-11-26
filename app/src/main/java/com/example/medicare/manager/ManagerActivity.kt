@@ -20,8 +20,10 @@ import com.example.medicare.manager.notification.ManagerNotificationsFragment
 import com.example.medicare.manager.patient.ManagerPatientsFragment
 import com.example.medicare.manager.schedule.ManagerWorkScheduleFragment
 import com.example.medicare.manager.settings.ManagerMoreFragment
+import com.example.medicare.notification.NotificationBadge
 import com.example.medicare.notification.NotificationPermission
 import com.example.medicare.notification.NotificationRegistration
+import com.example.medicare.notification.NotificationsActivity
 import com.example.medicare.ui.base.FullscreenActivity
 import com.example.medicare.ui.base.RoleCatalogDialog
 import com.example.medicare.ui.chat.StaffChatActivity
@@ -39,6 +41,7 @@ open class ManagerActivity : FullscreenActivity() {
         BookingSlotRepository().backfillExistingAppointments()
         NotificationRegistration.registerCurrentDevice()
         NotificationPermission.requestIfNeeded(this)
+        NotificationBadge.bind(this, binding.managerNotificationBadge)
 
         selectedTab = savedInstanceState?.getInt(STATE_SELECTED_TAB)
             ?: intent.getIntExtra(EXTRA_INITIAL_TAB, TAB_HOME)
@@ -48,7 +51,9 @@ open class ManagerActivity : FullscreenActivity() {
         binding.managerNavNotificationsInclude.root.setOnClickListener { showTab(TAB_PATIENTS) }
         binding.managerNavMoreInclude.root.setOnClickListener { showCatalog() }
         binding.managerMenuButton.setOnClickListener { showCatalog() }
-        binding.managerNotificationButton.setOnClickListener { showTab(TAB_NOTIFICATIONS) }
+        binding.managerNotificationButton.setOnClickListener {
+            startActivity(Intent(this, NotificationsActivity::class.java))
+        }
 
         if (savedInstanceState == null) showTab(selectedTab) else updateNavigation()
     }
