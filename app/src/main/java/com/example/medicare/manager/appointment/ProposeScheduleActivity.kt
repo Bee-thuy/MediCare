@@ -1,21 +1,21 @@
 package com.example.medicare.manager.appointment
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
+import android.view.Gravity
+import android.view.WindowManager
 import android.widget.GridLayout
+import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.medicare.R
 import com.example.medicare.data.appointment.AppointmentRepository
 import com.example.medicare.data.schedule.ScheduleRepository
-import com.example.medicare.model.AppointmentStatus
-import java.time.LocalTime
 import com.example.medicare.databinding.ActivityProposeScheduleBinding
+import com.example.medicare.model.AppointmentStatus
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 /** Lets a manager select an available replacement time and notify the patient. */
 class ProposeScheduleActivity : AppCompatActivity() {
@@ -28,17 +28,21 @@ class ProposeScheduleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityProposeScheduleBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, (resources.displayMetrics.heightPixels * .88f).toInt())
+        window.setGravity(Gravity.BOTTOM)
 
         appointmentDate = intent.getStringExtra(EXTRA_DATE).orEmpty()
-        binding.proposeScheduleInfo.text = "Đang tải khung giờ còn trống..."
+        val patientName = intent.getStringExtra(EXTRA_PATIENT_NAME).orEmpty().ifBlank { "Bệnh nhân" }
+        val currentTime = intent.getStringExtra(EXTRA_CURRENT_TIME).orEmpty()
+        val dateLabel = runCatching {
+            LocalDate.parse(appointmentDate).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        }.getOrDefault(appointmentDate)
+        binding.proposeSchedulePatient.text = patientName
+        binding.proposeScheduleRequested.text = listOf(currentTime.substringBefore(" - ").ifBlank { currentTime }, dateLabel)
+            .filter { it.isNotBlank() }.joinToString(" · ")
+        binding.proposeScheduleInfo.text = getString(R.string.manager_propose_new_time_label)
         binding.proposeScheduleBack.setOnClickListener { finish() }
         binding.proposeScheduleCancel.setOnClickListener { finish() }
         binding.proposeSlotGrid.removeAllViews()
@@ -65,8 +69,9 @@ class ProposeScheduleActivity : AppCompatActivity() {
                 appointments.getAppointmentsForDoctor(schedule.doctorId) { result ->
                     if (isFinishing || isDestroyed) return@getAppointmentsForDoctor
                     result.onSuccess { booked ->
-                        val occupied = booked.filter { it.id != intent.getStringExtra(EXTRA_APPOINTMENT_ID) &&
-                            it.appointmentDate == schedule.workDate && it.status in setOf(
+                        val occupied = booked.filter {
+                            it.id != intent.getStringExtra(EXTRA_APPOINTMENT_ID) &&
+                                it.appointmentDate == schedule.workDate && it.status in setOf(
                                 AppointmentStatus.PENDING, AppointmentStatus.CONFIRMED,
                                 AppointmentStatus.ARRIVED, AppointmentStatus.IN_PROGRESS)
                         }.map { it.startTime }.toSet()
@@ -79,8 +84,10 @@ class ProposeScheduleActivity : AppCompatActivity() {
                         val times = generateSequence(start) { it.plusMinutes(durationMinutes.toLong()) }
                             .takeWhile { it.plusMinutes(durationMinutes.toLong()) <= end }
                             .map(LocalTime::toString)
-                            .filter { it !in occupied && it !in schedule.lockedSlots &&
-                                it != intent.getStringExtra(EXTRA_CURRENT_TIME)?.substringBefore(" - ") }
+                            .filter {
+                                it !in occupied && it !in schedule.lockedSlots &&
+                                    it != intent.getStringExtra(EXTRA_CURRENT_TIME)?.substringBefore(" - ")
+                            }
                             .take(24).toList()
                         availableTimes = times.toSet()
                         renderTimes(times)
@@ -93,20 +100,21 @@ class ProposeScheduleActivity : AppCompatActivity() {
     private fun renderTimes(times: List<String>) {
         binding.proposeSlotGrid.removeAllViews()
         binding.proposeScheduleInfo.text = if (times.isEmpty()) "Không còn khung giờ trống trong ca này."
-            else "Các giờ còn trống ngày $appointmentDate"
+        else getString(R.string.manager_propose_new_time_label)
         binding.proposeScheduleSend.isEnabled = times.isNotEmpty()
         times.forEach { time ->
             val slot = TextView(this).apply {
                 text = time
-                textSize = 14f
+                textSize = 12f
                 gravity = android.view.Gravity.CENTER
+                setTypeface(resources.getFont(R.font.inter_bold))
                 setTextColor(getColor(R.color.manager_ink))
                 setBackgroundResource(R.drawable.manager_time_option_background)
                 setOnClickListener { selectTime(this) }
             }
             binding.proposeSlotGrid.addView(slot, GridLayout.LayoutParams().apply {
                 width = 0
-                height = dp(48)
+                height = dp(44)
                 columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 setMargins(dp(3), dp(4), dp(3), dp(4))
             })
@@ -117,10 +125,10 @@ class ProposeScheduleActivity : AppCompatActivity() {
         selectedTime = slot.text.toString()
         (0 until binding.proposeSlotGrid.childCount).map(binding.proposeSlotGrid::getChildAt)
             .filterIsInstance<TextView>().forEach { option ->
-            val selected = option == slot
-            option.isSelected = selected
-            option.setTextColor(ContextCompat.getColor(this, if (selected) R.color.white else R.color.manager_ink))
-        }
+                val selected = option == slot
+                option.isSelected = selected
+                option.setTextColor(ContextCompat.getColor(this, if (selected) R.color.white else R.color.manager_ink))
+            }
     }
 
     private fun sendProposal() {
@@ -144,10 +152,8 @@ class ProposeScheduleActivity : AppCompatActivity() {
         appointments.rescheduleAppointment(appointmentId, time, endTime, note) { result ->
             binding.proposeScheduleSend.isEnabled = true
             result.onSuccess {
-                val message = "Đã tạo lịch mới $appointmentDate · $time - $endTime và gửi thông báo trong ứng dụng."
-                startActivity(Intent(this, PatientNotificationActivity::class.java)
-                    .putExtra(PatientNotificationActivity.EXTRA_SHOW_SENT_STATE, true)
-                    .putExtra(PatientNotificationActivity.EXTRA_SENT_CONTENT, message))
+                Toast.makeText(this, "Đã gửi đề xuất giờ mới cho bệnh nhân", Toast.LENGTH_SHORT).show()
+                setResult(RESULT_OK)
                 finish()
             }.onFailure { error ->
                 Toast.makeText(this, error.message ?: "Không thể đổi lịch hẹn.", Toast.LENGTH_LONG).show()
@@ -156,7 +162,8 @@ class ProposeScheduleActivity : AppCompatActivity() {
     }
 
     private fun addMinutes(start: String, duration: Int): String {
-        val parts = start.split(":"); val total = parts[0].toInt() * 60 + parts[1].toInt() + duration
+        val parts = start.split(":")
+        val total = parts[0].toInt() * 60 + parts[1].toInt() + duration
         return "%02d:%02d".format(total / 60, total % 60)
     }
 
@@ -167,6 +174,7 @@ class ProposeScheduleActivity : AppCompatActivity() {
         const val EXTRA_DATE = "propose_schedule_date"
         const val EXTRA_APPOINTMENT_ID = "propose_schedule_appointment_id"
         const val EXTRA_PATIENT_ID = "propose_schedule_patient_id"
+        const val EXTRA_PATIENT_NAME = "propose_schedule_patient_name"
         const val EXTRA_CURRENT_TIME = "propose_schedule_current_time"
     }
 }

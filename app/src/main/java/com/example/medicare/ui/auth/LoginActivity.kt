@@ -98,7 +98,7 @@ class LoginActivity : FullscreenActivity() {
 
     private fun setLoading(isLoading: Boolean) {
         binding.loginLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
-        binding.loginButton.isEnabled = !isLoading
+        binding.loginButton.visibility = if (isLoading) View.GONE else View.VISIBLE
         binding.loginQuickAdmin.isEnabled = !isLoading
         binding.loginQuickDoctor.isEnabled = !isLoading
         binding.loginQuickPatient.isEnabled = !isLoading

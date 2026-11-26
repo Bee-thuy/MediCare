@@ -108,6 +108,7 @@ object ManagerDetailSheets {
                     .putExtra(ProposeScheduleActivity.EXTRA_APPOINTMENT_ID, appointment.id)
                     .putExtra(ProposeScheduleActivity.EXTRA_SCHEDULE_ID, appointment.scheduleId)
                     .putExtra(ProposeScheduleActivity.EXTRA_PATIENT_ID, appointment.patientId)
+                    .putExtra(ProposeScheduleActivity.EXTRA_PATIENT_NAME, appointment.patientName)
                     .putExtra(ProposeScheduleActivity.EXTRA_DATE, appointment.appointmentDate)
                     .putExtra(ProposeScheduleActivity.EXTRA_CURRENT_TIME, "${appointment.startTime} - ${appointment.endTime}"))
             }

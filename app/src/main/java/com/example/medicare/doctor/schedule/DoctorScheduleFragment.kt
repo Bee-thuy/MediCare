@@ -52,7 +52,24 @@ class DoctorScheduleFragment : Fragment() {
         }
         leaveRequests.getMine { result ->
             if (!isAdded) return@getMine
-            result.onSuccess { requests -> binding.doctorWorkRequests.text = if (requests.isEmpty()) getString(R.string.doctor_no_leave_requests) else requests.take(3).joinToString("\n") { "${it.date} · ${it.status}: ${it.reason}" } }
+            result.onSuccess { requests ->
+                binding.doctorWorkRequests.text = if (requests.isEmpty()) {
+                    getString(R.string.doctor_no_leave_requests)
+                } else {
+                    requests.take(3).joinToString("\n") { request ->
+                        val date = runCatching {
+                            java.time.LocalDate.parse(request.date).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                        }.getOrDefault(request.date)
+                        val status = when (request.status) {
+                            "PENDING" -> "Chờ duyệt"
+                            "APPROVED" -> "Đã duyệt"
+                            "REJECTED" -> "Từ chối"
+                            else -> request.status
+                        }
+                        "$date · $status · ${request.reason}"
+                    }
+                }
+            }
         }
     }
 

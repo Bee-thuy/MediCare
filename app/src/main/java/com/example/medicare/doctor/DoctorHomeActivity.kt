@@ -2,16 +2,11 @@ package com.example.medicare.doctor
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.RelativeSizeSpan
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.view.View
 import androidx.fragment.app.Fragment
 import com.example.medicare.R
 import com.example.medicare.databinding.ActivityDoctorShellBinding
@@ -21,24 +16,24 @@ import com.example.medicare.doctor.medical.DoctorPrescriptionsFragment
 import com.example.medicare.doctor.patient.DoctorPatientsFragment
 import com.example.medicare.doctor.profile.DoctorProfileFragment
 import com.example.medicare.doctor.schedule.DoctorScheduleFragment
-import com.example.medicare.notification.NotificationRegistration
 import com.example.medicare.notification.NotificationPermission
+import com.example.medicare.notification.NotificationRegistration
 import com.example.medicare.notification.NotificationsActivity
+import com.example.medicare.ui.base.FullscreenActivity
 import com.example.medicare.ui.base.RoleCatalogDialog
 import com.example.medicare.ui.chat.StaffChatActivity
-import com.google.firebase.auth.FirebaseAuth
 import com.example.medicare.data.auth.AuthRepository
 import com.example.medicare.ui.auth.LoginActivity
+import com.google.firebase.auth.FirebaseAuth
 
 /** Persistent shell for the doctor role. Each day-to-day workflow owns a fragment. */
-class DoctorHomeActivity : AppCompatActivity() {
+class DoctorHomeActivity : FullscreenActivity() {
     private lateinit var binding: ActivityDoctorShellBinding
     private var selectedTab = TAB_HOME
     private var requestedChatPatientId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         binding = ActivityDoctorShellBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
@@ -46,8 +41,6 @@ class DoctorHomeActivity : AppCompatActivity() {
                 if (insets.isVisible(WindowInsetsCompat.Type.ime())) View.GONE else View.VISIBLE
             insets
         }
-        listOf(binding.doctorNavHome, binding.doctorNavAppointments, binding.doctorNavPatients,
-            binding.doctorNavExam, binding.doctorNavCatalog).forEach(::styleNavIcon)
         NotificationRegistration.registerCurrentDevice()
         NotificationPermission.requestIfNeeded(this)
         selectedTab = savedInstanceState?.getInt(STATE_SELECTED_TAB, TAB_HOME) ?: TAB_HOME
@@ -95,18 +88,21 @@ class DoctorHomeActivity : AppCompatActivity() {
     }
 
     private fun updateNavigation() {
-        listOf(
-            binding.doctorNavHome to TAB_HOME,
-            binding.doctorNavAppointments to TAB_APPOINTMENTS,
-            binding.doctorNavPatients to TAB_PATIENTS,
-            binding.doctorNavExam to TAB_EXAM,
-        ).forEach { (view, tab) ->
-            view.isSelected = selectedTab == tab
-            view.setTextColor(ContextCompat.getColor(this, if (view.isSelected) R.color.doctor_teal else R.color.manager_muted))
+        fun setNav(container: View, icon: ImageView, label: TextView, active: Boolean) {
+            container.isSelected = active
+            icon.isSelected = active
+            label.isSelected = active
         }
-        binding.doctorNavCatalog.isSelected = selectedTab in setOf(TAB_CHATS, TAB_SCHEDULE, TAB_PRESCRIPTIONS, TAB_PROFILE)
-        binding.doctorNavCatalog.setTextColor(ContextCompat.getColor(this,
-            if (binding.doctorNavCatalog.isSelected) R.color.doctor_teal else R.color.manager_muted))
+        setNav(binding.doctorNavHome, binding.doctorNavHomeIcon, binding.doctorNavHomeLabel, selectedTab == TAB_HOME)
+        setNav(binding.doctorNavAppointments, binding.doctorNavAppointmentsIcon, binding.doctorNavAppointmentsLabel, selectedTab == TAB_APPOINTMENTS)
+        setNav(binding.doctorNavPatients, binding.doctorNavPatientsIcon, binding.doctorNavPatientsLabel, selectedTab == TAB_PATIENTS)
+        setNav(binding.doctorNavExam, binding.doctorNavExamIcon, binding.doctorNavExamLabel, selectedTab == TAB_EXAM)
+        setNav(
+            binding.doctorNavCatalog,
+            binding.doctorNavCatalogIcon,
+            binding.doctorNavCatalogLabel,
+            selectedTab in setOf(TAB_CHATS, TAB_SCHEDULE, TAB_PRESCRIPTIONS, TAB_PROFILE),
+        )
         binding.doctorHeaderTitle.text = when (selectedTab) {
             TAB_HOME -> "Tổng quan bác sĩ"
             TAB_PATIENTS -> "Bệnh nhân được phân công"
@@ -149,13 +145,6 @@ class DoctorHomeActivity : AppCompatActivity() {
                     }
                 }
             }
-    }
-
-    private fun styleNavIcon(view: TextView) {
-        val label = SpannableString(view.text)
-        val iconEnd = label.indexOf('\n')
-        if (iconEnd > 0) label.setSpan(RelativeSizeSpan(1.8f), 0, iconEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        view.text = label
     }
 
     companion object {

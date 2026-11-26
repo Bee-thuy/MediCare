@@ -233,11 +233,11 @@
     <string name="manager_slot_available">Còn trống</string>
     <string name="manager_doctor_specialty_format">Chuyên khoa %1$s</string>
     <string name="manager_slot_suggestion">Có thể đề xuất khung giờ %1$s cho bệnh nhân.</string>
-    <string name="manager_propose_schedule_title">Đề xuất lịch khác</string>
+    <string name="manager_propose_schedule_title">Đề xuất giờ khám khác</string>
     <string name="manager_available_slots_info">Các khung giờ trống của bác sĩ (ngày %1$s)</string>
     <string name="manager_optional_note">Ghi chú (tùy chọn)</string>
-    <string name="manager_propose_note_hint">Nhập ghi chú gửi cho bệnh nhân...</string>
-    <string name="manager_send_proposal">Gửi đề xuất</string>
+    <string name="manager_propose_note_hint">Khung giờ cũ đã có người đặt</string>
+    <string name="manager_send_proposal">Gửi đề xuất cho bệnh nhân</string>
     <string name="manager_select_available_time">Vui lòng chọn một khung giờ trống.</string>
     <string name="manager_proposal_sent_content">Bệnh viện đề xuất lịch khám mới vào %1$s, ngày %2$s. %3$s</string>
     <string name="manager_notification_sent_title">Đã gửi thông báo!</string>
@@ -401,4 +401,9 @@
     <string name="doctor_submit_request">Gửi yêu cầu</string>
     <string name="doctor_leave_invalid">Vui lòng nhập ngày đúng định dạng yyyy-MM-dd và lý do.</string>
     <string name="doctor_leave_submitted">Đã gửi yêu cầu để quản trị viên phê duyệt.</string>
+    <string name="manager_propose_patient_label">Bệnh nhân</string>
+    <string name="manager_propose_requested_time_label">Giờ đã yêu cầu</string>
+    <string name="manager_propose_new_time_label">Giờ khám mới</string>
+    <string name="doctor_patient_arrived_toast">Đã ghi nhận bệnh nhân đến khám</string>
+    <string name="manager_create_adjust_shift_title">Tạo / điều chỉnh ca làm việc</string>
 </resources>

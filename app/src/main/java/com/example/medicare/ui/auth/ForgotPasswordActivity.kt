@@ -33,10 +33,10 @@ class ForgotPasswordActivity : FullscreenActivity() {
         binding.forgotEmailInput.error = if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) null else getString(R.string.auth_invalid_email)
         if (binding.forgotEmailInput.error != null) return
 
-        binding.forgotButton.isEnabled = false
+        binding.forgotButton.visibility = View.GONE
         binding.forgotLoading.visibility = View.VISIBLE
         authRepository.sendPasswordReset(email) { result ->
-            binding.forgotButton.isEnabled = true
+            binding.forgotButton.visibility = View.VISIBLE
             binding.forgotLoading.visibility = View.GONE
             binding.forgotMessage.apply {
                 text = result.fold(

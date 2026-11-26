@@ -25,13 +25,58 @@
     </LinearLayout>
     <androidx.fragment.app.FragmentContainerView android:id="@+id/doctorFragmentContainer"
         android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
-    <LinearLayout android:id="@+id/doctorBottomNavigation" android:layout_width="match_parent" android:layout_height="68dp"
+    <LinearLayout android:id="@+id/doctorBottomNavigation" android:layout_width="match_parent" android:layout_height="70dp"
         android:background="@color/white" android:elevation="8dp" android:orientation="horizontal"
-        android:paddingHorizontal="5dp" android:paddingVertical="5dp">
-        <TextView android:id="@+id/doctorNavHome" style="@style/RoleBottomItem" android:text="🏠\nTrang chủ" />
-        <TextView android:id="@+id/doctorNavAppointments" style="@style/RoleBottomItem" android:text="📋\nLịch khám" />
-        <TextView android:id="@+id/doctorNavPatients" style="@style/RoleBottomItem" android:text="👥\nBệnh nhân" />
-        <TextView android:id="@+id/doctorNavExam" style="@style/RoleBottomItem" android:text="🩺\nKết quả" />
-        <TextView android:id="@+id/doctorNavCatalog" style="@style/RoleBottomItem" android:text="☷\nDanh mục" />
+        android:paddingHorizontal="4dp" android:paddingVertical="6dp">
+        <LinearLayout android:id="@+id/doctorNavHome" style="@style/RoleBottomItem" android:orientation="vertical">
+            <ImageView android:id="@+id/doctorNavHomeIcon" android:layout_width="40dp" android:layout_height="32dp"
+                android:background="@drawable/doctor_nav_icon_background" android:contentDescription="@null"
+                android:paddingHorizontal="8dp" android:paddingVertical="4dp" android:scaleType="fitCenter"
+                android:src="@drawable/ic_nav_home" android:tint="@color/nav_tint_doctor" />
+            <TextView android:id="@+id/doctorNavHomeLabel" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" android:fontFamily="@font/plus_jakarta_sans_medium"
+                android:includeFontPadding="false" android:text="Trang chủ"
+                android:textColor="@color/nav_tint_doctor" android:textSize="10sp" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/doctorNavAppointments" style="@style/RoleBottomItem" android:orientation="vertical">
+            <ImageView android:id="@+id/doctorNavAppointmentsIcon" android:layout_width="40dp" android:layout_height="32dp"
+                android:background="@drawable/doctor_nav_icon_background" android:contentDescription="@null"
+                android:paddingHorizontal="8dp" android:paddingVertical="4dp" android:scaleType="fitCenter"
+                android:src="@drawable/ic_nav_calendar" android:tint="@color/nav_tint_doctor" />
+            <TextView android:id="@+id/doctorNavAppointmentsLabel" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" android:fontFamily="@font/plus_jakarta_sans_medium"
+                android:includeFontPadding="false" android:text="Lịch khám"
+                android:textColor="@color/nav_tint_doctor" android:textSize="10sp" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/doctorNavPatients" style="@style/RoleBottomItem" android:orientation="vertical">
+            <ImageView android:id="@+id/doctorNavPatientsIcon" android:layout_width="40dp" android:layout_height="32dp"
+                android:background="@drawable/doctor_nav_icon_background" android:contentDescription="@null"
+                android:paddingHorizontal="8dp" android:paddingVertical="4dp" android:scaleType="fitCenter"
+                android:src="@drawable/ic_nav_patients" android:tint="@color/nav_tint_doctor" />
+            <TextView android:id="@+id/doctorNavPatientsLabel" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" android:fontFamily="@font/plus_jakarta_sans_medium"
+                android:includeFontPadding="false" android:text="Bệnh nhân"
+                android:textColor="@color/nav_tint_doctor" android:textSize="10sp" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/doctorNavExam" style="@style/RoleBottomItem" android:orientation="vertical">
+            <ImageView android:id="@+id/doctorNavExamIcon" android:layout_width="40dp" android:layout_height="32dp"
+                android:background="@drawable/doctor_nav_icon_background" android:contentDescription="@null"
+                android:paddingHorizontal="8dp" android:paddingVertical="4dp" android:scaleType="fitCenter"
+                android:src="@drawable/ic_nav_exam" android:tint="@color/nav_tint_doctor" />
+            <TextView android:id="@+id/doctorNavExamLabel" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" android:fontFamily="@font/plus_jakarta_sans_medium"
+                android:includeFontPadding="false" android:text="Kết quả"
+                android:textColor="@color/nav_tint_doctor" android:textSize="10sp" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/doctorNavCatalog" style="@style/RoleBottomItem" android:orientation="vertical">
+            <ImageView android:id="@+id/doctorNavCatalogIcon" android:layout_width="40dp" android:layout_height="32dp"
+                android:background="@drawable/doctor_nav_icon_background" android:contentDescription="@null"
+                android:paddingHorizontal="8dp" android:paddingVertical="4dp" android:scaleType="fitCenter"
+                android:src="@drawable/ic_nav_menu" android:tint="@color/nav_tint_doctor" />
+            <TextView android:id="@+id/doctorNavCatalogLabel" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" android:fontFamily="@font/plus_jakarta_sans_medium"
+                android:includeFontPadding="false" android:text="Danh mục"
+                android:textColor="@color/nav_tint_doctor" android:textSize="10sp" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0e6cda" />
+  <title>Smart Healthcare — Mobile UI 3 vai trò</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="workspace">
+    <aside class="desktop-sidebar">
+      <div class="workspace-brand"><span class="workspace-mark">✚</span><div><strong>Smart Healthcare</strong><small>Mobile UI Prototype · Android Java/XML reference</small></div></div>
+      <h2>Chọn tác nhân</h2>
+      <div class="role-switch" id="roleSwitcher"></div>
+      <div class="side-note"><span class="spark">✦</span> <strong>26 nhóm chức năng</strong><p>8 Admin · 8 Bác sĩ · 10 Bệnh nhân. Dữ liệu demo được đồng bộ khi chuyển vai trò ngay trên thiết bị.</p></div>
+      <div class="side-help"><strong>Hướng dẫn</strong><p>Chọn vai trò → mở chức năng bằng thanh điều hướng hoặc nút <b>Danh mục</b> → thao tác trên từng màn hình.</p><p>Ví dụ: Admin duyệt 1 lịch 08:30 → Bác sĩ thấy lịch đã duyệt → Bệnh nhân thấy thông báo xác nhận.</p></div>
+      <div class="side-tag">UI mockup có tương tác · Không có backend thật</div>
+    </aside>
+    <main class="center-stage">
+      <div class="mobile-role-switch" id="mobileSwitcher"></div>
+      <div class="phone-shell">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="statusbar"><span>9:41</span><span>▮▮▮  ◕  ▰</span></div>
+          <div id="appHeader"></div>
+          <div id="appContent"></div>
+          <div id="bottomNav"></div>
+          <div id="drawerRoot"></div>
+          <div id="modalRoot"></div>
+          <div id="toastRoot"></div>
+        </div>
+      </div>
+      <div class="prototype-footnote">Tất cả Admin, Bác sĩ và Bệnh nhân đều là giao diện mobile · Bản mô phỏng để chốt UI trước khi lập trình Android</div>
+    </main>
+    <aside class="desktop-index"><div class="index-title">Các màn hình của vai trò <span id="roleLabel"></span></div><div id="pageIndex"></div><div class="index-note">Chức năng được đối chiếu từ các tab “UI Admin”, “UI Bác sĩ”, “UI Bệnh nhân” trong Google Sheets.</div></aside>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

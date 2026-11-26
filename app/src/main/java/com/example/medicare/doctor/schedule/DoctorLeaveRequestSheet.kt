@@ -4,9 +4,10 @@ import android.app.DatePickerDialog
 import android.graphics.Color
 import android.view.WindowManager
 import android.widget.FrameLayout
-import android.widget.ArrayAdapter
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.medicare.R
 import com.example.medicare.data.schedule.DoctorLeaveRequestRepository
 import com.example.medicare.databinding.DialogDoctorLeaveRequestBinding
@@ -27,6 +28,19 @@ object DoctorLeaveRequestSheet {
         val form = DialogDoctorLeaveRequestBinding.inflate(activity.layoutInflater)
         val dialog = BottomSheetDialog(activity)
         var selectedDate = initialDate
+        var selectedType = "Xin nghỉ"
+
+        fun selectType(type: String) {
+            selectedType = type
+            styleChip(form.doctorLeaveTypeRest, type == "Xin nghỉ")
+            styleChip(form.doctorLeaveTypeChange, type == "Đổi ca")
+            form.doctorLeaveReason.hint = if (type == "Đổi ca") {
+                "Ví dụ: muốn đổi sang ca chiều vì có lịch cá nhân buổi sáng"
+            } else {
+                "Nhập lý do xin nghỉ"
+            }
+        }
+
         form.doctorLeaveDate.text = selectedDate.format(displayDate)
         form.doctorLeaveDate.setOnClickListener {
             DatePickerDialog(activity, { _, year, month, day ->
@@ -34,11 +48,9 @@ object DoctorLeaveRequestSheet {
                 form.doctorLeaveDate.text = selectedDate.format(displayDate)
             }, selectedDate.year, selectedDate.monthValue - 1, selectedDate.dayOfMonth).show()
         }
-        form.doctorLeaveType.adapter = ArrayAdapter(
-            activity,
-            android.R.layout.simple_spinner_dropdown_item,
-            listOf("Xin nghỉ", "Đổi ca"),
-        )
+        form.doctorLeaveTypeRest.setOnClickListener { selectType("Xin nghỉ") }
+        form.doctorLeaveTypeChange.setOnClickListener { selectType("Đổi ca") }
+        selectType("Xin nghỉ")
         form.doctorLeaveClose.setOnClickListener { dialog.dismiss() }
         form.doctorLeaveSubmit.setOnClickListener {
             val reason = form.doctorLeaveReason.text.toString().trim()
@@ -47,8 +59,7 @@ object DoctorLeaveRequestSheet {
                 return@setOnClickListener
             }
             form.doctorLeaveSubmit.isEnabled = false
-            val type = form.doctorLeaveType.selectedItem.toString()
-            repository.submit(selectedDate.toString(), "$type: $reason") { result ->
+            repository.submit(selectedDate.toString(), "$selectedType: $reason") { result ->
                 result.onSuccess {
                     dialog.dismiss()
                     onSaved()
@@ -68,5 +79,15 @@ object DoctorLeaveRequestSheet {
         dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
             ?.setBackgroundColor(Color.TRANSPARENT)
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    }
+
+    private fun styleChip(view: TextView, selected: Boolean) {
+        view.isSelected = selected
+        view.setTextColor(
+            ContextCompat.getColor(
+                view.context,
+                if (selected) R.color.doctor_teal_dark else R.color.manager_muted,
+            ),
+        )
     }
 }

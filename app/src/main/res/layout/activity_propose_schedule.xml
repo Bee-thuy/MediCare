@@ -4,37 +4,28 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/manager_background"
-    android:orientation="vertical">
+    android:background="@drawable/patient_record_sheet_background"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:padding="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:background="@color/white"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp">
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/PatientAccountSheetTitle"
+            android:text="@string/manager_propose_schedule_title" />
 
         <TextView
             android:id="@+id/proposeScheduleBack"
-            android:layout_width="36dp"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:text="‹"
-            android:textColor="@color/manager_ink"
-            android:textSize="40sp" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/plus_jakarta_sans_bold"
-            android:text="@string/manager_propose_schedule_title"
-            android:textColor="@color/manager_ink"
-            android:textSize="20sp" />
+            style="@style/PatientAccountSheetClose"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:contentDescription="@string/manager_close" />
     </LinearLayout>
 
     <ScrollView
@@ -48,215 +39,106 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:paddingBottom="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/manager_quick_action_background"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="14dp">
+                android:layout_marginTop="12dp"
+                android:background="@drawable/manager_card_background"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_manager_notifications"
-                    android:tint="@color/manager_blue" />
-
-                <TextView
-                    android:id="@+id/proposeScheduleInfo"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_weight="1"
-                    android:textColor="@color/manager_muted"
-                    android:textSize="15sp" />
+                    android:orientation="horizontal"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/manager_propose_patient_label"
+                        android:textColor="@color/manager_muted"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/proposeSchedulePatient"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="end"
+                        android:textColor="@color/manager_ink"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/manager_propose_requested_time_label"
+                        android:textColor="@color/manager_muted"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/proposeScheduleRequested"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="end"
+                        android:textColor="@color/manager_ink"
+                        android:textSize="12sp" />
+                </LinearLayout>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/proposeScheduleInfo"
+                style="@style/ClinicalLabel"
+                android:layout_marginTop="14dp"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/manager_propose_new_time_label" />
 
             <GridLayout
                 android:id="@+id/proposeSlotGrid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:columnCount="4"
-                >
-
-                <TextView
-                    android:id="@+id/proposeSlot0830"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_columnWeight="1"
-                    android:layout_marginEnd="6dp"
-                    android:background="@drawable/manager_time_option_background"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:text="08:30"
-                    android:textColor="@color/manager_ink"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/proposeSlot0900"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_columnWeight="1"
-                    android:layout_marginHorizontal="3dp"
-                    android:background="@drawable/manager_time_option_background"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:text="09:00"
-                    android:textColor="@color/manager_ink"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/proposeSlot0930"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_columnWeight="1"
-                    android:layout_marginHorizontal="3dp"
-                    android:background="@drawable/manager_time_option_background"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:text="09:30"
-                    android:textColor="@color/manager_ink"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/proposeSlot1000"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_columnWeight="1"
-                    android:layout_marginStart="6dp"
-                    android:background="@drawable/manager_time_option_background"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:text="10:00"
-                    android:textColor="@color/manager_ink"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/proposeSlot1030"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_columnWeight="1"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="6dp"
-                    android:background="@drawable/manager_time_option_background"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:text="10:30"
-                    android:textColor="@color/manager_ink"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/proposeSlot1100"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_columnWeight="1"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginHorizontal="3dp"
-                    android:background="@drawable/manager_time_option_background"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:text="11:00"
-                    android:textColor="@color/manager_ink"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/proposeSlot1130"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_columnWeight="1"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginHorizontal="3dp"
-                    android:background="@drawable/manager_time_option_background"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:text="11:30"
-                    android:textColor="@color/manager_ink"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-            </GridLayout>
+                android:layout_marginTop="8dp"
+                android:columnCount="3" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="38dp"
-                android:fontFamily="@font/plus_jakarta_sans_bold"
-                android:text="@string/manager_optional_note"
-                android:textColor="@color/manager_ink"
-                android:textSize="17sp" />
+                style="@style/ClinicalLabel"
+                android:layout_marginTop="16dp"
+                android:text="@string/manager_optional_note" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:counterEnabled="true"
-                app:counterMaxLength="200">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/proposeScheduleNote"
-                    android:layout_width="match_parent"
-                    android:layout_height="140dp"
-                    android:background="@drawable/manager_card_background"
-                    android:gravity="top|start"
-                    android:hint="@string/manager_propose_note_hint"
-                    android:inputType="textMultiLine|textCapSentences"
-                    android:maxLength="200"
-                    android:padding="14dp"
-                    android:textColor="@color/manager_ink"
-                    android:textColorHint="@color/manager_muted"
-                    android:textSize="15sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <EditText
+                android:id="@+id/proposeScheduleNote"
+                style="@style/ClinicalField"
+                android:layout_height="96dp"
+                android:gravity="top|start"
+                android:hint="@string/manager_propose_note_hint"
+                android:inputType="textMultiLine|textCapSentences"
+                android:maxLength="200" />
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="76dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="20dp">
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/proposeScheduleSend"
+        style="@style/ClinicalButton"
+        android:text="@string/manager_send_proposal"
+        app:backgroundTint="@color/manager_blue" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/proposeScheduleCancel"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/manager_card_background"
-            android:insetBottom="0dp"
-            android:insetTop="0dp"
-            android:text="@string/manager_cancel"
-            android:textAllCaps="false"
-            android:textColor="@color/manager_blue" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/proposeScheduleSend"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/manager_button_background"
-            android:insetBottom="0dp"
-            android:insetTop="0dp"
-            android:text="@string/manager_send_proposal"
-            android:textAllCaps="false"
-            android:textColor="@color/white" />
-    </LinearLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/proposeScheduleCancel"
+        style="@style/ClinicalButton"
+        android:layout_marginTop="8dp"
+        android:text="@string/manager_cancel"
+        android:textColor="@color/manager_blue"
+        app:backgroundTint="@color/patient_hero_blue" />
 </LinearLayout>

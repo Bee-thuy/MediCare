@@ -119,7 +119,7 @@ class RegisterActivity : FullscreenActivity() {
 
     private fun setLoading(isLoading: Boolean) {
         binding.registerLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
-        binding.registerButton.isEnabled = !isLoading
+        binding.registerButton.visibility = if (isLoading) View.GONE else View.VISIBLE
     }
 
     private fun showMessage(message: String) {

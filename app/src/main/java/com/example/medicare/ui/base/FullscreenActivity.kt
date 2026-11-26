@@ -22,7 +22,7 @@ abstract class FullscreenActivity : AppCompatActivity() {
         if (hasFocus) hideSystemBars()
     }
 
-    private fun hideSystemBars() {
+    protected fun hideSystemBars() {
         WindowInsetsControllerCompat(window, window.decorView).apply {
             hide(WindowInsetsCompat.Type.systemBars())
             systemBarsBehavior =

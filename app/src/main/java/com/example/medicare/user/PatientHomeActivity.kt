@@ -2,43 +2,40 @@ package com.example.medicare.user
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.RelativeSizeSpan
-import android.view.View
 import android.view.Gravity
+import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import com.example.medicare.databinding.ActivityPatientHomeBinding
-import com.example.medicare.user.appointment.MyAppointmentsActivity
-import com.example.medicare.user.doctor.DoctorDirectoryFragment
-import com.example.medicare.user.appointment.PatientBookingFragment
-import com.example.medicare.model.Doctor
-import com.example.medicare.model.Appointment
-import com.example.medicare.data.review.DoctorReviewRepository
-import java.time.format.DateTimeFormatter
-import com.example.medicare.user.reminder.MedicationReminderActivity
-import com.example.medicare.notification.NotificationRegistration
-import com.example.medicare.notification.NotificationPermission
+import com.example.medicare.R
+import com.example.medicare.ui.base.FullscreenActivity
 import com.example.medicare.data.appointment.AppointmentRepository
 import com.example.medicare.data.doctor.DoctorManagementRepository
+import com.example.medicare.data.review.DoctorReviewRepository
+import com.example.medicare.databinding.ActivityPatientHomeBinding
+import com.example.medicare.model.Appointment
 import com.example.medicare.model.AppointmentStatus
-import com.example.medicare.user.medical.MedicalHistoryActivity
-import com.example.medicare.user.review.MyReviewsActivity
-import com.example.medicare.user.chat.PatientChatsActivity
-import com.example.medicare.user.settings.PatientSettingsFragment
+import com.example.medicare.model.Doctor
+import com.example.medicare.notification.NotificationPermission
+import com.example.medicare.notification.NotificationRegistration
 import com.example.medicare.notification.NotificationsActivity
 import com.example.medicare.ui.base.RoleCatalogDialog
-import com.example.medicare.R
+import com.example.medicare.user.appointment.MyAppointmentsActivity
+import com.example.medicare.user.appointment.PatientBookingFragment
+import com.example.medicare.user.chat.PatientChatsActivity
+import com.example.medicare.user.doctor.DoctorDirectoryFragment
+import com.example.medicare.user.medical.MedicalHistoryActivity
+import com.example.medicare.user.reminder.MedicationReminderActivity
+import com.example.medicare.user.review.MyReviewsActivity
+import com.example.medicare.user.settings.PatientSettingsFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-class PatientHomeActivity : AppCompatActivity() {
+class PatientHomeActivity : FullscreenActivity() {
     private lateinit var binding: ActivityPatientHomeBinding
     private val appointments = AppointmentRepository()
     private var nextAppointment: Appointment? = null
@@ -49,8 +46,6 @@ class PatientHomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPatientHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        listOf(binding.patientNavAccount, binding.patientNavHome, binding.patientNavSearch,
-            binding.patientNavBooking, binding.patientNavCatalog).forEach(::styleNavIcon)
         tabBack = onBackPressedDispatcher.addCallback(this, enabled = false) { showTab(TAB_HOME) }
         selectedTab = savedInstanceState?.getInt(STATE_SELECTED_TAB)
             ?: intent.getIntExtra(EXTRA_TAB, TAB_HOME)
@@ -136,12 +131,16 @@ class PatientHomeActivity : AppCompatActivity() {
             TAB_BOOKING -> "Đặt lịch khám"
             else -> "Trang chủ bệnh nhân"
         }
-        listOf(binding.patientNavHome to TAB_HOME, binding.patientNavSearch to TAB_SEARCH,
-            binding.patientNavBooking to TAB_BOOKING, binding.patientNavAccount to TAB_ACCOUNT).forEach { (view, tab) ->
-            view.isSelected = selectedTab == tab
-            view.setTextColor(ContextCompat.getColor(this,
-                if (view.isSelected) R.color.patient_purple else R.color.manager_muted))
+        fun setNav(container: View, icon: ImageView, label: TextView, active: Boolean) {
+            container.isSelected = active
+            icon.isSelected = active
+            label.isSelected = active
         }
+        setNav(binding.patientNavHome, binding.patientNavHomeIcon, binding.patientNavHomeLabel, selectedTab == TAB_HOME)
+        setNav(binding.patientNavSearch, binding.patientNavSearchIcon, binding.patientNavSearchLabel, selectedTab == TAB_SEARCH)
+        setNav(binding.patientNavBooking, binding.patientNavBookingIcon, binding.patientNavBookingLabel, selectedTab == TAB_BOOKING)
+        setNav(binding.patientNavAccount, binding.patientNavAccountIcon, binding.patientNavAccountLabel, selectedTab == TAB_ACCOUNT)
+        setNav(binding.patientNavCatalog, binding.patientNavCatalogIcon, binding.patientNavCatalogLabel, false)
         tabBack.isEnabled = selectedTab != TAB_HOME
     }
 
@@ -167,13 +166,6 @@ class PatientHomeActivity : AppCompatActivity() {
                 if (destination != null) startActivity(Intent(this, destination))
                 else { showTab(TAB_HOME); binding.patientHomeScroll.smoothScrollTo(0, 0) }
             }
-    }
-
-    private fun styleNavIcon(view: TextView) {
-        val label = SpannableString(view.text)
-        val iconEnd = label.indexOf('\n')
-        if (iconEnd > 0) label.setSpan(RelativeSizeSpan(1.8f), 0, iconEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        view.text = label
     }
 
     private fun loadDashboard() {

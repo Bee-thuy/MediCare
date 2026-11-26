@@ -2,7 +2,6 @@ package com.example.medicare.manager.schedule
 
 import android.content.Intent
 import android.app.DatePickerDialog
-import android.app.AlertDialog
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -51,10 +50,19 @@ class ManagerWorkScheduleFragment : Fragment() {
             addSchedule.launch(Intent(requireContext(), AssignDoctorScheduleActivity::class.java).putExtra(AssignDoctorScheduleActivity.EXTRA_DOCTOR_ID, selectedDoctorId).putExtra(AssignDoctorScheduleActivity.EXTRA_DATE, selectedDate.toString()))
         }
         binding.workScheduleAddInline.setOnClickListener {
-            AlertDialog.Builder(requireContext()).setItems(arrayOf("Tạo ca làm việc", "Xem yêu cầu nghỉ / đổi ca")) { _, index ->
-                if (index == 0) addSchedule.launch(Intent(requireContext(), AssignDoctorScheduleActivity::class.java).putExtra(AssignDoctorScheduleActivity.EXTRA_DOCTOR_ID, selectedDoctorId).putExtra(AssignDoctorScheduleActivity.EXTRA_DATE, selectedDate.toString()))
-                else startActivity(Intent(requireContext(), LeaveRequestsActivity::class.java))
-            }.show()
+            ScheduleActionsSheet.show(
+                requireContext(),
+                onCreateShift = {
+                    addSchedule.launch(
+                        Intent(requireContext(), AssignDoctorScheduleActivity::class.java)
+                            .putExtra(AssignDoctorScheduleActivity.EXTRA_DOCTOR_ID, selectedDoctorId)
+                            .putExtra(AssignDoctorScheduleActivity.EXTRA_DATE, selectedDate.toString()),
+                    )
+                },
+                onLeaveRequests = {
+                    startActivity(Intent(requireContext(), LeaveRequestsActivity::class.java))
+                },
+            )
         }
         binding.workScheduleLeaveRequests.setOnClickListener {
             startActivity(Intent(requireContext(), LeaveRequestsActivity::class.java))

@@ -9,20 +9,27 @@
     android:focusable="true"
     android:gravity="center"
     android:orientation="vertical">
-  <TextView
-    android:id="@+id/managerNavHomeIcon"
-    android:layout_width="39dp"
-    android:layout_height="32dp"
-    android:background="@drawable/manager_nav_icon_background"
-    android:contentDescription="@null"
-    android:gravity="center" android:text="📊" android:textSize="21sp"/>
-  <TextView
-    android:id="@+id/managerNavHomeLabel"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="2dp"
-    android:fontFamily="@font/plus_jakarta_sans_medium"
-    android:text="@string/manager_home"
-    android:textColor="@color/manager_muted"
-    android:textSize="10sp"/>
+
+    <ImageView
+        android:id="@+id/managerNavHomeIcon"
+        android:layout_width="40dp"
+        android:layout_height="32dp"
+        android:background="@drawable/manager_nav_icon_background"
+        android:contentDescription="@null"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_nav_dashboard"
+        android:tint="@color/nav_tint_manager" />
+
+    <TextView
+        android:id="@+id/managerNavHomeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/plus_jakarta_sans_medium"
+        android:includeFontPadding="false"
+        android:text="@string/manager_home"
+        android:textColor="@color/nav_tint_manager"
+        android:textSize="10sp" />
 </LinearLayout>

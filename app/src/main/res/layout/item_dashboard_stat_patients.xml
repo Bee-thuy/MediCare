@@ -2,50 +2,73 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:minHeight="124dp"
     android:layout_marginStart="6dp"
     android:layout_weight="1"
     android:background="@drawable/manager_dashboard_patient_card"
-    android:foreground="?attr/selectableItemBackground"
     android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
+    android:minHeight="124dp"
     android:orientation="vertical"
     android:padding="14dp">
-
-    <LinearLayout android:layout_width="match_parent" android:layout_height="35dp"
-        android:gravity="center_vertical" android:orientation="horizontal">
-        <TextView android:layout_width="35dp" android:layout_height="35dp"
-            android:gravity="center" android:background="@drawable/manager_dashboard_icon_plate"
-            android:text="👥" android:textSize="19sp" />
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:layout_marginStart="0dp" android:layout_weight="1" android:gravity="end"
-            android:text="↗" android:textColor="#39A982" android:textSize="19sp" />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
-        android:orientation="vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/dashboardPatientsValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/plus_jakarta_sans_bold"
-            android:text="—"
-            android:textColor="@color/manager_ink"
-            android:textSize="26sp" />
+        <FrameLayout
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/manager_dash_icon_green">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="@string/manager_patients"
-            android:textColor="@color/manager_muted"
-            android:textSize="11sp" />
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_dash_patients" />
+        </FrameLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_dash_arrow"
+            android:tint="#39A982" />
     </LinearLayout>
-    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:layout_marginTop="6dp" android:text="Xem hồ sơ  ›"
-        android:textColor="#188C68" android:textSize="10sp" android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dashboardPatientsValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/plus_jakarta_sans_bold"
+        android:text="—"
+        android:textColor="@color/manager_ink"
+        android:textSize="26sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="@string/manager_patients"
+        android:textColor="@color/manager_muted"
+        android:textSize="11sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Xem hồ sơ  ›"
+        android:textColor="#188C68"
+        android:textSize="10sp"
+        android:textStyle="bold" />
 </LinearLayout>

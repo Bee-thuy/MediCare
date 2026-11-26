@@ -1,45 +1,309 @@
-<?xml version='1.0' encoding='utf-8'?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="@drawable/patient_record_sheet_background" android:padding="20dp">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
-        <TextView style="@style/PatientAccountSheetTitle" android:text="Chi tiết lịch khám" />
-        <TextView android:id="@+id/doctorVisitClose" style="@style/PatientAccountSheetClose" android:layout_width="44dp" android:layout_height="44dp" android:contentDescription="Đóng" />
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/patient_record_sheet_background"
+    android:orientation="vertical"
+    android:paddingHorizontal="20dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="20dp">
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/patient_profile_sheet_handle" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/PatientAccountSheetTitle"
+            android:text="Chi tiết lịch khám" />
+
+        <TextView
+            android:id="@+id/doctorVisitClose"
+            style="@style/PatientAccountSheetClose"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="Đóng" />
     </LinearLayout>
-    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true" android:scrollbars="none">
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingBottom="16dp">
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:background="@drawable/manager_card_background" android:padding="16dp" android:orientation="vertical">
-                <TextView android:id="@+id/doctorVisitName" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="17sp" android:fontFamily="@font/inter_bold" android:textColor="@color/manager_ink" />
-                <TextView android:id="@+id/doctorVisitStatus" style="@style/ClinicalLabel" android:textColor="@color/doctor_teal" />
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="10dp" android:orientation="horizontal">
-                    <TextView android:layout_width="90dp" android:layout_height="wrap_content" android:text="Mã lịch" android:textSize="12sp" android:textColor="@color/manager_muted" />
-                    <TextView android:id="@+id/doctorVisitId" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textSize="12sp" android:fontFamily="@font/inter_bold" android:textColor="@color/manager_ink" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/manager_card_background"
+                android:elevation="1dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/doctorVisitAvatar"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/doctor_avatar_background"
+                        android:gravity="center"
+                        android:text="👤"
+                        android:textSize="22sp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/doctorVisitName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/inter_bold"
+                            android:maxLines="1"
+                            android:textColor="@color/manager_ink"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/doctorVisitStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:background="@drawable/doctor_visit_status_background"
+                            android:fontFamily="@font/inter_bold"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="4dp"
+                            android:textColor="@color/doctor_teal"
+                            android:textSize="10sp" />
+                    </LinearLayout>
                 </LinearLayout>
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="10dp" android:orientation="horizontal">
-                    <TextView android:layout_width="90dp" android:layout_height="wrap_content" android:text="Bác sĩ" android:textSize="12sp" android:textColor="@color/manager_muted" />
-                    <TextView android:id="@+id/doctorVisitDoctor" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textSize="12sp" android:fontFamily="@font/inter_bold" android:textColor="@color/manager_ink" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="#EEF2F8" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="10dp">
+
+                    <TextView
+                        android:layout_width="96dp"
+                        android:layout_height="wrap_content"
+                        android:text="Mã lịch"
+                        android:textColor="@color/manager_muted"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/doctorVisitId"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="end"
+                        android:textColor="@color/manager_ink"
+                        android:textSize="12sp" />
                 </LinearLayout>
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="10dp" android:orientation="horizontal">
-                    <TextView android:layout_width="90dp" android:layout_height="wrap_content" android:text="Chuyên khoa" android:textSize="12sp" android:textColor="@color/manager_muted" />
-                    <TextView android:id="@+id/doctorVisitSpecialty" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textSize="12sp" android:fontFamily="@font/inter_bold" android:textColor="@color/manager_ink" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="10dp">
+
+                    <TextView
+                        android:layout_width="96dp"
+                        android:layout_height="wrap_content"
+                        android:text="Bác sĩ"
+                        android:textColor="@color/manager_muted"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/doctorVisitDoctor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="end"
+                        android:textColor="@color/manager_ink"
+                        android:textSize="12sp" />
                 </LinearLayout>
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="10dp" android:orientation="horizontal">
-                    <TextView android:layout_width="90dp" android:layout_height="wrap_content" android:text="Ngày khám" android:textSize="12sp" android:textColor="@color/manager_muted" />
-                    <TextView android:id="@+id/doctorVisitDate" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textSize="12sp" android:fontFamily="@font/inter_bold" android:textColor="@color/manager_ink" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="10dp">
+
+                    <TextView
+                        android:layout_width="96dp"
+                        android:layout_height="wrap_content"
+                        android:text="Chuyên khoa"
+                        android:textColor="@color/manager_muted"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/doctorVisitSpecialty"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="end"
+                        android:textColor="@color/manager_ink"
+                        android:textSize="12sp" />
                 </LinearLayout>
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="10dp" android:orientation="horizontal">
-                    <TextView android:layout_width="90dp" android:layout_height="wrap_content" android:text="Thời gian" android:textSize="12sp" android:textColor="@color/manager_muted" />
-                    <TextView android:id="@+id/doctorVisitTime" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textSize="12sp" android:fontFamily="@font/inter_bold" android:textColor="@color/manager_ink" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="10dp">
+
+                    <TextView
+                        android:layout_width="96dp"
+                        android:layout_height="wrap_content"
+                        android:text="Ngày khám"
+                        android:textColor="@color/manager_muted"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/doctorVisitDate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="end"
+                        android:textColor="@color/manager_ink"
+                        android:textSize="12sp" />
                 </LinearLayout>
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="10dp" android:orientation="horizontal">
-                    <TextView android:layout_width="90dp" android:layout_height="wrap_content" android:text="Lý do" android:textSize="12sp" android:textColor="@color/manager_muted" />
-                    <TextView android:id="@+id/doctorVisitReason" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textSize="12sp" android:fontFamily="@font/inter_bold" android:textColor="@color/manager_ink" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="10dp">
+
+                    <TextView
+                        android:layout_width="96dp"
+                        android:layout_height="wrap_content"
+                        android:text="Thời gian"
+                        android:textColor="@color/manager_muted"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/doctorVisitTime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="end"
+                        android:textColor="@color/manager_ink"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:layout_width="96dp"
+                        android:layout_height="wrap_content"
+                        android:text="Lý do"
+                        android:textColor="@color/manager_muted"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/doctorVisitReason"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="end"
+                        android:textColor="@color/manager_ink"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
-            <TextView android:id="@+id/doctorVisitHint" style="@style/ClinicalLabel" android:lineSpacingExtra="3dp" />
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="10dp">
-                <com.google.android.material.button.MaterialButton android:id="@+id/doctorVisitArrived" style="@style/ClinicalButton" android:layout_width="0dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="✓ Bệnh nhân đã đến" android:textColor="@color/doctor_teal_dark" app:backgroundTint="@color/patient_hero_blue" />
-                <com.google.android.material.button.MaterialButton android:id="@+id/doctorVisitExam" style="@style/ClinicalButton" android:layout_width="0dp" android:layout_weight="1" android:text="Bắt đầu khám" />
-            </LinearLayout>
-            <com.google.android.material.button.MaterialButton android:id="@+id/doctorVisitChat" style="@style/ClinicalButton" android:layout_marginTop="10dp" android:text="Chat tư vấn" android:textColor="@color/doctor_teal_dark" app:backgroundTint="@color/doctor_teal_soft" />
+
+            <TextView
+                android:id="@+id/doctorVisitHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/doctor_visit_hint_background"
+                android:fontFamily="@font/inter_medium"
+                android:lineSpacingExtra="3dp"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="12dp"
+                android:textColor="@color/doctor_teal_dark"
+                android:textSize="12sp" />
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/doctorVisitActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        android:paddingTop="12dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="12dp"
+            android:background="#EEF2F8" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/doctorVisitArrived"
+            style="@style/ClinicalButton.Secondary"
+            android:layout_marginBottom="8dp"
+            android:text="Bệnh nhân đã đến"
+            app:icon="@drawable/ic_visit_check" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/doctorVisitExam"
+            style="@style/ClinicalButton"
+            android:layout_marginBottom="8dp"
+            android:text="Bắt đầu khám"
+            app:icon="@drawable/ic_visit_exam"
+            app:iconTint="@color/white" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/doctorVisitChat"
+            style="@style/ClinicalButton.Outline"
+            android:background="@drawable/doctor_visit_button_outline"
+            android:text="Chat tư vấn"
+            app:backgroundTint="@null"
+            app:icon="@drawable/ic_visit_chat" />
+    </LinearLayout>
 </LinearLayout>

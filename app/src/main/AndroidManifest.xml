@@ -114,7 +114,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".manager.appointment.ProposeScheduleActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.MediCare.ClinicalSheet" />
         <activity
             android:name=".manager.appointment.DetailDoctorActivity"
             android:exported="false" />

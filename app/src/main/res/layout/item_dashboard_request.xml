@@ -20,15 +20,20 @@
         android:orientation="horizontal"
         android:padding="13dp">
 
-        <TextView
-            android:id="@+id/dashboardRequestInitials"
-            android:layout_width="43dp"
-            android:layout_height="43dp"
-            android:background="@drawable/manager_appointment_avatar_background"
-            android:gravity="center"
-            android:textColor="@color/manager_blue"
-            android:textSize="23sp"
-            android:textStyle="bold" />
+        <FrameLayout
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:background="@drawable/manager_dash_icon_blue">
+
+            <TextView
+                android:id="@+id/dashboardRequestInitials"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:fontFamily="@font/plus_jakarta_sans_bold"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -41,24 +46,27 @@
                 android:id="@+id/dashboardRequestName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:fontFamily="@font/plus_jakarta_sans_bold"
+                android:maxLines="1"
                 android:textColor="@color/manager_ink"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/dashboardRequestInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
+                android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/manager_muted"
-                android:textSize="10sp" />
+                android:textSize="11sp" />
 
             <TextView
                 android:id="@+id/dashboardRequestStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="6dp"
                 android:background="@drawable/manager_appointment_pending_background"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
@@ -67,11 +75,11 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="›"
-            android:textColor="@color/manager_muted"
-            android:textSize="28sp" />
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_dash_arrow"
+            android:tint="@color/manager_muted" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

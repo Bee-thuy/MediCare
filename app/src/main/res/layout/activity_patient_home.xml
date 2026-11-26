@@ -146,14 +146,58 @@
         android:layout_width="match_parent" android:layout_height="match_parent"
         android:visibility="gone" />
     </FrameLayout>
-    <LinearLayout android:layout_width="match_parent" android:layout_height="68dp"
+    <LinearLayout android:layout_width="match_parent" android:layout_height="70dp"
         android:background="@color/white" android:elevation="8dp" android:orientation="horizontal"
-        android:paddingHorizontal="5dp" android:paddingVertical="5dp">
-        <TextView android:id="@+id/patientNavAccount" style="@style/RoleBottomItem" android:text="🔐\nTài khoản" />
-        <TextView android:id="@+id/patientNavHome" style="@style/RoleBottomItem"
-            android:text="🏠\nTrang chủ" android:textColor="@color/patient_purple" />
-        <TextView android:id="@+id/patientNavSearch" style="@style/RoleBottomItem" android:text="🔍\nTìm bác sĩ" />
-        <TextView android:id="@+id/patientNavBooking" style="@style/RoleBottomItem" android:text="📅\nĐặt lịch" />
-        <TextView android:id="@+id/patientNavCatalog" style="@style/RoleBottomItem" android:text="☷\nDanh mục" />
+        android:paddingHorizontal="4dp" android:paddingVertical="6dp">
+        <LinearLayout android:id="@+id/patientNavAccount" style="@style/RoleBottomItem" android:orientation="vertical">
+            <ImageView android:id="@+id/patientNavAccountIcon" android:layout_width="40dp" android:layout_height="32dp"
+                android:background="@drawable/patient_nav_icon_background" android:contentDescription="@null"
+                android:paddingHorizontal="8dp" android:paddingVertical="4dp" android:scaleType="fitCenter"
+                android:src="@drawable/ic_nav_account" android:tint="@color/nav_tint_patient" />
+            <TextView android:id="@+id/patientNavAccountLabel" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" android:fontFamily="@font/plus_jakarta_sans_medium"
+                android:includeFontPadding="false" android:text="Tài khoản"
+                android:textColor="@color/nav_tint_patient" android:textSize="10sp" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/patientNavHome" style="@style/RoleBottomItem" android:orientation="vertical">
+            <ImageView android:id="@+id/patientNavHomeIcon" android:layout_width="40dp" android:layout_height="32dp"
+                android:background="@drawable/patient_nav_icon_background" android:contentDescription="@null"
+                android:paddingHorizontal="8dp" android:paddingVertical="4dp" android:scaleType="fitCenter"
+                android:src="@drawable/ic_nav_home" android:tint="@color/nav_tint_patient" />
+            <TextView android:id="@+id/patientNavHomeLabel" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" android:fontFamily="@font/plus_jakarta_sans_medium"
+                android:includeFontPadding="false" android:text="Trang chủ"
+                android:textColor="@color/nav_tint_patient" android:textSize="10sp" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/patientNavSearch" style="@style/RoleBottomItem" android:orientation="vertical">
+            <ImageView android:id="@+id/patientNavSearchIcon" android:layout_width="40dp" android:layout_height="32dp"
+                android:background="@drawable/patient_nav_icon_background" android:contentDescription="@null"
+                android:paddingHorizontal="8dp" android:paddingVertical="4dp" android:scaleType="fitCenter"
+                android:src="@drawable/ic_nav_search" android:tint="@color/nav_tint_patient" />
+            <TextView android:id="@+id/patientNavSearchLabel" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" android:fontFamily="@font/plus_jakarta_sans_medium"
+                android:includeFontPadding="false" android:text="Tìm bác sĩ"
+                android:textColor="@color/nav_tint_patient" android:textSize="10sp" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/patientNavBooking" style="@style/RoleBottomItem" android:orientation="vertical">
+            <ImageView android:id="@+id/patientNavBookingIcon" android:layout_width="40dp" android:layout_height="32dp"
+                android:background="@drawable/patient_nav_icon_background" android:contentDescription="@null"
+                android:paddingHorizontal="8dp" android:paddingVertical="4dp" android:scaleType="fitCenter"
+                android:src="@drawable/ic_nav_calendar" android:tint="@color/nav_tint_patient" />
+            <TextView android:id="@+id/patientNavBookingLabel" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" android:fontFamily="@font/plus_jakarta_sans_medium"
+                android:includeFontPadding="false" android:text="Đặt lịch"
+                android:textColor="@color/nav_tint_patient" android:textSize="10sp" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/patientNavCatalog" style="@style/RoleBottomItem" android:orientation="vertical">
+            <ImageView android:id="@+id/patientNavCatalogIcon" android:layout_width="40dp" android:layout_height="32dp"
+                android:background="@drawable/patient_nav_icon_background" android:contentDescription="@null"
+                android:paddingHorizontal="8dp" android:paddingVertical="4dp" android:scaleType="fitCenter"
+                android:src="@drawable/ic_nav_menu" android:tint="@color/nav_tint_patient" />
+            <TextView android:id="@+id/patientNavCatalogLabel" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" android:fontFamily="@font/plus_jakarta_sans_medium"
+                android:includeFontPadding="false" android:text="Danh mục"
+                android:textColor="@color/nav_tint_patient" android:textSize="10sp" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

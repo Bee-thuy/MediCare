@@ -111,6 +111,7 @@ class DetailPatientActivity : AppCompatActivity() {
                     .putExtra(ProposeScheduleActivity.EXTRA_APPOINTMENT_ID, appointmentId)
                     .putExtra(ProposeScheduleActivity.EXTRA_SCHEDULE_ID, intent.getStringExtra(EXTRA_SCHEDULE_ID))
                     .putExtra(ProposeScheduleActivity.EXTRA_PATIENT_ID, patientId)
+                    .putExtra(ProposeScheduleActivity.EXTRA_PATIENT_NAME, patientName)
                     .putExtra(ProposeScheduleActivity.EXTRA_CURRENT_TIME, binding.detailAppointmentTime.text.toString()),
             )
         }

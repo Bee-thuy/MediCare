@@ -4,42 +4,36 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.example.medicare.R
+import com.example.medicare.data.appointment.BookingSlotRepository
+import com.example.medicare.data.doctor.DoctorManagementRepository
 import com.example.medicare.databinding.ActivityManagerBinding
 import com.example.medicare.manager.appointment.ManagerAppointmentsFragment
 import com.example.medicare.manager.dashboard.ManagerDashboardFragment
+import com.example.medicare.manager.dashboard.ManagerReportActivity
 import com.example.medicare.manager.doctor.ManagerDoctorsFragment
+import com.example.medicare.manager.doctor.SpecialtyActivity
 import com.example.medicare.manager.notification.ManagerNotificationsFragment
 import com.example.medicare.manager.patient.ManagerPatientsFragment
 import com.example.medicare.manager.schedule.ManagerWorkScheduleFragment
 import com.example.medicare.manager.settings.ManagerMoreFragment
-import com.example.medicare.manager.doctor.SpecialtyActivity
-import com.example.medicare.data.doctor.DoctorManagementRepository
-import com.example.medicare.data.appointment.BookingSlotRepository
-import com.example.medicare.ui.chat.StaffChatActivity
-import androidx.appcompat.app.AlertDialog
-import android.widget.Toast
-import com.example.medicare.manager.dashboard.ManagerReportActivity
-import com.example.medicare.notification.NotificationRegistration
 import com.example.medicare.notification.NotificationPermission
+import com.example.medicare.notification.NotificationRegistration
+import com.example.medicare.ui.base.FullscreenActivity
 import com.example.medicare.ui.base.RoleCatalogDialog
+import com.example.medicare.ui.chat.StaffChatActivity
 
 /** The manager shell: one activity that owns the persistent bottom navigation. */
-open class ManagerActivity : AppCompatActivity() {
+open class ManagerActivity : FullscreenActivity() {
 
     private lateinit var binding: ActivityManagerBinding
     private var selectedTab = TAB_HOME
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        hideSystemBars()
         binding = ActivityManagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         BookingSlotRepository().backfillExistingAppointments()
@@ -68,19 +62,6 @@ open class ManagerActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         showTab(intent.getIntExtra(EXTRA_INITIAL_TAB, TAB_HOME))
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) hideSystemBars()
-    }
-
-    private fun hideSystemBars() {
-        WindowInsetsControllerCompat(window, window.decorView).apply {
-            hide(WindowInsetsCompat.Type.systemBars())
-            systemBarsBehavior =
-                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
     }
 
     fun showTab(tab: Int) {
@@ -120,10 +101,9 @@ open class ManagerActivity : AppCompatActivity() {
         )
         items.forEach { item ->
             val active = item.tab == selectedTab
-            val color = ContextCompat.getColor(this, if (active) R.color.manager_blue else R.color.manager_muted)
             item.container.isSelected = active
             item.icon.isSelected = active
-            item.label.setTextColor(color)
+            item.label.isSelected = active
         }
     }
 
@@ -171,7 +151,7 @@ open class ManagerActivity : AppCompatActivity() {
 
     private data class NavigationItem(
         val container: View,
-        val icon: TextView,
+        val icon: android.widget.ImageView,
         val label: TextView,
         val tab: Int,
     )

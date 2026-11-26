@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/patient_record_sheet_background"
+    android:orientation="vertical"
+    android:paddingHorizontal="20dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="24dp">
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/patient_profile_sheet_handle" />
+
+    <TextView
+        android:id="@+id/leaveDecisionTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/plus_jakarta_sans_bold"
+        android:textColor="@color/manager_ink"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/leaveDecisionMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:lineSpacingExtra="3dp"
+        android:textColor="@color/manager_muted"
+        android:textSize="13sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/leaveDecisionApprove"
+        style="@style/ClinicalButton"
+        android:layout_marginTop="18dp"
+        android:text="@string/manager_accept"
+        app:backgroundTint="@color/manager_blue" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/leaveDecisionReject"
+        style="@style/ClinicalButton.Outline"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/doctor_visit_button_outline"
+        android:text="@string/manager_reject"
+        android:textColor="#D14343"
+        app:backgroundTint="@null"
+        app:icon="@null"
+        app:strokeColor="#F0C7C7" />
+</LinearLayout>

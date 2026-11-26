@@ -109,8 +109,9 @@ class ManagerDashboardFragment : Fragment() {
         current.dashboardRequestsEmpty.visibility = if (requests.isEmpty()) View.VISIBLE else View.GONE
         requests.forEach { appointment ->
             val row = ItemDashboardRequestBinding.inflate(layoutInflater, current.dashboardRequestsList, false)
-            row.dashboardRequestInitials.text = "👤"
-            row.dashboardRequestName.text = appointment.patientName.ifBlank { "Bệnh nhân" }
+            val name = appointment.patientName.ifBlank { "Bệnh nhân" }
+            row.dashboardRequestInitials.text = name.trim().firstOrNull()?.uppercaseChar()?.toString() ?: "?"
+            row.dashboardRequestName.text = name
             row.dashboardRequestInfo.text =
                 appointment.appointmentDate + " · " + appointment.startTime + " · " +
                     appointment.specialtyName.ifBlank { appointment.doctorName }

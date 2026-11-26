@@ -1,9 +1,7 @@
 package com.example.medicare.user
 
 import android.content.Intent
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.RelativeSizeSpan
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.medicare.R
@@ -28,13 +26,7 @@ object PatientScreenChrome {
             R.id.patientChromeNavCatalog to { openHome(activity, PatientHomeActivity.TAB_HOME, catalog = true) },
         )
         nav.forEach { (id, action) ->
-            activity.findViewById<TextView>(id)?.apply {
-                val label = SpannableString(text)
-                val end = label.indexOf('\n')
-                if (end > 0) label.setSpan(RelativeSizeSpan(1.8f), 0, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                text = label
-                setOnClickListener { action() }
-            }
+            activity.findViewById<View>(id)?.setOnClickListener { action() }
         }
     }
 

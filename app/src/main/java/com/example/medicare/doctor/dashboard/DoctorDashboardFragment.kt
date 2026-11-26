@@ -168,7 +168,9 @@ class DoctorDashboardFragment : Fragment() {
         visitDialog = dialog
         dialog.setContentView(sheet.root)
         var current = appointment
-        sheet.doctorVisitName.text = appointment.patientName
+        val patientLabel = appointment.patientName.ifBlank { getString(R.string.doctor_patient) }
+        sheet.doctorVisitAvatar.text = patientLabel.trim().firstOrNull()?.uppercaseChar()?.toString() ?: "👤"
+        sheet.doctorVisitName.text = patientLabel
         sheet.doctorVisitId.text = appointment.id
         sheet.doctorVisitDoctor.text = "BS. ${appointment.doctorName}"
         sheet.doctorVisitSpecialty.text = appointment.specialtyName
@@ -182,6 +184,7 @@ class DoctorDashboardFragment : Fragment() {
             sheet.doctorVisitExam.visibility = if (current.status in setOf(AppointmentStatus.CONFIRMED,
                 AppointmentStatus.ARRIVED, AppointmentStatus.IN_PROGRESS, AppointmentStatus.COMPLETED)) View.VISIBLE else View.GONE
             sheet.doctorVisitExam.isEnabled = current.status != AppointmentStatus.CONFIRMED
+            sheet.doctorVisitExam.alpha = if (current.status == AppointmentStatus.CONFIRMED) 0.45f else 1f
             sheet.doctorVisitExam.text = when (current.status) {
                 AppointmentStatus.IN_PROGRESS -> "Ghi kết quả khám"
                 AppointmentStatus.COMPLETED -> "Xem kết quả khám"
@@ -189,12 +192,25 @@ class DoctorDashboardFragment : Fragment() {
             }
             sheet.doctorVisitHint.text = when (current.status) {
                 AppointmentStatus.CONFIRMED -> "Xác nhận bệnh nhân đã đến trước khi bắt đầu khám."
-                AppointmentStatus.ARRIVED -> "✓ Đã ghi nhận bệnh nhân đến. Bạn có thể bắt đầu khám."
+                AppointmentStatus.ARRIVED -> "Đã ghi nhận bệnh nhân đến. Bạn có thể bắt đầu khám."
                 AppointmentStatus.IN_PROGRESS -> "Đang khám · Nhập kết quả và lưu nháp hoặc hoàn tất lượt khám."
-                AppointmentStatus.COMPLETED -> "✓ Lượt khám đã hoàn tất."
+                AppointmentStatus.COMPLETED -> "Lượt khám đã hoàn tất."
                 else -> "Lịch khám chưa sẵn sàng để tiếp nhận."
             }
             sheet.doctorVisitChat.visibility = sheet.doctorVisitExam.visibility
+            val statusColor = when (current.status) {
+                AppointmentStatus.ARRIVED, AppointmentStatus.IN_PROGRESS -> R.color.doctor_teal
+                AppointmentStatus.COMPLETED -> R.color.manager_green
+                AppointmentStatus.CONFIRMED -> R.color.manager_blue
+                else -> R.color.manager_muted
+            }
+            val statusBackground = when (current.status) {
+                AppointmentStatus.CONFIRMED -> R.drawable.manager_info_background
+                AppointmentStatus.COMPLETED -> R.drawable.manager_status_active_background
+                else -> R.drawable.doctor_visit_status_background
+            }
+            sheet.doctorVisitStatus.setTextColor(ContextCompat.getColor(requireContext(), statusColor))
+            sheet.doctorVisitStatus.setBackgroundResource(statusBackground)
         }
         fun updateStatus(arrived: Boolean) {
             sheet.doctorVisitArrived.isEnabled = false
@@ -206,7 +222,13 @@ class DoctorDashboardFragment : Fragment() {
                     current = current.copy(status = if (arrived) AppointmentStatus.ARRIVED else AppointmentStatus.IN_PROGRESS)
                     load()
                     if (!dialog.isShowing) return@onSuccess
-                    if (arrived) renderState() else { dialog.dismiss(); openAppointment(current) }
+                    if (arrived) {
+                        Toast.makeText(requireContext(), R.string.doctor_patient_arrived_toast, Toast.LENGTH_SHORT).show()
+                        renderState()
+                    } else {
+                        dialog.dismiss()
+                        openAppointment(current)
+                    }
                 }.onFailure {
                     if (!dialog.isShowing) return@onFailure
                     sheet.doctorVisitArrived.isEnabled = true
